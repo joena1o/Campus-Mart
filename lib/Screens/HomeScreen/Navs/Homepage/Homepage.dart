@@ -1,9 +1,7 @@
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/AdGrid/AdGrid.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/Category/Category.dart';
-import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/Navbar/Navbar.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/SearchBar/SearchBar.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class HomepageNav extends StatefulWidget {
   const HomepageNav({Key? key}) : super(key: key);
@@ -28,7 +26,7 @@ class _HomepageNavState extends State<HomepageNav> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
-        AdGrid(grid: 1)
+        AdGrid(grid: 1, category: "",)
       ],
     );
   }

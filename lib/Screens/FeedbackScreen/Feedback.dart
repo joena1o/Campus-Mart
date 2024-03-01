@@ -1,3 +1,4 @@
+import 'package:campus_mart/Screens/FeedbackScreen/FeedBackPage/Feedbackpage.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackPage extends StatefulWidget {
@@ -20,10 +21,7 @@ class _FeedbackState extends State<FeedbackPage> {
         ),
         elevation: 0,
       ),
-      body: SizedBox(
-        width: size.width,
-        height: size.height,
-      ),
+      body: FeedbackView(type: '',),
     );
   }
 }

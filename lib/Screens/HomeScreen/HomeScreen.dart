@@ -1,4 +1,6 @@
-import 'package:campus_mart/Screens/AdScreen/AdScreen.dart';
+import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Homepage.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/DrawerMenu.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/NotificationPage/NotificationPage.dart';
@@ -8,8 +10,8 @@ import 'package:campus_mart/Screens/HomeScreen/Widgets/BottomNav/BottomNav.dart'
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../MessageScreen/MessageScreen.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,6 +27,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   updateNav(val) {
     setState(() => currentNav = val);
+  }
+
+  @override
+  void initState(){
+    super.initState();
+
+    //Subscribe User
+    String? user = context.read<UserProvider>().userDetails?.id.toString();
+
+    OneSignal.shared.setExternalUserId(user ?? "").then((results) {
+      print(results.toString());
+    }).catchError((error) {
+      print(error.toString());
+    });
+
   }
 
   @override
@@ -56,18 +73,17 @@ class _HomeScreenState extends State<HomeScreen> {
               )));
         }),
         actions: [
-          IconButton(
+          currentNav != 3 ?  IconButton(
               onPressed: () {
+                context.read<ProductProvider>().resetItems();
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const MessageScreen()));
+                    MaterialPageRoute(builder: (_) => const CategoryScreen(index: -1,)));
               },
               icon: const Icon(
-                Icons.messenger_outline,
-                size: 22,
-              )),
-          const SizedBox(
-            width: 10,
-          )
+                Icons.search_sharp,
+                size: 28,
+                color: primary,
+              )):Container(),
         ],
       ):null,
       body: Container(
@@ -83,16 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? const NotificationPage()
                     : const ProfilePage())),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primary,
-        elevation: 0,
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => const AdScreen()));
-        },
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomAppBar(
         child: BottomNav(
           index: currentNav,

@@ -1,6 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:campus_mart/Screens/AdAlertScreen/AdAlerts.dart';
+import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
+import 'package:campus_mart/Utils/conn.dart';
+import 'package:http/http.dart' as http;
 import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Screens/EditProfileScreen/EditProfileScreen.dart';
+import 'package:campus_mart/Screens/MyAdScreen/MyAdScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -10,7 +20,10 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>{
+
+  File? _images;
+
   @override
   Widget build(BuildContext context) {
     final userDetails = context.read<UserProvider>().userDetails;
@@ -18,16 +31,27 @@ class _ProfilePageState extends State<ProfilePage> {
     return SingleChildScrollView(child:Column(
       children: [
 
-        Container(height: kToolbarHeight*2,),
+        Container(height: kToolbarHeight*1.5,),
 
         ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: Container(
+          child: GestureDetector(
+            onTap: (){
+              showUploadDialog();
+            },
+            child: Consumer<UserProvider>(builder: (_, data, __) {
+              return data.userDp !="" ? SizedBox(
             width:100,
             height:100,
-            color: Colors.black,
-          ),
-        ),
+            // color: Colors.black,
+            child: ImageWidget(url: data.userDp,),
+          ) :  Container(
+              width:100,
+              height:100,
+              color: Colors.black45,
+              child: const Icon(Icons.person, color: Colors.white, size: 45,),
+            );})
+        )),
 
         Container(
           height: 20,
@@ -48,66 +72,45 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
 
         Container(
+          height: 30,
+        ),
+
+
+        Container(
           height: 20,
         ),
 
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: const [
-                Text("My Ads", style: TextStyle(fontSize: 15, color: primary),),
-                Text("0",  style: TextStyle(fontSize: 20)),
-              ],
-            ),
-
-
-
-            Container(width: 1,
-              height: 50,
-              margin: const EdgeInsets.symmetric(horizontal: 50),
-              decoration: const BoxDecoration(
-                color: Colors.grey
-              ),
-            ),
-
-            Column(
-              children: const [
-                Text("Reviews", style: TextStyle(fontSize: 15, color: primary)),
-                Text("0", style: TextStyle(fontSize: 20)),
-              ],
-            )
-          ],
-        ),
-
         Container(
-          height: 10,
-        ),
-
-        Container(
-          width: size.width*.65,
+          width: size.width*.70,
           padding: const EdgeInsets.symmetric(vertical: 20),
             child:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: size.width*.65,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
+
+
+              GestureDetector(
+                  onTap:(){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_)=> const MyAdScreen())
+                    );
+                  },
+                  child:Container(
+                  width: size.width*.75,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
                     Text("My Ads", style: TextStyle(fontSize: 16),),
                     Icon(Icons.chevron_right)
                   ],
                 ),
-              ),
+              )),
 
               const Divider(color: Colors.grey),
 
 
               Container(
-                width: size.width*.65,
+                width: size.width*.75,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,8 +123,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
               const Divider(color: Colors.grey),
 
-              Container(
-                width: size.width*.65,
+            GestureDetector(
+              onTap:(){
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_)=> const AdAlerts())
+                );
+              },
+              child:Container(
+                width: size.width*.75,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,12 +139,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     Icon(Icons.chevron_right)
                   ],
                 ),
-              ),
+              )),
 
               const Divider(color: Colors.grey),
 
-              Container(
-                width: size.width*.65,
+              GestureDetector(
+                onTap:(){
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_)=> const EditProfileScreen())
+                  );
+                },
+                child:Container(
+                width: size.width*.75,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,9 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Icon(Icons.chevron_right)
                   ],
                 ),
-              ),
-
-              // const Divider(color: Colors.grey)
+              )),
 
 
             ],
@@ -154,11 +167,111 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-
-        // const AdGrid()
-
-
       ],
     ));
   }
+
+  void _pickImages() async {
+    final picker = ImagePicker();
+    final pickedFiles = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFiles != null) {
+      setState(() {
+        _images = File(pickedFiles.path);
+        _uploadImages();
+      });
+    }
+  }
+
+  void _snapImage() async {
+    final picker = ImagePicker();
+    final pickedFiles = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFiles!=null) {
+      setState(() {
+        _images = File(pickedFiles.path);
+        _uploadImages();
+      });
+    }
+  }
+
+
+  _uploadImages() async {
+    showLoadingDialog();
+    final url = Uri.parse('$conn/upload-images');
+    http.MultipartRequest request = http.MultipartRequest('POST', url);
+      final multipartFile = await http.MultipartFile.fromPath(
+        "image", _images!.path,
+      );
+      request.files.add(multipartFile);
+
+    await request.send().then((value) async{
+      if(value.statusCode == 200) {
+        final responseString = await value.stream.bytesToString();
+        final connValue = jsonDecode(responseString);
+        updateUser(connValue);
+        return responseString;
+      } else {
+        Navigator.pop(context);
+        return "Failed";
+      }
+    });
+
+
+  }
+
+  updateUser(connValue){
+    context.read<UserProvider>().updateDp(
+        context.read<UserProvider>().userDetails?.email,
+        connValue['data'][0]['url'],
+        context);
+  }
+
+  showUploadDialog(){
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return  CupertinoAlertDialog(
+          title:  const Text(
+            "Choose action", style: TextStyle(fontSize: 14),),
+          content: Column(
+            children: const [
+              Text(
+                  "Upload either from gallery or camera"),
+            ],
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  _pickImages();
+                },
+                isDefaultAction: true,
+                child: const Text("Gallery", style: TextStyle(color: primary),)
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context);
+                _snapImage();
+              },
+              child: const Text("Camera", style: TextStyle(color: secondary),),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+
+  showLoadingDialog(){
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return  WillPopScope(child: const Center(child:CircularProgressIndicator()),
+
+            onWillPop: () async{
+              return false;
+            });
+      },
+    );
+  }
+
 }

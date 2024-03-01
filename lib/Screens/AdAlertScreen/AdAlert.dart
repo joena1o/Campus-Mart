@@ -1,3 +1,5 @@
+import 'package:campus_mart/Screens/AdAlertScreen/Widget/AlertForm.dart';
+import 'package:campus_mart/Screens/AdAlertScreen/Widget/EmptyScreen.dart';
 import 'package:flutter/material.dart';
 
 class AdAlert extends StatefulWidget {
@@ -15,7 +17,7 @@ class _AdAlertState extends State<AdAlert> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text(
-          "Ad Alert",
+          "Create an Ad Alert",
           style: TextStyle(fontSize: 15),
         ),
         elevation: 0,
@@ -23,6 +25,7 @@ class _AdAlertState extends State<AdAlert> {
       body: SizedBox(
         width: size.width,
         height: size.height,
+        child: const AlertForm()
       ),
     );
   }

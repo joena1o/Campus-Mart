@@ -1,8 +1,10 @@
+import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
 import 'package:campus_mart/Utils/Categories.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class Category extends StatefulWidget {
   const Category({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class _CategoryState extends State<Category> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.only(top: 19),
+      margin: const EdgeInsets.only(top: 10),
       width: size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +37,7 @@ class _CategoryState extends State<Category> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const[
-               Text("Select category", style: TextStyle(fontSize: 16,  fontWeight: FontWeight.bold),),
+               Text("Select category", style: TextStyle(fontSize: 16,  fontWeight: FontWeight.w600),),
                Text("View all", style: TextStyle(fontSize: 15, color: primary, fontWeight: FontWeight.normal),),
             ],
           ),
@@ -49,11 +51,11 @@ class _CategoryState extends State<Category> {
               itemBuilder: (ctx, i) {
                 return Container(
                   margin: const EdgeInsets.only(right: 20,top: 9),
-                  // padding: const EdgeInsets.all(10),
                   child: GestureDetector(
                       onTap: (){
+                        context.read<ProductProvider>().resetItems();
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_)=> CategoryScreen(val: categories[i], index: i,))
+                          MaterialPageRoute(builder: (_)=> CategoryScreen(index: i,))
                         );
                       },
                       child:chip(categories[i], i))

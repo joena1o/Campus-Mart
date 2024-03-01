@@ -1,5 +1,4 @@
 class UserModel{
-
   String? id;
   String? firstName;
   String? lastName;
@@ -7,7 +6,10 @@ class UserModel{
   String? phone;
   String? state;
   String? campus;
+  String? countryId;
   String? username;
+  String? password;
+  String? image;
 
   UserModel({
     this.id,
@@ -17,20 +19,66 @@ class UserModel{
     this.phone,
     this.state,
     this.campus,
+    this.countryId,
     this.username,
+    this.password,
+    this.image
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     id: json['_id'],
     firstName: json['firstName'],
-    lastName: json['lastname'],
+    lastName: json['lastName'],
     email: json['email'],
     phone: json['phone'].toString(),
     state: json['state'],
     campus: json['campus'],
+    countryId: json['countryId'],
     username: json['username'],
+    image: json['image']
   );
 
+  factory UserModel.fromJson2(Map<String, dynamic> json) => UserModel(
+      id: json['id'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      email: json['email'],
+      phone: json['phone'].toString(),
+      state: json['state'],
+      campus: json['campus'],
+      countryId: json['countryId'],
+      username: json['username'],
+      image: json['image']
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "firstName": firstName,
+    "lastName": lastName,
+    "email": email,
+    "phone": phone,
+    "state": state,
+    "campus": campus,
+    "countryId": countryId,
+    "username": username,
+    "password": password,
+    "image": image
+  };
+
+  Map<String, dynamic> toJson2() => {
+    "firstName": firstName,
+    "lastName": lastName,
+    "email": email,
+    "phone": phone,
+    "state": state,
+    "campus": campus,
+    "countryId": countryId,
+    "username": username,
+    "password": password,
+    "image": image
+  };
 
 
 }
+
+

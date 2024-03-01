@@ -1,6 +1,9 @@
+import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Screens/AdScreen/AdScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({Key? key, required this.index, required this.callback})
@@ -26,11 +29,12 @@ class _BottomNavState extends State<BottomNav> {
         children: [
           IconButton(
               onPressed: () {
+                context.read<ProductProvider>().resetMyProduct();
                 widget.callback(1);
               },
               icon: widget.index == 1
-                  ? const FaIcon(FontAwesomeIcons.house, color: primary, size: 20,)
-                  : const FaIcon(FontAwesomeIcons.house, color: Colors.black, size: 20,)),
+                  ? const FaIcon(FontAwesomeIcons.house, color: Colors.orange, size: 20,)
+                  : const FaIcon(FontAwesomeIcons.house, color: Colors.black54, size: 20,)),
           IconButton(
               onPressed: () {
                 widget.callback(2);
@@ -38,26 +42,36 @@ class _BottomNavState extends State<BottomNav> {
               icon: widget.index == 2
                   ? const FaIcon(
                 FontAwesomeIcons.solidHeart,
-                color: primary,
+                color: Colors.orange,
                 size: 20,
               )
                   : const FaIcon(
                       FontAwesomeIcons.solidHeart,
-                      color: Colors.black,
+                      color: Colors.black54,
                         size: 20,
                     )),
-          Container(
-            width: 10,
-          ),
+          GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => const AdScreen()));
+              },
+              child: const FaIcon(
+                FontAwesomeIcons.plus,
+                color: Colors.grey,
+                size: 35,
+              )),
+
           IconButton(
               onPressed: () {
                 widget.callback(3);
               },
               icon: widget.index == 3
-                  ? const FaIcon(FontAwesomeIcons.solidBell, color: primary)
+                  ? const FaIcon(FontAwesomeIcons.solidBell, color: Colors.orange,
+                      size: 20,
+                    )
                   : const FaIcon(
                       FontAwesomeIcons.solidBell,
-                      color: Colors.black,
+                      color: Colors.black54,
                       size: 20,
                     )),
           IconButton(
@@ -67,12 +81,13 @@ class _BottomNavState extends State<BottomNav> {
               icon: widget.index == 4
                   ? const Icon(
                       Icons.person,
-                color: primary,
+                color: Colors.orange,
                 size: 27,
                     )
                   : const Icon(
                       Icons.person,
                       size: 27,
+                      color: Colors.black54,
                     ))
         ],
       ),

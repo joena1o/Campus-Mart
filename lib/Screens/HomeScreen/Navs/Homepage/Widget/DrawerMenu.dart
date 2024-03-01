@@ -1,7 +1,10 @@
 import 'package:campus_mart/Screens/AboutUsScreen/AboutUs.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlert.dart';
+import 'package:campus_mart/Screens/AdAlertScreen/AdAlerts.dart';
 import 'package:campus_mart/Screens/FeedbackScreen/Feedback.dart';
 import 'package:campus_mart/Screens/HelpScreen/Help.dart';
+import 'package:campus_mart/Screens/OptionScreen/OptionScreen.dart';
+import 'package:campus_mart/Utils/savePrefs.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +27,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
           GestureDetector(
               onTap: () {
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => const AdAlert()));
+                    .push(MaterialPageRoute(builder: (_) => const AdAlerts()));
               },
               child: const ListTile(
                 leading: Icon(EvaIcons.alertTriangleOutline),
@@ -63,8 +66,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
           const Divider(),
           GestureDetector(
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                clearPrefs();
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const OptionScreen()));
               },
               child: const ListTile(
                 leading: Icon(EvaIcons.logInOutline),

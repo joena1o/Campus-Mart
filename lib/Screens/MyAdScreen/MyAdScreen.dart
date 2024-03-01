@@ -1,4 +1,14 @@
+import 'package:campus_mart/Model/UserModel.dart';
+import 'package:campus_mart/Provider/AuthProvider.dart';
+import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
+import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class MyAdScreen extends StatefulWidget {
   const MyAdScreen({Key? key}) : super(key: key);
@@ -8,11 +18,23 @@ class MyAdScreen extends StatefulWidget {
 }
 
 class _MyAdScreenState extends State<MyAdScreen> {
+
+  @override
+  void initState(){
+    super.initState();
+    context.read<ProductProvider>().getMyAds(context.read<UserProvider>().userDetails?.id, context.read<AuthProvider>().accessToken);
+  }
+
+  void _onRefresh() async{
+    context.read<ProductProvider>().getProduct("", 1, context, false, context.read<AuthProvider>().accessToken);
+  }
+
+  static const images = ['Camera.jpeg','detergent.jpeg','earbuds.jpeg','watch.jpeg'];
+  String? selectedId;
+
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -33,19 +55,167 @@ class _MyAdScreenState extends State<MyAdScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              height: size.height*.83,
-              padding: EdgeInsets.symmetric(horizontal:size.width*.05),
-              child: ListView(
-                children: const [
-                  // Text("Hello")
-                ],
-              ),
-            ),
+         Expanded(
+        child: SmartRefresher(
+        enablePullDown: false,
+            enablePullUp: true,
+            onRefresh: _onRefresh,
+            onLoading: _onRefresh,
+            controller: context.read<ProductProvider>().refreshController,
+            child: Consumer<ProductProvider>(
+                builder: (_, bar, __) {
+                  return !bar.getIsGettingProduct ? Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      child: SingleChildScrollView(
+                      child: StaggeredGrid.count(
+                        crossAxisCount:2,
+                        mainAxisSpacing: 10,
+                        axisDirection: AxisDirection.down,
+                        crossAxisSpacing: 10,
+                        children: List.generate(bar.myProductList!.toList().length, (index) {
+                          UserModel user = UserModel.fromJson(bar.myProductList![index].user![0]);
+                          // print(bar.myProductList![index].images![0]['url'].toString());
+                          return GestureDetector(
+                              onTap: (){
+                                //Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductScreen(product: bar.myProductList![index])));
+                              },
+                              child: SizedBox(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+
+                                    Container(
+                                      width: size.width * .5,
+                                      height: index%2==0? size.width * .34 : size.width * .4,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.grey,
+                                      ),
+                                      child: Stack(
+                                        children: [
+
+                                          Positioned(child: Opacity(
+                                              opacity: 0.78,
+                                              child: SizedBox(
+                                                width: size.width * .5,
+                                                height: index%2==0? size.width * .34 : size.width * .4,
+                                                child: bar.myProductList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
+                                                  fit: BoxFit.cover,
+                                                ):ImageWidget(url: bar.myProductList![index].images![0]['url'].toString()),
+                                              ))),
+
+                                          Positioned(
+                                              right: 0,
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setState(()=> selectedId = bar.myProductList![index].id);
+                                                    print(selectedId);
+                                                    customBottomSheet(context);
+                                                  },
+                                                  icon:  const Icon(
+                                                    Icons.more_horiz,
+                                                    color: Colors.white,
+                                                  ))),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: size.width,
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children:  [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 7),
+                                            child: Text("${bar.myProductList![index].title}",
+                                              style: const TextStyle(color: Colors.black, fontSize: 13),
+                                            ),
+                                          ),
+                                          Text("${bar.myProductList![index].adCategory}",
+                                              style: const TextStyle(color: primary, fontSize: 12)),
+
+                                          Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 7),
+                                              child:Text("${user.campus}",
+                                                  style: const TextStyle(color: Colors.black, fontSize: 12)))
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ));
+                        }),
+                      )
+                  )): const Center(
+                    child:  CircularProgressIndicator(),
+                  ) ; })
+        ))
 
           ],
         ),
       ),
     );
   }
+
+
+  void customBottomSheet(BuildContext context) {
+    final userDetails = context.read<UserProvider>().userDetails;
+    Size size = MediaQuery.of(context).size;
+
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        Size size = MediaQuery.of(context).size;
+        return Container(
+          height: size.height*.26 ,
+          padding: const EdgeInsets.all(30),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(topLeft: radiusCircular(20), topRight: radiusCircular(20)),
+            color: Colors.white, // Customize the background color
+          ),// Set the desired height of the bottom sheet
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:  [
+
+                Row(
+                  children: const [
+                    Icon(Icons.edit, color: Colors.grey, size: 30,),
+                    SizedBox(width: 20,),
+                    Text("Edit", style: TextStyle(fontSize: 16),)
+                  ],
+                ),
+
+              const SizedBox(height: 30,),
+
+                GestureDetector(
+                    onTap: (){
+                        Navigator.pop(context);
+                        context.read<ProductProvider>().deleteAd(selectedId, context,
+                            context.read<UserProvider>().userDetails?.id,
+                            context.read<AuthProvider>().accessToken
+                        );
+                    },
+                    child:Row(
+                    children: const [
+                     Icon(Icons.delete, color: Colors.red, size: 30,),
+                    SizedBox(width: 20,),
+                    Text("Delete", style: TextStyle(fontSize: 16))
+                  ],
+                )),
+
+
+
+
+
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }

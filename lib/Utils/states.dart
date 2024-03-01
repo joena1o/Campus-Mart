@@ -1,5 +1,4 @@
 List states = [
-  "Any state",
   "Abia",
   "Adamawa",
   "Akwa Ibom",

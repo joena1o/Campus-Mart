@@ -1,7 +1,7 @@
-import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
+import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Screens/ProductScreen/ProductScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class AdGrid extends StatefulWidget {
-  const AdGrid({Key? key, this.category, required this.grid}) : super(key: key);
+  const AdGrid({Key? key, required this.category, required this.grid}) : super(key: key);
 
-  final category;
+  final String category;
   final int grid;
 
   @override
@@ -21,21 +21,16 @@ class AdGrid extends StatefulWidget {
 
 class _AdGridState extends State<AdGrid> {
 
-  bool isLoading = true;
-  ProductClass product = ProductClass();
-
-  List<ProductModel> products = [];
-
   static const images = ['Camera.jpeg','detergent.jpeg','earbuds.jpeg','watch.jpeg'];
 
   @override
   void initState(){
     super.initState();
-    context.read<ProductProvider>().getProduct(widget.category, 1, context);
+      context.read<ProductProvider>().getProduct(widget.category, 1, context, false, context.read<AuthProvider>().accessToken);
   }
 
   void _onRefresh() async{
-    context.read<ProductProvider>().getProduct(widget.category, 1, context);
+    context.read<ProductProvider>().getProduct(widget.category, 1, context, false, context.read<AuthProvider>().accessToken);
   }
 
   @override
@@ -51,14 +46,21 @@ class _AdGridState extends State<AdGrid> {
             : context.read<ProductProvider>().refreshController2,
             child: Consumer<ProductProvider>(
               builder: (_, bar, __) {
+
+                if(bar.productList.isEmpty && !bar.getIsGettingProduct){
+                  return const Center(child: Text("No Ads Found"));
+                }
+
                 return !bar.getIsGettingProduct ? SingleChildScrollView(
                     child: StaggeredGrid.count(
                     crossAxisCount:2,
             mainAxisSpacing: 10,
             axisDirection: AxisDirection.down,
             crossAxisSpacing: 10,
-            children: List.generate(bar.productList!.length, (index) {
-              UserModel user = UserModel.fromJson(bar.productList![index]!.user![0]);
+            children: List.generate(bar.productList!.toList().length, (index) {
+
+              UserModel user = UserModel.fromJson(bar.productList![index].user![0]);
+
               return GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductScreen(product: bar.productList![index])));
@@ -83,9 +85,9 @@ class _AdGridState extends State<AdGrid> {
                         child: SizedBox(
                       width: size.width * .5,
                       height: index%2==0? size.width * .34 : size.width * .4,
-                      child: Image(image: AssetImage("assets/images/${images[0]}"),
+                      child: bar.productList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
                       fit: BoxFit.cover,
-                      ),
+                      ):ImageWidget(url: bar.productList![index].images![0]['url'].toString()),
                     ))),
 
                     Positioned(
@@ -93,7 +95,7 @@ class _AdGridState extends State<AdGrid> {
                         child: IconButton(
                             onPressed: () {},
                             icon:  Icon(
-                              bar.productList![index]!.wishList!.isEmpty ? Icons.favorite_border:
+                              bar.productList![index].wishList!.isEmpty ? Icons.favorite_border:
                               Icons.favorite,
                               color: Colors.white,
                             ))),
@@ -108,11 +110,11 @@ class _AdGridState extends State<AdGrid> {
                   children:  [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 7),
-                      child: Text("${bar.productList![index]!.title}",
+                      child: Text("${bar.productList![index].title}",
                         style: const TextStyle(color: Colors.black, fontSize: 13),
                       ),
                     ),
-                    Text("${bar.productList![index]!.adCategory}",
+                    Text("${bar.productList![index].adCategory}",
                         style: const TextStyle(color: primary, fontSize: 12)),
 
                     Padding(

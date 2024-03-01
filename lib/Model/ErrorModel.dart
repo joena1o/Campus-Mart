@@ -1,15 +1,21 @@
+import 'dart:convert';
+
 class ErrorModel {
-  String message;
+  String? message;
 
+  ErrorModel({
+    this.message,
+  });
 
-  ErrorModel(this.message,);
+  factory ErrorModel.fromRawJson(String str) => ErrorModel.fromJson(json.decode(str));
 
-  factory ErrorModel.fromJson(dynamic json) {
-    return ErrorModel(json['message'] as String,);
-  }
+  String toRawJson() => json.encode(toJson());
 
-  @override
-  String toString() {
-    return '{ ${this.message},  }';
-  }
+  factory ErrorModel.fromJson(Map<String, dynamic> json) => ErrorModel(
+    message: json["message"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "message": message,
+  };
 }

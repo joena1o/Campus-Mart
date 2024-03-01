@@ -1,6 +1,7 @@
 import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/Utils/timeAndDate.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,7 +34,11 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            child: Text("N${product.price}", style: const TextStyle(fontSize: 23, fontFamily: "century", letterSpacing: 1),),
+            child:
+            !product.contactForPrice! ?
+            Text("N${normalizeAmount(product.price!)}", style: const TextStyle(fontSize: 23, fontFamily: "century", letterSpacing: 1),)
+            : const Text("Contact for price", style: TextStyle(fontSize: 15, letterSpacing: 1),)
+            ,
           ),
 
           Row(
@@ -63,7 +68,7 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
                   color: primary,
                 ),
               ),
-              Container(
+              GestureDetector(child:Container(
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 decoration: BoxDecoration(
                   // border: Border.all(color: primary),
@@ -73,7 +78,9 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
                   size: 24,
                   color: primary,
                 ),
-              )
+              ), onTap: (){
+                launch("sms: ${user.phone}");
+              },)
 
             ],
           )

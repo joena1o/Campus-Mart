@@ -41,42 +41,7 @@ class _SearchBarState extends State<SearchBar> {
             ],
           ),
 
-
-
-          Container(
-            margin: const EdgeInsets.only(top: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child:Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(250, 250, 250, 1),
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: const Text("Search here...", style: TextStyle(fontSize: 12),),
-                )),
-                Container(width: 10,),
-                Container(
-                  width: size.width*.15,
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.bottomRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          secondary,
-                          primary,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: const Icon(Icons.search, color: Colors.white, size: 17,),
-                )
-              ],
-            ),
-          )
+          Container(height: 20,),
 
         ],
       )

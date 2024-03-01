@@ -1,17 +1,34 @@
+import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/SignUpProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
-import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Wrapper.dart';
+import 'package:campus_mart/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  OneSignal.shared.setAppId("4e46778f-4e06-4ed1-a774-12e34ba10da1");
+  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+    print("Accepted permission: $accepted");
+  });
+
   runApp(
       MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_)=> ProductProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider())
+        ChangeNotifierProvider(create: (_)=> SignUpProvider())
       ],
       child: const MyApp()));
 }
@@ -47,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
 
-
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -57,10 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: primary, //or set color with: Color(0xFF0000FF)
+      statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
     ));
-    return const Scaffold(
-      body: Wrapper(),
-    );
+    return  const Wrapper();
   }
 }

@@ -1,5 +1,7 @@
-import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/Provider/AuthProvider.dart';
+import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({Key? key}) : super(key: key);
@@ -14,7 +16,8 @@ class _NavbarState extends State<Navbar> {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      // padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: const Color.fromRGBO(250, 250, 250, 1),
         borderRadius: BorderRadius.circular(10)
@@ -24,20 +27,22 @@ class _NavbarState extends State<Navbar> {
         children: [
           IconButton(onPressed: (){
             Navigator.of(context).pop();
-          }, icon: const Icon(Icons.chevron_left, size: 25,)),
+          }, icon: const Icon(Icons.keyboard_arrow_left, size: 35,)),
 
-          const Expanded(child:SizedBox(
+           Expanded(child:SizedBox(
               child: TextField(
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Search here",
-              hintStyle: TextStyle(fontSize: 12)
+                textInputAction: TextInputAction.search,
+                decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "Search here",
+                hintStyle: TextStyle(fontSize: 14),
             ),
+             onSubmitted: (String? text){
+               Provider.of<ProductProvider>(context, listen: false).searchProduct(text,
+                   context.read<AuthProvider>().accessToken, context);
+             },
           ))),
 
-          IconButton(onPressed: (){
-            Scaffold.of(context).openDrawer();
-          }, icon: const Icon(Icons.tune, size: 25))
         ],
       ),
     );

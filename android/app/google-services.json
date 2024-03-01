@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "24001240351",
+    "project_id": "campusmart-5aac2",
+    "storage_bucket": "campusmart-5aac2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24001240351:android:95487d54085eaffd54e42a",
+        "android_client_info": {
+          "package_name": "com.example.campus_mart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24001240351-knko5r8huj8e4vc3eh5lds2ommd2mqd5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_ankTrYn-9V7Ck2hx8FCfK6_vii7rEKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24001240351-knko5r8huj8e4vc3eh5lds2ommd2mqd5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

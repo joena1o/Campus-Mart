@@ -47,10 +47,11 @@ class NetworkHelper {
   /// A function to do any get request with the url and headers
   /// then sends back a json decoded result
   Future<dynamic> get(String url, {Map<String, String>? headers, body}) async {
+    print(url);
     try {
       return http.get(Uri.parse(url), headers: headers).then((http.Response response) {
         final String res = response.body;
-        print(res);
+        print(response.statusCode);
         var myResponse={
           "code":response.statusCode,
           "body": response.body
@@ -70,9 +71,9 @@ class NetworkHelper {
   /// A function to do any post request with the url and headers
   /// then sends back a json decoded result
   Future<dynamic> post(String url, {Map<String, String>? headers, body, encoding}) {
-    print(url);
-    print(headers);
-    print(body);
+    // print(url);
+    // print(headers);
+    // print(body);
     try {
       return http
           .post(Uri.parse(url),
@@ -208,14 +209,10 @@ class NetworkHelper {
     try {
       print(url);
       return http.delete(Uri.parse(url), headers: headers).then((http.Response response) {
-        // final String res = response.body;
+        final String res = response.body;
         final int statusCode = response.statusCode;
-        // var result = _decoder.convert(res);
-
-        if (statusCode < 200 || statusCode > 400) {
-          throw ("no");
-        }
-        return "yes";
+        // print(statusCode);
+        return res;
       });
     } catch (e) {
       print(e);

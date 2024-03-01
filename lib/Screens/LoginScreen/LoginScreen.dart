@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'package:campus_mart/Model/AuthModel.dart';
+import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
+import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/HomeScreen/HomeScreen.dart';
 import 'package:campus_mart/Screens/SignUpScreen/SignUpScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:campus_mart/Utils/Snackbar.dart';
+import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:provider/provider.dart';
 
@@ -20,8 +23,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
   Auth auth = Auth();
   bool isLoading = false;
+
+  AuthProvider? authProvider;
+
+  @override
+  void initState(){
+    super.initState();
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +127,11 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isLoading = true;
     });
-    await auth.loginUser({"email":email.text.toString(), "password":password.text.toString()})
-        .then((value){
+    await auth.loginUser({"email": email.text.toString(), "password": password.text.toString()})
+        .then((AuthModel value){
           setState(()=> isLoading = false);
-          context.read<UserProvider>().setUserDetails(value);
+          context.read<UserProvider>().setUserDetails(UserModel.fromJson(value.data!.toJson()), password.text);
+          authProvider?.accessToken = value.auth!;
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomeScreen()));
     }).catchError((onError){
       setState(()=> isLoading = false);

@@ -11,6 +11,7 @@ class ProductModel{
   int? price;
   List<dynamic>? images;
   String? userId;
+  String? countryId;
   List<dynamic>? user;
   String? campus;
   List<dynamic>? wishList;
@@ -27,6 +28,7 @@ class ProductModel{
   this.price,
   this.images,
   this.userId,
+  this.countryId,
   this.user,
   this.campus,
   this.wishList
@@ -45,6 +47,7 @@ class ProductModel{
         negotiable: json['negotiable'],
         price: json['price'],
         images: json['images'],
+        countryId: json['countryId'],
         userId: json['userId'],
         user: json['user'],
         campus: json['campus'],
@@ -65,8 +68,26 @@ class ProductModel{
       "price": price,
       "images": images ?? [],
       "userId": userId,
+      "countryId": countryId,
       "campus": campus,
       "wishList": wishList
+    };
+  }
+
+  Map<String, dynamic> toJson2(){
+    return {
+      "title": title,
+      "description": description,
+      "adCategory": adCategory,
+      "adType": adType,
+      "condition": condition,
+      "contactForPrice": contactForPrice ?? false,
+      "negotiable": negotiable ?? false,
+      "price": price,
+      "images": images ?? [],
+      "userId": userId,
+      "countryId": countryId,
+      "campus": campus,
     };
   }
 
