@@ -38,6 +38,7 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Expanded(
+      flex: 1,
         child: SmartRefresher(
             enablePullDown: false,
             enablePullUp: true,

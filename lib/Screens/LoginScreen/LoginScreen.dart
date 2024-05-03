@@ -4,6 +4,7 @@ import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Screens/ForgotPasswordScreen/ForgotPasswordScreen.dart';
 import 'package:campus_mart/Screens/HomeScreen/HomeScreen.dart';
 import 'package:campus_mart/Screens/SignUpScreen/SignUpScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:provider/provider.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -99,7 +102,18 @@ class _LoginScreenState extends State<LoginScreen> {
               child: CircularProgressIndicator(),
             )),
 
-            const Text("Forgot password, Click here", style: TextStyle(fontSize:15,fontWeight:FontWeight.normal)),
+            Wrap(
+              children: [
+                  const Text("Forgot password, ", style: TextStyle(fontSize:15,fontWeight:FontWeight.normal)),
+                  GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_)=> const ForgotPasswordScreen())
+                        );
+                      },
+                      child: const Text("Click here", style: TextStyle(fontSize:15, color: Colors.orangeAccent, fontWeight:FontWeight.normal))),
+              ],
+            ),
 
             Container(height: size.height*.2,),
 
@@ -131,6 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
         .then((AuthModel value){
           setState(()=> isLoading = false);
           context.read<UserProvider>().setUserDetails(UserModel.fromJson(value.data!.toJson()), password.text);
+          OneSignal.shared.setExternalUserId(value.data!.id!);
           authProvider?.accessToken = value.auth!;
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomeScreen()));
     }).catchError((onError){

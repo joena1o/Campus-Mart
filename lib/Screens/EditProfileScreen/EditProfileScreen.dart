@@ -1,5 +1,6 @@
 import 'package:campus_mart/Model/CampusModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
+import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/SignUpProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Utils/colors.dart';
@@ -31,13 +32,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-
-    firstName.text =
-        context.read<UserProvider>().userDetails!.firstName!.toString();
-    lastName.text =
-        context.read<UserProvider>().userDetails!.lastName!.toString();
+    firstName.text = context.read<UserProvider>().userDetails!.firstName!.toString();
+    lastName.text = context.read<UserProvider>().userDetails!.lastName!.toString();
     phone.text = "${context.read<UserProvider>().userDetails!.phone}";
     state = context.read<UserProvider>().userDetails!.state;
+    context.read<SignUpProvider>().fetchCampuses(state, context);
   }
 
   @override
@@ -202,9 +201,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   "phone": phone.text.toString(),
                                   "campus": campus,
                                 };
-                              context
-                                  .read<UserProvider>()
-                                  .editProfile(data, context);
+                              context.read<UserProvider>().editProfile(data, context.read<AuthProvider>().accessToken,context);
                             }
                           },
                           child: Container(

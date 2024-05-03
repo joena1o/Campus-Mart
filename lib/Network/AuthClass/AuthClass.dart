@@ -3,7 +3,9 @@ import 'package:campus_mart/Model/AuthModel.dart';
 import 'package:campus_mart/Model/CampusModel.dart';
 import 'package:campus_mart/Model/CountryModel.dart';
 import 'package:campus_mart/Model/StateModel.dart';
+import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
+import 'package:campus_mart/Model/VerifyOtpModel.dart';
 import 'package:campus_mart/Network/error_handler.dart';
 import 'package:campus_mart/Network/network_util.dart';
 import 'package:campus_mart/Utils/conn.dart';
@@ -25,6 +27,9 @@ class Auth{
   String createUserEndpoint = "$conn/user/create";
   String editProfileEndpoint = "$conn/user/editProfile";
 
+  String forgottenPasswordUrl  = "$conn/forgot-password/";
+  String verifyOtpUrl  = "$conn/forgot-password/verify";
+  String resetPasswordUrl = "$conn/forgot-password/reset-password";
 
   Future<AuthModel> loginUser(data){
     headers  = {
@@ -32,10 +37,8 @@ class Auth{
       "Content-Type": "application/json",
     };
     AuthModel authModel = AuthModel();
-    print(data);
     return networkHelper.post(loginEndpoint, headers: headers,  encoding: Encoding.getByName("utf-8"), body: data)
         .then((dynamic res) async{
-          print(res);
           authModel = AuthModel.fromJson(res);
           return authModel;
         }).catchError((err){
@@ -105,7 +108,6 @@ class Auth{
       states = res.map((val)=> StateModel.fromJson(val)).toList();
       return states;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -126,25 +128,26 @@ class Auth{
     }
 
 
-    Future editProfile(data){
+    Future editProfile(data, token){
       headers  = {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        "Authorization": token
       };
-      return networkHelper.post(editProfileEndpoint, body:data, headers: headers)
+      return networkHelper.put(editProfileEndpoint, body:data, headers: headers)
           .then((dynamic value) async{
-            print(value);
-        return true;
+        return UserModel.fromJson(value['data']);
       }).catchError((err){
         errorHandler.handleError(err['body']);
       });
   }
 
 
-  Future updateDp(email, dp){
+  Future updateDp(email, dp, token){
     headers  = {
       "Accept": "application/json",
       "Content-Type": "application/json",
+      "Authorization": token
     };
     return networkHelper.post(updateDpUrl, body:{
       "emailField": email,
@@ -170,9 +173,66 @@ class Auth{
           .then((dynamic value) async{
         return true;
       }).catchError((err){
+        print(err);
         errorHandler.handleError(err['body']);
       });
     }
+
+  Future requestForgottenPasswordOtp(email){
+    SuccessMessageModel? successMessageModel;
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    return networkHelper.post(forgottenPasswordUrl, body:{
+      "email": email
+    }, headers: headers)
+        .then((dynamic value) async{
+      successMessageModel = SuccessMessageModel.fromJson(value);
+      return successMessageModel;
+    }).catchError((err){
+      print(err);
+      errorHandler.handleError(err['body']);
+    });
+  }
+
+  Future verifyOtp(otp, email){
+    VerifyTokenModel? verifyTokenModel;
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    return networkHelper.post(verifyOtpUrl, body:{
+      "email": email,
+      "otp": otp
+    }, headers: headers)
+        .then((dynamic value) async{
+      verifyTokenModel = VerifyTokenModel.fromJson(value);
+      return verifyTokenModel;
+    }).catchError((err){
+      print(err);
+      errorHandler.handleError(err['body']);
+    });
+  }
+
+  Future resetPassword(token, newPassword){
+    VerifyTokenModel? verifyTokenModel;
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    return networkHelper.post(resetPasswordUrl, body:{
+      "password": newPassword,
+    }, headers: headers)
+        .then((dynamic value) async{
+      verifyTokenModel = VerifyTokenModel.fromJson(value);
+      return verifyTokenModel;
+    }).catchError((err){
+      print(err);
+      errorHandler.handleError(err['body']);
+    });
+  }
 
 
 }

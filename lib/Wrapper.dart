@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:campus_mart/Model/UserModel.dart';
+import 'package:campus_mart/Provider/AdsProvider.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/OnboardingScreen/OnboardingScreen.dart';
@@ -7,6 +8,8 @@ import 'package:campus_mart/Screens/WelcomeScreen/WelcomeScreen.dart';
 import 'package:campus_mart/Utils/savePrefs.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
 
@@ -21,7 +24,6 @@ class _WrapperState extends State<Wrapper> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     Timer(const Duration(seconds: 4), () {
       read("user").then((user){
         if(user==null){
@@ -33,6 +35,7 @@ class _WrapperState extends State<Wrapper> {
           context.read<UserProvider>().loadDetails();
           readValue('passcode').then((passcode){
             Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth!.email, passcode, context);
+            //Provider.of<AdProvider>(context, listen: false).loadAd();
           });
         }
       });

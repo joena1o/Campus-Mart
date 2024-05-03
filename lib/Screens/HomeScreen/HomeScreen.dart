@@ -32,16 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState(){
     super.initState();
-
     //Subscribe User
     String? user = context.read<UserProvider>().userDetails?.id.toString();
-
-    OneSignal.shared.setExternalUserId(user ?? "").then((results) {
-      print(results.toString());
-    }).catchError((error) {
-      print(error.toString());
-    });
-
+    OneSignal.shared.setExternalUserId(user ?? "");
+    Provider.of<UserProvider>(context, listen: false).loadDetails();
   }
 
   @override

@@ -54,12 +54,12 @@ class _AdGridState extends State<AdGrid> {
                 return !bar.getIsGettingProduct ? SingleChildScrollView(
                     child: StaggeredGrid.count(
                     crossAxisCount:2,
-            mainAxisSpacing: 10,
-            axisDirection: AxisDirection.down,
-            crossAxisSpacing: 10,
-            children: List.generate(bar.productList!.toList().length, (index) {
+                    mainAxisSpacing: 10,
+                    axisDirection: AxisDirection.down,
+                    crossAxisSpacing: 10,
+                    children: List.generate(bar.productList!.toList().length, (index) {
 
-              UserModel user = UserModel.fromJson(bar.productList![index].user![0]);
+                    UserModel user = UserModel.fromJson(bar.productList![index].user![0]);
 
               return GestureDetector(
                 onTap: (){
@@ -80,6 +80,8 @@ class _AdGridState extends State<AdGrid> {
                 child: Stack(
                   children: [
 
+
+
                     Positioned(child: Opacity(
                         opacity: 0.78,
                         child: SizedBox(
@@ -99,6 +101,24 @@ class _AdGridState extends State<AdGrid> {
                               Icons.favorite,
                               color: Colors.white,
                             ))),
+
+
+                    Positioned(
+                      top: 0,
+                      child: Visibility(
+                        visible: bar.productList![index].adType != "Free",
+                        child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: const BoxDecoration(
+                                color: Colors.orangeAccent
+                            ),
+                            child: Text("${bar.productList![index].adType} Ad",
+                            style: const TextStyle(color: Colors.white, fontSize: 10),
+                            )
+                        ),
+                      ),
+                    ),
+
                   ],
                 ),
               ),
@@ -123,7 +143,9 @@ class _AdGridState extends State<AdGrid> {
                         style: const TextStyle(color: Colors.black, fontSize: 12)))
                   ],
                 ),
-              )
+              ),
+
+
             ],
           ),
         ));

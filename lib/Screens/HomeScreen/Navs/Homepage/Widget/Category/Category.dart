@@ -53,6 +53,7 @@ class _CategoryState extends State<Category> {
                   margin: const EdgeInsets.only(right: 20,top: 9),
                   child: GestureDetector(
                       onTap: (){
+                        context.read<ProductProvider>().currentCategory = categories[i];
                         context.read<ProductProvider>().resetItems();
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_)=> CategoryScreen(index: i,))

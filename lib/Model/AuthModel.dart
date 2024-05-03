@@ -35,7 +35,8 @@ class Data {
   String? countryId;
   String? username;
   String? password;
-  dynamic image;
+  String? image;
+  bool? emailVerified;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
@@ -52,6 +53,7 @@ class Data {
     this.username,
     this.password,
     this.image,
+    this.emailVerified,
     this.createdAt,
     this.updatedAt,
     this.v,
@@ -73,6 +75,7 @@ class Data {
     username: json["username"],
     password: json["password"],
     image: json["image"],
+    emailVerified:  json['emailVerified'],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
@@ -90,6 +93,7 @@ class Data {
     "username": username,
     "password": password,
     "image": image,
+    "emailVerified": emailVerified,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "__v": v,

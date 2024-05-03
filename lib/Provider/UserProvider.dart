@@ -41,9 +41,9 @@ class UserProvider extends ChangeNotifier{
     });
   }
 
-  void updateDp(email, image, context){
+  void updateDp(email, image, token, context){
     updatingDp = true;
-    user.updateDp(email, image).then((value){
+    user.updateDp(email, image, token).then((value){
       updatingDp = false;
       userDp = image;
       Navigator.pop(context);
@@ -57,17 +57,18 @@ class UserProvider extends ChangeNotifier{
     });
   }
 
-  void editProfile(data, context){
+  void editProfile(data, token, context) async{
     editingProfile = true;
-    user.editProfile(data)
-    .then((value){
+    try{
+      userDetails = await user.editProfile(data, token);
+      await saveJsonDetails("user", userDetails);
+      Navigator.pop(context);
+    }catch(e){
+      showMessage(e.toString(), context);
+    }finally{
       editingProfile = false;
-    }).catchError((onError){
-      editingProfile = false;
-      ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
-      notifyListeners();
-    });
+    }
+    notifyListeners();
   }
 
 }

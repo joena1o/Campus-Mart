@@ -6,6 +6,7 @@ import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Screens/AdScreen/SuccessScreen.dart';
 import 'package:campus_mart/Utils/Categories.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:campus_mart/Utils/colors.dart';
@@ -13,9 +14,9 @@ import 'package:campus_mart/Utils/conn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+
 
 class AdScreen extends StatefulWidget {
   const AdScreen({Key? key}) : super(key: key);
@@ -43,6 +44,7 @@ class _AdScreenState extends State<AdScreen> {
 
   bool isUploading = false;
 
+  bool isSuccessful = false;
 
   @override
   void initState(){
@@ -50,6 +52,7 @@ class _AdScreenState extends State<AdScreen> {
     productModel.userId = context.read<UserProvider>().userDetails!.id;
     productModel.campus = context.read<UserProvider>().userDetails!.campus;
     productModel.countryId = context.read<UserProvider>().userDetails!.countryId;
+    productModel.state = context.read<UserProvider>().userDetails!.state;
     productModel.contactForPrice = false;
   }
 
@@ -59,7 +62,8 @@ class _AdScreenState extends State<AdScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
+    return isSuccessful ? const SuccessScreen()
+    : Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text("Post an ad", style: TextStyle(fontSize: 15),),
@@ -92,14 +96,14 @@ class _AdScreenState extends State<AdScreen> {
                     value: "Basic",
                     child: SizedBox(
                       width: size.width*.8,
-                        child: const Text("Premium Ad - N500"))),
-                DropdownMenuItem(
-                    value: "Standard",
-                    child: SizedBox(
-                        width: size.width*.8,
-                        child: const Text("Standard Ad - N200"))),
+                        child: const Text("Basic Ad - N200"))),
                 DropdownMenuItem(
                     value: "Premium",
+                    child: SizedBox(
+                        width: size.width*.8,
+                        child: const Text("Premium Ad - N500"))),
+                DropdownMenuItem(
+                    value: "Free",
                     child: SizedBox(
                         width: size.width*.8,
                         child: const Text("Basic Ad - Free"))),
@@ -329,21 +333,19 @@ class _AdScreenState extends State<AdScreen> {
     );
   }
 
-  uploadProduct(){
+  void uploadProduct(){
     productModel.title = title.text.toString();
     productModel.description = description.text.toString();
     productModel.price = !productModel.contactForPrice! ? int.parse(price.text.toString().replaceAll("N","")):0;
     product.addProduct(productModel.toJson2(), context.read<AuthProvider>().accessToken)
     .then((value){
       setState(()=> isUploading = false);
-      showMessage(value['message'], context);
-      finish(context);
+      setState(()=> isSuccessful = true);
     }).catchError((onError){
       setState(()=> isUploading = false);
       ErrorModel error = ErrorModel.fromJson(onError);
       showMessage(error.message, context);
     });
-
   }
 
   void _pickImages() async {
@@ -364,34 +366,32 @@ class _AdScreenState extends State<AdScreen> {
     if (pickedFiles != null) {
       setState(() {
         _images = [File(pickedFiles.path)];
-            // pickedFiles.map((file) => File(file.path)).toList();
       });
     }
   }
 
-   _uploadImages() async {
+   Future<List<dynamic>> _uploadImages() async {
     setState(()=> isUploading = true);
     final url = Uri.parse('$conn/upload-images');
     http.MultipartRequest request = http.MultipartRequest('POST', url,);
+    request.headers['Authorization'] = context.read<AuthProvider>().accessToken;
     for (final image in _images) {
       final multipartFile = await http.MultipartFile.fromPath(
         "image", image.path,
       );
       request.files.add(multipartFile);
     }
-  await request.send().then((value) async{
-    if(value.statusCode == 200) {
-      final resp_string = await value.stream.bytesToString();
+    final result = await request.send();
+    if(result.statusCode == 200) {
+      final resp_string = await result.stream.bytesToString();
       final connValue = jsonDecode(resp_string);
-      print(connValue['data']);
       productModel.images = connValue['data'];
       uploadProduct();
-      return resp_string;
+      return connValue['data'];
     } else {
       setState(()=> isUploading = false);
-      return "Failed";
+      return [];
     }
-    });
   }
 
 }

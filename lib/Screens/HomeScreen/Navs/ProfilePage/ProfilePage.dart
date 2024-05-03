@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlerts.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
+import 'package:campus_mart/Utils/adsAdUnit.dart';
 import 'package:campus_mart/Utils/conn.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/EditProfileScreen/EditProfileScreen.dart';
@@ -11,6 +14,7 @@ import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -23,10 +27,26 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage>{
 
   File? _images;
+  BannerAd? _bannerAd;
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadAd();
+  }
 
   @override
   Widget build(BuildContext context) {
+
     final userDetails = context.read<UserProvider>().userDetails;
+
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(child:Column(
       children: [
@@ -162,6 +182,15 @@ class _ProfilePageState extends State<ProfilePage>{
               )),
 
 
+              30.height,
+
+              _bannerAd == null
+              // Nothing to render yet.
+                  ? const SizedBox() : SizedBox(
+                  height: 50,
+                  child: AdWidget(ad: _bannerAd!)),
+
+
             ],
         ))
 
@@ -198,11 +227,11 @@ class _ProfilePageState extends State<ProfilePage>{
     showLoadingDialog();
     final url = Uri.parse('$conn/upload-images');
     http.MultipartRequest request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = context.read<AuthProvider>().accessToken;
       final multipartFile = await http.MultipartFile.fromPath(
         "image", _images!.path,
       );
       request.files.add(multipartFile);
-
     await request.send().then((value) async{
       if(value.statusCode == 200) {
         final responseString = await value.stream.bytesToString();
@@ -214,14 +243,13 @@ class _ProfilePageState extends State<ProfilePage>{
         return "Failed";
       }
     });
-
-
   }
 
   updateUser(connValue){
     context.read<UserProvider>().updateDp(
         context.read<UserProvider>().userDetails?.email,
         connValue['data'][0]['url'],
+        context.read<AuthProvider>().accessToken,
         context);
   }
 
@@ -266,12 +294,39 @@ class _ProfilePageState extends State<ProfilePage>{
       context: context,
       builder: (BuildContext context) {
         return  WillPopScope(child: const Center(child:CircularProgressIndicator()),
-
             onWillPop: () async{
               return false;
             });
       },
     );
+  }
+
+  void _loadAd() {
+    final bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: bannerAdUnit,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+          if (!mounted) {
+            ad.dispose();
+            return;
+          }
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, error) {
+          debugPrint('BannerAd failed to load: $error');
+          ad.dispose();
+        },
+      ),
+    );
+
+    // Start loading.
+    bannerAd.load();
   }
 
 }

@@ -51,8 +51,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: CircularProgressIndicator(
                 color: Colors.white,
               ),
-            ),
-          );
+             ),
+            );
           }
         )
 

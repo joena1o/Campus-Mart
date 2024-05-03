@@ -30,6 +30,8 @@ class ProductProvider extends ChangeNotifier{
 
   ProductClass product = ProductClass();
 
+  String? currentCategory;
+
   bool loadingWishList = false;
   bool get isLoadingWishList => loadingWishList;
 
@@ -67,8 +69,10 @@ class ProductProvider extends ChangeNotifier{
     product.fetchWishList(username, token).then((value){
       loadingWishList = false;
       wishProductModel = value;
+      print(wishProductModel?.length);
       notifyListeners();
     }).catchError((onError){
+      print(onError);
       loadingWishList = false;
       wishProductModel = [];
       notifyListeners();
@@ -214,17 +218,30 @@ class ProductProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void searchProductByCategory(query, token, ctx) async{
+    categoryProductList = [];
+    isGettingProduct = true;
+    try{
+      categoryProductList += await product.searchCategoryProduct(query, searchIndex, currentCategory, token);;
+    }catch(e){
+      showMessage(e.toString(), ctx);
+    }finally{
+      isGettingProduct = false;
+    }
+    notifyListeners();
+  }
+
   void getProduct(category,val,context,cat,token) async{
     isGettingProduct = true;
     await product.fetchProduct(category, category.toString().isEmpty ? indexAll : indexCat, token).then((value){
       isGettingProduct = false;
       if(category.toString().isEmpty){
-          if(value is List<ProductModel>){
+          if(value is List<ProductModel> && value.isNotEmpty){
             productList += value;
             indexAll += 1;
           }
       }else{
-        if(value is List<ProductModel>){
+        if(value is List<ProductModel> && value.isNotEmpty){
           categoryProductList += value;
           indexCat += 1;
         }

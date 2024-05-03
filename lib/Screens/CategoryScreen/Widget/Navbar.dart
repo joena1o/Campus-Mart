@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Navbar extends StatefulWidget {
-  const Navbar({Key? key}) : super(key: key);
+  const Navbar({Key? key, required this.categoryPage}) : super(key: key);
+
+  final bool categoryPage;
 
   @override
   State<Navbar> createState() => _NavbarState();
@@ -38,7 +40,9 @@ class _NavbarState extends State<Navbar> {
                 hintStyle: TextStyle(fontSize: 14),
             ),
              onSubmitted: (String? text){
-               Provider.of<ProductProvider>(context, listen: false).searchProduct(text,
+
+               !widget.categoryPage ? Provider.of<ProductProvider>(context, listen: false).searchProduct(text,
+                   context.read<AuthProvider>().accessToken, context) : Provider.of<ProductProvider>(context, listen: false).searchProductByCategory(text,
                    context.read<AuthProvider>().accessToken, context);
              },
           ))),

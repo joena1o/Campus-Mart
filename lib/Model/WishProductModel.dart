@@ -1,10 +1,16 @@
 import 'dart:convert';
 
-WishProductModel wishProductModelFromJson(String str) => WishProductModel.fromJson(json.decode(str));
-
-String wishProductModelToJson(WishProductModel data) => json.encode(data.toJson());
-
 class WishProductModel {
+  String? id;
+  String? username;
+  String? productId;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
+  String? convertedId;
+  List<Product>? product;
+  List<User>? user;
+
   WishProductModel({
     this.id,
     this.username,
@@ -17,15 +23,9 @@ class WishProductModel {
     this.user,
   });
 
-  String? id;
-  String? username;
-  String? productId;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  int? v;
-  String? convertedId;
-  List<Product>? product;
-  List<User>? user;
+  factory WishProductModel.fromRawJson(String str) => WishProductModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory WishProductModel.fromJson(Map<String, dynamic> json) => WishProductModel(
     id: json["_id"],
@@ -53,6 +53,24 @@ class WishProductModel {
 }
 
 class Product {
+  String? id;
+  String? title;
+  String? description;
+  String? adCategory;
+  String? adType;
+  String? condition;
+  bool? contactForPrice;
+  bool? negotiable;
+  String? countryId;
+  String? campus;
+  int? price;
+  List<dynamic>? images;
+  String? userId;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
+  String? state;
+
   Product({
     this.id,
     this.title,
@@ -62,6 +80,7 @@ class Product {
     this.condition,
     this.contactForPrice,
     this.negotiable,
+    this.countryId,
     this.campus,
     this.price,
     this.images,
@@ -69,23 +88,12 @@ class Product {
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.state,
   });
 
-  String? id;
-  String? title;
-  String? description;
-  String? adCategory;
-  String? adType;
-  String? condition;
-  bool? contactForPrice;
-  bool? negotiable;
-  String? campus;
-  int? price;
-  List<dynamic>? images;
-  String? userId;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  int? v;
+  factory Product.fromRawJson(String str) => Product.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
     id: json["_id"],
@@ -96,6 +104,7 @@ class Product {
     condition: json["condition"],
     contactForPrice: json["contactForPrice"],
     negotiable: json["negotiable"],
+    countryId: json["countryId"],
     campus: json["campus"],
     price: json["price"],
     images: json["images"] == null ? [] : List<dynamic>.from(json["images"]!.map((x) => x)),
@@ -103,6 +112,7 @@ class Product {
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
+    state: json["state"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -114,6 +124,7 @@ class Product {
     "condition": condition,
     "contactForPrice": contactForPrice,
     "negotiable": negotiable,
+    "countryId": countryId,
     "campus": campus,
     "price": price,
     "images": images == null ? [] : List<dynamic>.from(images!.map((x) => x)),
@@ -121,48 +132,59 @@ class Product {
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "__v": v,
+    "state": state,
   };
 }
 
 class User {
+  String? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? phone;
+  String? state;
+  String? campus;
+  String? countryId;
+  String? username;
+  String? password;
+  String? image;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
+
   User({
     this.id,
     this.firstName,
-    this.lastname,
+    this.lastName,
     this.email,
     this.phone,
     this.state,
     this.campus,
+    this.countryId,
     this.username,
     this.password,
+    this.image,
     this.createdAt,
     this.updatedAt,
     this.v,
   });
 
-  String? id;
-  String? firstName;
-  String? lastname;
-  String? email;
-  int? phone;
-  String? state;
-  String? campus;
-  String? username;
-  String? password;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  int? v;
+  factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["_id"],
     firstName: json["firstName"],
-    lastname: json["lastname"],
+    lastName: json["lastName"],
     email: json["email"],
     phone: json["phone"],
     state: json["state"],
     campus: json["campus"],
+    countryId: json["countryId"],
     username: json["username"],
     password: json["password"],
+    image: json["image"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
@@ -171,13 +193,15 @@ class User {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "firstName": firstName,
-    "lastname": lastname,
+    "lastName": lastName,
     "email": email,
     "phone": phone,
     "state": state,
     "campus": campus,
+    "countryId": countryId,
     "username": username,
     "password": password,
+    "image": image,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "__v": v,

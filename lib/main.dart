@@ -1,3 +1,4 @@
+import 'package:campus_mart/Provider/AdsProvider.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/SignUpProvider.dart';
@@ -7,6 +8,7 @@ import 'package:campus_mart/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +17,7 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  MobileAds.instance.initialize();
 
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
   OneSignal.shared.setAppId("4e46778f-4e06-4ed1-a774-12e34ba10da1");
@@ -25,8 +28,11 @@ void main() async{
   runApp(
       MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_)=> AdProvider()),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => AuthProvider(),
+        ),
         ChangeNotifierProvider(create: (_)=> ProductProvider()),
         ChangeNotifierProvider(create: (_)=> SignUpProvider())
       ],
@@ -73,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
+      statusBarColor: Colors.transparent,
     ));
     return  const Wrapper();
   }

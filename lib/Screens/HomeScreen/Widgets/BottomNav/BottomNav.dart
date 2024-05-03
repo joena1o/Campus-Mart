@@ -23,9 +23,10 @@ class _BottomNavState extends State<BottomNav> {
     return Container(
       color: Colors.white,
       width: size.width,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       height: size.height * .07,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
               onPressed: () {

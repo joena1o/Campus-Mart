@@ -162,6 +162,7 @@ class ProductClass{
     return networkHelper.get("$wishListEndpoint/$username", headers: headers)
         .then((dynamic res) async{
       Map<String, dynamic> response = res;
+      print(response['data']);
       productModel = response['data']
           .map<WishProductModel>(
               (json) => WishProductModel.fromJson(json))
@@ -255,7 +256,6 @@ class ProductClass{
       adAlert = result.map((json)=>AdAlertModel.fromJson(json)).toList();
       return adAlert;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -269,10 +269,8 @@ class ProductClass{
     };
     return networkHelper.delete("$addAlertEndpoint/$id", headers: headers)
         .then((dynamic res) async{
-          print(res);
       return res;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
