@@ -15,9 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:galleryimage/galleryimage.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:popup_banner/popup_banner.dart';
 import 'package:provider/provider.dart';
 
 
@@ -154,8 +152,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   const Text("Reviews", style: TextStyle(fontSize: 16),),
                   Row(
                     children:  [
-                      const Icon(Icons.sort),
-                      const SizedBox(width: 10,),
+
+                      // const Icon(Icons.sort),
+                      // const SizedBox(width: 10,),
 
                       IconButton(
                           onPressed: (){
@@ -290,7 +289,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       }).catchError((onError){
                         setState(()=> isLoading = false);
                         ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-                        showMessage(errorModel.message, context);
+                        showMessageError(errorModel.message, context);
                       });
                     }
                   },

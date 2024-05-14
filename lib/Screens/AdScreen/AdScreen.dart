@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:campus_mart/Model/ErrorModel.dart';
+import 'package:campus_mart/Model/PaymentTypeModel.dart';
+import 'package:campus_mart/Model/PrePaidProductModel.dart';
 import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
+import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/AdScreen/SuccessScreen.dart';
 import 'package:campus_mart/Utils/Categories.dart';
@@ -12,8 +15,10 @@ import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/conn.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,12 +31,16 @@ class AdScreen extends StatefulWidget {
 
 class _AdScreenState extends State<AdScreen> {
 
+  var publicKey = 'pk_test_c1025aaf085e2f65db15176d53378af42b1b1767';
+  final plugin = PaystackPayment();
+
   bool contact = false;
   bool negotiable = false;
   ProductModel productModel = ProductModel();
   ProductClass product = ProductClass();
 
   UserModel userDetails = UserModel();
+  PrePaidProductModel? prePaidProductModel;
 
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
@@ -46,23 +55,34 @@ class _AdScreenState extends State<AdScreen> {
 
   bool isSuccessful = false;
 
+  bool processingPayment = false;
+
   @override
   void initState(){
-    super.initState();
+    plugin.initialize(publicKey: publicKey);
     productModel.userId = context.read<UserProvider>().userDetails!.id;
     productModel.campus = context.read<UserProvider>().userDetails!.campus;
     productModel.countryId = context.read<UserProvider>().userDetails!.countryId;
     productModel.state = context.read<UserProvider>().userDetails!.state;
     productModel.contactForPrice = false;
+    super.initState();
   }
 
   final ImagePicker _picker = ImagePicker();
   List<File> _images = [];
 
+  List<PaymentTypeModel> paymentPlan = [
+    PaymentTypeModel(value: "Premium", text: "Premium Ad - N500", amount: 50000),
+    PaymentTypeModel(value: "Standard", text: "Standard Ad - N200", amount: 50000),
+    PaymentTypeModel(value: "Free", text: "Basic Ad - FREE", amount: 0),
+  ];
+
+  PaymentTypeModel? selectPayment;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return isSuccessful ? const SuccessScreen()
+    return isSuccessful ?  const SuccessScreen()
     : Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -85,31 +105,19 @@ class _AdScreenState extends State<AdScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           children: [
 
-            SizedBox(child:DropdownButton(
-              value: productModel.adType,
-              hint:
-              SizedBox(width: size.width*.8, child: const Text("Select Ad Type")),
+            SizedBox(child:DropdownButton<PaymentTypeModel>(
+              value: selectPayment,
+              hint: SizedBox(width: size.width*.8, child: const Text("Select Ad Type")),
               icon: const Icon(Icons.keyboard_arrow_down),
               underline: Container(),
-              items:  [
-                DropdownMenuItem(
-                    value: "Basic",
-                    child: SizedBox(
+              items: paymentPlan.map((PaymentTypeModel e) => DropdownMenuItem(
+                  value: e,
+                  child: SizedBox(
                       width: size.width*.8,
-                        child: const Text("Basic Ad - N200"))),
-                DropdownMenuItem(
-                    value: "Premium",
-                    child: SizedBox(
-                        width: size.width*.8,
-                        child: const Text("Premium Ad - N500"))),
-                DropdownMenuItem(
-                    value: "Free",
-                    child: SizedBox(
-                        width: size.width*.8,
-                        child: const Text("Basic Ad - Free"))),
-              ],
-              onChanged: (dynamic newValue) {
-                setState(()=> productModel.adType = newValue);
+                      child: Text(e.text.toString())))).toList(),
+              onChanged: (PaymentTypeModel? newValue) {
+                setState(()=> productModel.adType = newValue!.value);
+                setState(()=> selectPayment = newValue);
               },
             )),
 
@@ -285,6 +293,7 @@ class _AdScreenState extends State<AdScreen> {
               width: size.width*.8,
               child: const Text("Upload Ad", style: TextStyle(color:Colors.white),),
             ), onTap: (){
+              // payStackCheckOut();
               if(!_formKey.currentState!.validate()){
                   return;
               }else{
@@ -334,13 +343,15 @@ class _AdScreenState extends State<AdScreen> {
   }
 
   void uploadProduct(){
+    productModel.adType == "Free" ? productModel.paid = true : productModel.paid = false;
     productModel.title = title.text.toString();
     productModel.description = description.text.toString();
     productModel.price = !productModel.contactForPrice! ? int.parse(price.text.toString().replaceAll("N","")):0;
     product.addProduct(productModel.toJson2(), context.read<AuthProvider>().accessToken)
     .then((value){
       setState(()=> isUploading = false);
-      setState(()=> isSuccessful = true);
+       setState(() => prePaidProductModel = PrePaidProductModel.fromJson(value));
+       (productModel.paid != false) ? setState(()=> isSuccessful = true) : payStackCheckOut();
     }).catchError((onError){
       setState(()=> isUploading = false);
       ErrorModel error = ErrorModel.fromJson(onError);
@@ -392,6 +403,51 @@ class _AdScreenState extends State<AdScreen> {
       setState(()=> isUploading = false);
       return [];
     }
+  }
+
+  payStackCheckOut() async{
+    final userDetails = context.read<UserProvider>().userDetails;
+    Charge charge = Charge()
+      ..amount = selectPayment!.amount!
+      ..reference = _getReference()
+    // or ..accessCode = _getAccessCodeFrmInitialization()
+      ..email = userDetails?.email;
+    CheckoutResponse response = await plugin.checkout(
+      context,
+      fullscreen: false,
+      //logo: const Image(image: AssetImage("assets/launcher/launcher.png")),
+      method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
+      charge: charge,
+    );
+    if(response.message == "Success"){
+      setState(()=> processingPayment = true);
+      setState(()=> isSuccessful = true);
+      updatePaymentStatus();
+    }
+  }
+
+  String _getReference() {
+    String platform;
+    if (!kIsWeb) {
+      if (Platform.isIOS) {
+        platform = 'iOS';
+      } else {
+        platform = 'Android';
+      }
+    } else {
+      platform = "WEB";
+    }
+    return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
+  }
+
+  updatePaymentStatus(){
+    Provider.of<ProductProvider>(context, listen: false).updateProductStatus(
+        {"productId": prePaidProductModel?.product!.id,
+          "title": prePaidProductModel?.product!.title,
+          "description": prePaidProductModel?.product!.description,
+          "paid": true},
+        context.read<AuthProvider>().accessToken,
+        context);
   }
 
 }

@@ -35,7 +35,7 @@ class SignUpProvider extends ChangeNotifier{
     }).catchError((onError){
       loadingCampus = false;
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
+      showMessageError(errorModel.message, context);
       notifyListeners();
     });
   }
@@ -49,7 +49,7 @@ class SignUpProvider extends ChangeNotifier{
     }).catchError((onError){
       loadingCountries = false;
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
+      showMessageError(errorModel.message, context);
       notifyListeners();
     });
   }
@@ -63,7 +63,7 @@ class SignUpProvider extends ChangeNotifier{
     }).catchError((onError){
       loadingStates = false;
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
+      showMessageError(errorModel.message, context);
       notifyListeners();
     });
   }
@@ -78,7 +78,7 @@ class SignUpProvider extends ChangeNotifier{
     }).catchError((onError){
       signingUser = false;
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
+      showMessageError(errorModel.message, context);
       notifyListeners();
     });
   }

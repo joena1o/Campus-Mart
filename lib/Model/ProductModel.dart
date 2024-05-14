@@ -16,6 +16,7 @@ class ProductModel{
   String? campus;
   String? state;
   List<dynamic>? wishList;
+  bool? paid;
 
   ProductModel({
   this.id,
@@ -33,7 +34,8 @@ class ProductModel{
   this.user,
   this.campus,
   this.state,
-  this.wishList
+  this.wishList,
+  this.paid
   });
 
 
@@ -54,7 +56,8 @@ class ProductModel{
         user: json['user'],
         campus: json['campus'],
          state: json['state'],
-        wishList: json['wishlist']
+        wishList: json['wishlist'],
+        paid: json['paid']
       );
    }
 
@@ -74,7 +77,8 @@ class ProductModel{
       "countryId": countryId,
       "campus": campus,
       "state": state,
-      "wishList": wishList
+      "wishList": wishList,
+      "paid": paid
     };
   }
 
@@ -92,7 +96,8 @@ class ProductModel{
       "userId": userId,
       "countryId": countryId,
       "campus": campus,
-      "state": state
+      "state": state,
+      "paid": paid
     };
   }
 

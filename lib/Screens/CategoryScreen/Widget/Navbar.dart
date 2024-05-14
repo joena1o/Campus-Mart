@@ -42,7 +42,8 @@ class _NavbarState extends State<Navbar> {
              onSubmitted: (String? text){
 
                !widget.categoryPage ? Provider.of<ProductProvider>(context, listen: false).searchProduct(text,
-                   context.read<AuthProvider>().accessToken, context) : Provider.of<ProductProvider>(context, listen: false).searchProductByCategory(text,
+                   context.read<AuthProvider>().accessToken, context)
+                   : Provider.of<ProductProvider>(context, listen: false).searchProductByCategory(text,
                    context.read<AuthProvider>().accessToken, context);
              },
           ))),

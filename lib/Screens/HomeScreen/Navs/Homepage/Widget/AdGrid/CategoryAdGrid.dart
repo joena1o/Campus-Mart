@@ -53,7 +53,7 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
                     return const Center(child: Text("No Ads Found"));
                   }
 
-                  return !bar.getIsGettingProduct ? SingleChildScrollView(
+                  return !bar.isGettingProduct ? SingleChildScrollView(
                       child: StaggeredGrid.count(
                         crossAxisCount:2,
                         mainAxisSpacing: 10,
@@ -89,6 +89,22 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
                                                   fit: BoxFit.cover,
                                                 ):ImageWidget(url: bar.categoryProductList![index].images![0]['url'].toString())
                                               ))),
+
+                                          Positioned(
+                                            top: 0,
+                                            child: Visibility(
+                                              visible: bar.categoryProductList![index].adType != "Free",
+                                              child: Container(
+                                                  padding: const EdgeInsets.all(5),
+                                                  decoration: const BoxDecoration(
+                                                      color: Colors.orangeAccent
+                                                  ),
+                                                  child: Text("${bar.categoryProductList![index].adType} Ad",
+                                                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                                                  )
+                                              ),
+                                            ),
+                                          ),
 
                                           Positioned(
                                               right: 0,

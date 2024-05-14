@@ -26,6 +26,8 @@
     <string>Camera usage</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Microphone</string>
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

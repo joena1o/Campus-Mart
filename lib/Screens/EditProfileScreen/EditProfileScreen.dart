@@ -36,6 +36,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     lastName.text = context.read<UserProvider>().userDetails!.lastName!.toString();
     phone.text = "${context.read<UserProvider>().userDetails!.phone}";
     state = context.read<UserProvider>().userDetails!.state;
+    campus = context.read<UserProvider>().userDetails!.campus;
     context.read<SignUpProvider>().fetchCampuses(state, context);
   }
 
@@ -107,7 +108,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     DropdownButton<String>(
                       value: state,
                       hint: SizedBox(
-                          width: size.width * .75,
+                          width: size.width-70,
                           child: const Text("Select State")),
                       icon: const Icon(Icons.keyboard_arrow_down),
                       underline: Container(),
@@ -115,7 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         return DropdownMenuItem<String>(
                           value: item,
                           child: SizedBox(
-                              width: size.width * .75, child: Text(item)),
+                              width: size.width -70, child: Text(item)),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -140,7 +141,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 DropdownButton(
                                   value: campus,
                                   hint: SizedBox(
-                                      width: size.width * .75,
+                                      //width: size.width * .75,
                                       child: data.campuses.toList().isEmpty
                                           ? const Text("Fetching Campuses")
                                           : const Text("Select Campus")),
@@ -152,7 +153,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       child: Container(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 10),
-                                          width: size.width * .75,
+                                          width: size.width - 70,
                                           child: Text(item.campus.toString())),
                                     );
                                   }).toList(),

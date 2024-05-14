@@ -13,7 +13,6 @@ class ProductClass{
   NetworkHelper networkHelper = NetworkHelper();
   ErrorHandler errorHandler = ErrorHandler();
 
-
   String productEndpoint ="$conn/products";
   String wishListEndpoint = "$conn/wishlist";
   String reviewEndpoint = "$conn/review";
@@ -75,6 +74,7 @@ class ProductClass{
     List<ProductModel>? productModel;
     return networkHelper.get("$searchAdEndPoint$index/$query", headers: headers)
         .then((dynamic res) async{
+          print(res);
       Map<String, dynamic> response = res;
       productModel = response['data']
           .map<ProductModel>(
@@ -95,6 +95,7 @@ class ProductClass{
     List<ProductModel>? productModel;
     return networkHelper.get("$searchAdEndPoint$cat/$index/$query", headers: headers)
         .then((dynamic res) async{
+          print(res);
       Map<String, dynamic> response = res;
       productModel = response['data']
           .map<ProductModel>(
@@ -118,6 +119,24 @@ class ProductClass{
         .then((dynamic res) async{
           print(res);
       return res;
+    }).catchError((err){
+      errorHandler.handleError(err['body']);
+    });
+  }
+
+  Future updatePaymentStatus(data, token){
+    ProductModel? productModel;
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    return networkHelper.post("$productEndpoint/updatePaidStatus", headers: headers, body: data,
+      encoding: Encoding.getByName("utf-8"),)
+        .then((dynamic res) async{
+      print(res);
+      productModel = ProductModel.fromJson(res);
+      return productModel;
     }).catchError((err){
       errorHandler.handleError(err['body']);
     });
@@ -162,10 +181,8 @@ class ProductClass{
     return networkHelper.get("$wishListEndpoint/$username", headers: headers)
         .then((dynamic res) async{
       Map<String, dynamic> response = res;
-      print(response['data']);
       productModel = response['data']
-          .map<WishProductModel>(
-              (json) => WishProductModel.fromJson(json))
+          .map<WishProductModel>((json) => WishProductModel.fromJson(json))
           .toList();
       return productModel;
     }).catchError((err){
@@ -198,13 +215,13 @@ class ProductClass{
     ReviewModel? reviewModel;
     return networkHelper.get("$reviewEndpoint/$id", headers: headers)
         .then((dynamic res) async{
+          print(res);
       reviewModel = ReviewModel.fromJson(res);
       return reviewModel;
     }).catchError((err){
       errorHandler.handleError(err['body']);
     });
   }
-
 
 
   Future getNotifications(userId, token){
@@ -274,7 +291,6 @@ class ProductClass{
       errorHandler.handleError(err['body']);
     });
   }
-
 
 
 }

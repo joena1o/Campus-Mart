@@ -5,7 +5,7 @@ import 'package:campus_mart/Screens/AdAlertScreen/AdAlerts.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/adsAdUnit.dart';
 import 'package:campus_mart/Utils/conn.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/EditProfileScreen/EditProfileScreen.dart';
@@ -27,11 +27,11 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage>{
 
   File? _images;
-  BannerAd? _bannerAd;
+  //BannerAd? _bannerAd;
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
+    //_bannerAd?.dispose();
     super.dispose();
   }
 
@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadAd();
+    //_loadAd();
   }
 
   @override
@@ -184,11 +184,11 @@ class _ProfilePageState extends State<ProfilePage>{
 
               30.height,
 
-              _bannerAd == null
-              // Nothing to render yet.
-                  ? const SizedBox() : SizedBox(
-                  height: 50,
-                  child: AdWidget(ad: _bannerAd!)),
+              // _bannerAd == null
+              // // Nothing to render yet.
+              //     ? const SizedBox() : SizedBox(
+              //     height: 50,
+              //     child: AdWidget(ad: _bannerAd!)),
 
 
             ],
@@ -301,32 +301,32 @@ class _ProfilePageState extends State<ProfilePage>{
     );
   }
 
-  void _loadAd() {
-    final bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: bannerAdUnit,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        // Called when an ad is successfully received.
-        onAdLoaded: (ad) {
-          if (!mounted) {
-            ad.dispose();
-            return;
-          }
-          setState(() {
-            _bannerAd = ad as BannerAd;
-          });
-        },
-        // Called when an ad request failed.
-        onAdFailedToLoad: (ad, error) {
-          debugPrint('BannerAd failed to load: $error');
-          ad.dispose();
-        },
-      ),
-    );
-
-    // Start loading.
-    bannerAd.load();
-  }
+  // void _loadAd() {
+  //   final bannerAd = BannerAd(
+  //     size: AdSize.banner,
+  //     adUnitId: bannerAdUnit,
+  //     request: const AdRequest(),
+  //     listener: BannerAdListener(
+  //       // Called when an ad is successfully received.
+  //       onAdLoaded: (ad) {
+  //         if (!mounted) {
+  //           ad.dispose();
+  //           return;
+  //         }
+  //         setState(() {
+  //           _bannerAd = ad as BannerAd;
+  //         });
+  //       },
+  //       // Called when an ad request failed.
+  //       onAdFailedToLoad: (ad, error) {
+  //         debugPrint('BannerAd failed to load: $error');
+  //         ad.dispose();
+  //       },
+  //     ),
+  //   );
+  //
+  //   // Start loading.
+  //   bannerAd.load();
+  // }
 
 }

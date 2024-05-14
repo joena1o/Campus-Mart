@@ -45,7 +45,7 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
             children: [
 
               GestureDetector(child:Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 decoration: BoxDecoration(
                   // border: Border.all(color: primary),
                     borderRadius: BorderRadius.circular(10)),
@@ -58,7 +58,7 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
                 launch("tel: ${user.phone}");
               },),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 decoration: BoxDecoration(
                   // border: Border.all(color: primary),
                     borderRadius: BorderRadius.circular(10)),
@@ -69,7 +69,7 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
                 ),
               ),
               GestureDetector(child:Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 decoration: BoxDecoration(
                   // border: Border.all(color: primary),
                     borderRadius: BorderRadius.circular(10)),

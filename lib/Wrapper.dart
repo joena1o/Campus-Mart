@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AdsProvider.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/OnboardingScreen/OnboardingScreen.dart';
@@ -35,7 +34,6 @@ class _WrapperState extends State<Wrapper> {
           context.read<UserProvider>().loadDetails();
           readValue('passcode').then((passcode){
             Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth!.email, passcode, context);
-            //Provider.of<AdProvider>(context, listen: false).loadAd();
           });
         }
       });

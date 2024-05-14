@@ -10,6 +10,7 @@ import 'package:campus_mart/Screens/LoginScreen/LoginScreen.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_field2/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
@@ -66,6 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [firstStep(size), secondStep(size)]),
     );
@@ -282,13 +284,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Consumer<SignUpProvider>(builder: (_, data, __) { return !data.loadingStates ? DropdownButton<String>(
                     value: state,
                     hint:
-                    SizedBox(width: size.width * .75, child: const Text("Select State")),
+                    SizedBox(width: size.width - 90 , child: const Text("Select State")),
                     icon: const Icon(Icons.keyboard_arrow_down),
                     underline: Container(),
                     items: data.states.map((StateModel item) {
                       return DropdownMenuItem<String>(
                         value: item.state,
-                        child: SizedBox(width: size.width * .75, child: Text(item.state.toString())),
+                        child: SizedBox(width: size.width - 90, child: Text(item.state.toString())),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
@@ -308,7 +310,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   Consumer<SignUpProvider>(builder: (_, data, __) { return !data.loadingCampus ? DropdownButton(
                     value: campus,
-                    hint: SizedBox(width: size.width * .75, child: data.campuses.toList().isEmpty ? const Text("Fetching Campuses")
+                    hint: SizedBox(width: size.width - 90, child: data.campuses.toList().isEmpty ? const Text("Fetching Campuses")
                         : const Text("Select Campus")),
                     icon: const Icon(Icons.keyboard_arrow_down),
                     underline: Container(),
@@ -317,7 +319,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         value: item.campus,
                         child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            width: size.width * .75, child: Text(item.campus.toString())),
+                            width: size.width - 90, child: Text(item.campus.toString())),
                       );
                     }).toList(),
                     onChanged: (dynamic newValue) {
@@ -370,12 +372,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                    InputDecoration(
                       suffixIcon: IconButton(onPressed: (){
                         setState(()=> showPassword = !showPassword);
-                      }, icon: showPassword ? const Icon(Icons.remove_red_eye): const Icon(Icons.close)),
+                      }, icon: showPassword ? const Icon(FontAwesomeIcons.eye, size: 15,): const Icon(FontAwesomeIcons.eyeSlash, size: 15,)),
                       hintText: "Enter password"),
                 ),
 
                 Container(
-                  height: 20,
+                  height: 40,
                 ),
 
                 TextFormField(
@@ -392,7 +394,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                    InputDecoration(
                       suffixIcon: IconButton(onPressed: (){
                         setState(()=> showPassword = !showPassword);
-                      }, icon: showPassword ? const Icon(Icons.remove_red_eye): const Icon(Icons.close)),
+                      }, icon: showPassword ? const Icon(FontAwesomeIcons.eye, size: 15,): const Icon(FontAwesomeIcons.eyeSlash, size: 15,)),
                       hintText: "Confirm password"),
                 ),
                 Container(

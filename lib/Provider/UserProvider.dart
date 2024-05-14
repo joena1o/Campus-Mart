@@ -52,7 +52,7 @@ class UserProvider extends ChangeNotifier{
       updatingDp = false;
       Navigator.pop(context);
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
+      showMessageError(errorModel.message, context);
       notifyListeners();
     });
   }
@@ -64,7 +64,7 @@ class UserProvider extends ChangeNotifier{
       await saveJsonDetails("user", userDetails);
       Navigator.pop(context);
     }catch(e){
-      showMessage(e.toString(), context);
+      showMessageError(e.toString(), context);
     }finally{
       editingProfile = false;
     }

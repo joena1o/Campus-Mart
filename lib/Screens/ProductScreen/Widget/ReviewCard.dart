@@ -1,4 +1,5 @@
 import 'package:campus_mart/Model/ReviewModel.dart';
+import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:flutter/material.dart';
 
 class ReviewCard extends StatelessWidget {
@@ -23,11 +24,29 @@ class ReviewCard extends StatelessWidget {
             children:  [
                   Row(
                     children:  [
-                      const CircleAvatar(
-                        radius: 15,
-                        backgroundColor: Colors.grey,
-                        child:  Icon(Icons.person, size: 15, color: Colors.black,),
+
+                      Visibility(
+                        visible: data.user![0].image == null,
+                        child: const CircleAvatar(
+                          radius: 15,
+                          backgroundColor: Colors.grey,
+                          child:  Icon(Icons.person, size: 15, color: Colors.black,),
+                        ),
                       ),
+
+
+                      Visibility(
+                        visible: data.user![0].image != null,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: ImageWidget(url: data.user![0].image.toString(),)),
+                        ),
+                      ),
+
+
                       const SizedBox(width: 10,),
                       Text("${data.user![0].firstName} ${data.user![0].lastName}", style: const TextStyle(fontWeight: FontWeight.w600),),
                     ],

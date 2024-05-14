@@ -5,6 +5,7 @@ import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Utils/timeAndDate.dart';
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class NotificationList extends StatefulWidget {
@@ -68,12 +69,15 @@ class _NotificationListState extends State<NotificationList> {
                                  Padding(
                                     padding: const EdgeInsets.only(right: 15),
                                     child: CircleAvatar(
-                                      radius: 25,
+                                      radius: 20,
                                       child: Text(
                                         bar.notificationList[i].title.toString().substring(0,1).toUpperCase(),
                                         style: const TextStyle(fontSize: 17),
                                       ),
                                     )),
+
+                                10.width,
+
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:

@@ -105,6 +105,22 @@ class _MyAdScreenState extends State<MyAdScreen> {
                                               ))),
 
                                           Positioned(
+                                            top: 0,
+                                            child: Visibility(
+                                              visible: bar.myProductList![index].adType != "Free",
+                                              child: Container(
+                                                  padding: const EdgeInsets.all(5),
+                                                  decoration: const BoxDecoration(
+                                                      color: Colors.orangeAccent
+                                                  ),
+                                                  child: Text("${bar.myProductList![index].adType} Ad",
+                                                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                                                  )
+                                              ),
+                                            ),
+                                          ),
+
+                                          Positioned(
                                               right: 0,
                                               child: IconButton(
                                                   onPressed: () {

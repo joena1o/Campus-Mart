@@ -58,7 +58,7 @@ class AuthProvider with ChangeNotifier {
         callback();
       }
     }catch(e){
-      showMessage(e.toString(), context);
+      showMessageError(e.toString(), context);
     }finally{
       isLoading = false;
     }
@@ -74,7 +74,7 @@ class AuthProvider with ChangeNotifier {
       showMessage(verifyTokenModel?.message, context);
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const ResetPasswordScreen()));
     }catch(e){
-      showMessage(e.toString(), context);
+      showMessageError(e.toString(), context);
     }finally{
       isLoading = false;
     }
@@ -93,7 +93,7 @@ class AuthProvider with ChangeNotifier {
       showMessage(successMessageModel?.message, context);
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const LoginScreen()));
     }catch(e){
-      showMessage(e.toString(), context);
+      showMessageError(e.toString(), context);
     }finally{
       isLoading = false;
     }

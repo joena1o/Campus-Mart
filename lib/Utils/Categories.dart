@@ -4,8 +4,8 @@ const categories = [
   "Accommodation",
   "Gadgets",
   "Clothing",
-  "Tickets/Vouchers",
-  "Utensils/Tools",
+  "Vouchers",
+  "Utensils",
   "Tutor",
   "Services"
 ];

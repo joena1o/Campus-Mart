@@ -59,6 +59,9 @@ class ProductProvider extends ChangeNotifier{
   bool deleteAdAlertStatus = false;
   bool get deletingAdAlert => deleteAdAlertStatus;
 
+  bool processingPayment = false;
+  bool processingPaymentFailed = false;
+
   void setContext(BuildContext context){
     ctx = context;
     notifyListeners();
@@ -148,7 +151,7 @@ class ProductProvider extends ChangeNotifier{
     }).catchError((onError){
       deleteAdAlertStatus = false;
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
+      showMessageError(errorModel.message, context);
       notifyListeners();
     });
   }
@@ -159,8 +162,10 @@ class ProductProvider extends ChangeNotifier{
     product.getReviews(id, token).then((value){
       loadingReviews = false;
       reviews = value;
+      print(reviews!.data?.length);
       notifyListeners();
     }).catchError((onError){
+      print(onError);
       loadingReviews = false;
       notifyListeners();
     });
@@ -218,6 +223,20 @@ class ProductProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void updateProductStatus(data, token, ctx) async{
+    processingPayment = true;
+    processingPaymentFailed = false;
+    try{
+      await product.updatePaymentStatus(data, token);
+    }catch(e){
+      showMessage(e.toString(), ctx);
+      processingPaymentFailed = true;
+    }finally{
+      processingPayment = false;
+    }
+    notifyListeners();
+  }
+
   void searchProductByCategory(query, token, ctx) async{
     categoryProductList = [];
     isGettingProduct = true;
@@ -232,6 +251,7 @@ class ProductProvider extends ChangeNotifier{
   }
 
   void getProduct(category,val,context,cat,token) async{
+    categoryProductList = [];
     isGettingProduct = true;
     await product.fetchProduct(category, category.toString().isEmpty ? indexAll : indexCat, token).then((value){
       isGettingProduct = false;
@@ -256,7 +276,7 @@ class ProductProvider extends ChangeNotifier{
       refreshController.loadComplete();
       refreshController2.loadComplete();
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
+      showMessageError(errorModel.message, context);
     });
     notifyListeners();
   }

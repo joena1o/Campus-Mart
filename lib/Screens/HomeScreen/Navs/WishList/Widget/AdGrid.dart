@@ -88,7 +88,24 @@ class _WishListAdGridState extends State<WishListAdGrid> {
                                           child: products![index].product![0].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
                                             fit: BoxFit.cover,
                                           ):ImageWidget(url: products![index].product![0].images![0]['url'].toString()),
+
                                         ))),
+
+                                    Positioned(
+                                      top: 0,
+                                      child: Visibility(
+                                        visible: products![index].product![0].adType != "Free",
+                                        child: Container(
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: const BoxDecoration(
+                                                color: Colors.orangeAccent
+                                            ),
+                                            child: Text("${products![index].product![0].adType} Ad",
+                                              style: const TextStyle(color: Colors.white, fontSize: 10),
+                                            )
+                                        ),
+                                      ),
+                                    ),
 
                                     Positioned(
                                         right: 0,
@@ -168,7 +185,7 @@ class _WishListAdGridState extends State<WishListAdGrid> {
               ListTile(
                 style: ListTileStyle.list,
                 leading: SizedBox(
-                  height: size.width * .6,
+                  height: size.width * .65,
                   child: product.product![0].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
                     fit: BoxFit.cover,
                   ):ImageWidget(url: product.product![0].images![0]['url'].toString()),
@@ -179,10 +196,26 @@ class _WishListAdGridState extends State<WishListAdGrid> {
 
               Container(height: 30,),
 
+              Visibility(
+                visible: product.product![0].adType != "Free",
+                child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: const BoxDecoration(
+                        color: Colors.orangeAccent
+                    ),
+                    child: Text("${product.product![0].adType} Ad",
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                    )
+                ),
+              ),
+
+              Container(height: 30,),
+
               const Text("Location", style: TextStyle(fontSize: 15, color: primary),),
               Text(product.product![0].campus!),
 
-              Container(height: 50,),
+
+              Expanded(child: Container()),
 
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5),

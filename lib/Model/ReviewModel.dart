@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:nb_utils/nb_utils.dart';
+
 class ReviewModel {
   List<Datum>? data;
 
@@ -24,6 +26,7 @@ class Datum {
   String? id;
   List<User>? user;
   String? userId;
+  String? reviewerId;
   String? productId;
   String? review;
   double? rating;
@@ -37,6 +40,7 @@ class Datum {
     this.id,
     this.user,
     this.userId,
+    this.reviewerId,
     this.productId,
     this.review,
     this.rating,
@@ -55,9 +59,10 @@ class Datum {
     id: json["_id"],
     user: json["user"] == null ? [] : List<User>.from(json["user"]!.map((x) => User.fromJson(x))),
     userId: json["userId"],
+    reviewerId: json["reviewerId"],
     productId: json["ProductId"],
     review: json["Review"],
-    rating: json["Rating"]?.toDouble(),
+    rating: json["Rating"].toString().toDouble(),
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
@@ -69,6 +74,7 @@ class Datum {
     "_id": id,
     "user": user == null ? [] : List<dynamic>.from(user!.map((x) => x.toJson())),
     "userId": userId,
+    "reviewerId": reviewerId,
     "ProductId": productId,
     "Review": review,
     "Rating": rating,
@@ -85,15 +91,16 @@ class User {
   String? firstName;
   String? lastName;
   String? email;
-  int? phone;
+  String? phone;
   String? state;
   String? campus;
+  String? countryId;
   String? username;
   String? password;
+  String? image;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
-  String? image;
 
   User({
     this.id,
@@ -103,12 +110,13 @@ class User {
     this.phone,
     this.state,
     this.campus,
+    this.countryId,
     this.username,
     this.password,
+    this.image,
     this.createdAt,
     this.updatedAt,
     this.v,
-    this.image,
   });
 
   factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
@@ -123,12 +131,13 @@ class User {
     phone: json["phone"],
     state: json["state"],
     campus: json["campus"],
+    countryId: json["countryId"],
     username: json["username"],
     password: json["password"],
+    image: json["image"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
-    image: json["image"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -139,11 +148,12 @@ class User {
     "phone": phone,
     "state": state,
     "campus": campus,
+    "countryId": countryId,
     "username": username,
     "password": password,
+    "image": image,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "__v": v,
-    "image": image,
   };
 }
