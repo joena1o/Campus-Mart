@@ -23,14 +23,14 @@ class ProductClass{
 
   Map<String, String>?  headers;
 
-  Future getMyProducts(id, token){
+  Future getMyProducts(id, pageNumber, token){
     headers  = {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": token
     };
     List<ProductModel>? productModel;
-    return networkHelper.get("$getMyProductEndpoint/$id", headers: headers)
+    return networkHelper.get("$getMyProductEndpoint/$id/$pageNumber", headers: headers)
         .then((dynamic res) async{
       Map<String, dynamic> response = res;
       productModel = response['data']
@@ -107,7 +107,6 @@ class ProductClass{
     });
   }
 
-
   Future addProduct(data, token){
     headers  = {
       "Accept": "application/json",
@@ -119,6 +118,22 @@ class ProductClass{
         .then((dynamic res) async{
           print(res);
       return res;
+    }).catchError((err){
+      errorHandler.handleError(err['body']);
+    });
+  }
+
+  Future editProduct(data, token){
+    ProductModel? productModel;
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    return networkHelper.put("$productEndpoint/editAd", body: data, headers: headers)
+        .then((dynamic res) async{
+      productModel = ProductModel.fromJson(res);
+      return productModel;
     }).catchError((err){
       errorHandler.handleError(err['body']);
     });
@@ -155,6 +170,7 @@ class ProductClass{
       errorHandler.handleError(err['body']);
     });
   }
+
 
   Future addToWishlist(data, token){
     headers  = {
@@ -253,6 +269,22 @@ class ProductClass{
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
           print(res);
+      return res;
+    }).catchError((err){
+      errorHandler.handleError(err['body']);
+    });
+  }
+
+  Future saveSearch(data, token){
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    return networkHelper.post("$productEndpoint/saveSearch", headers: headers, body: data,
+      encoding: Encoding.getByName("utf-8"),)
+        .then((dynamic res) async{
+      print(res);
       return res;
     }).catchError((err){
       errorHandler.handleError(err['body']);

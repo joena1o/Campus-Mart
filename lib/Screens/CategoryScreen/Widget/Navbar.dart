@@ -1,5 +1,6 @@
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +46,12 @@ class _NavbarState extends State<Navbar> {
                    context.read<AuthProvider>().accessToken, context)
                    : Provider.of<ProductProvider>(context, listen: false).searchProductByCategory(text,
                    context.read<AuthProvider>().accessToken, context);
+
+               Provider.of<ProductProvider>(context, listen: false).saveSearch({
+                 "user_id": context.read<UserProvider>().userDetails?.id,
+                 "keyword": text
+               },  context.read<AuthProvider>().accessToken);
+
              },
           ))),
 

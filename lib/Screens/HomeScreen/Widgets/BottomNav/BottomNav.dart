@@ -1,6 +1,10 @@
+import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/AdScreen/AdScreen.dart';
+import 'package:campus_mart/Screens/VerifyEmailScreen/VerifyEmailScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +21,16 @@ class BottomNav extends StatefulWidget {
 }
 
 class _BottomNavState extends State<BottomNav> {
+
+  UserModel? user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user = context.read<UserProvider>().userDetails;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -53,8 +67,13 @@ class _BottomNavState extends State<BottomNav> {
                     )),
           GestureDetector(
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => const AdScreen()));
+                user!.emailVerified! ?  Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => const AdScreen())) :
+                showMessageWithButton("Verify your email address", context, (){
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_)=> const VerifyEmailScreen())
+                  );
+                });
               },
               child: const FaIcon(
                 FontAwesomeIcons.plus,

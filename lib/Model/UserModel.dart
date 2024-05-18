@@ -6,6 +6,7 @@ class UserModel{
   String? phone;
   String? state;
   String? campus;
+  bool? emailVerified;
   String? countryId;
   String? username;
   String? password;
@@ -19,6 +20,7 @@ class UserModel{
     this.phone,
     this.state,
     this.campus,
+    this.emailVerified,
     this.countryId,
     this.username,
     this.password,
@@ -32,6 +34,7 @@ class UserModel{
     email: json['email'],
     phone: json['phone'].toString(),
     state: json['state'],
+      emailVerified: json['emailVerified'],
     campus: json['campus'],
     countryId: json['countryId'],
     username: json['username'],
@@ -45,6 +48,7 @@ class UserModel{
       email: json['email'],
       phone: json['phone'].toString(),
       state: json['state'],
+      emailVerified: json['emailVerified'],
       campus: json['campus'],
       countryId: json['countryId'],
       username: json['username'],
@@ -59,6 +63,7 @@ class UserModel{
     "phone": phone,
     "state": state,
     "campus": campus,
+    "emailVerified": emailVerified,
     "countryId": countryId,
     "username": username,
     "password": password,
@@ -72,6 +77,7 @@ class UserModel{
     "phone": phone,
     "state": state,
     "campus": campus,
+    "emailVerified": emailVerified,
     "countryId": countryId,
     "username": username,
     "password": password,

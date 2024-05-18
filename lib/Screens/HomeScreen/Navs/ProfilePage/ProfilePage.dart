@@ -81,6 +81,8 @@ class _ProfilePageState extends State<ProfilePage>{
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text("${userDetails?.firstName} ${userDetails?.lastName}")),
 
+        10.height,
+
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,20 +128,20 @@ class _ProfilePageState extends State<ProfilePage>{
                 ),
               )),
 
-              const Divider(color: Colors.grey),
-
-
-              Container(
-                width: size.width*.75,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text("Reviews", style: TextStyle(fontSize: 16),),
-                    Icon(Icons.chevron_right)
-                  ],
-                ),
-              ),
+              // const Divider(color: Colors.grey),
+              //
+              //
+              // Container(
+              //   width: size.width*.75,
+              //   padding: const EdgeInsets.symmetric(vertical: 10),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: const [
+              //       Text("Reviews", style: TextStyle(fontSize: 16),),
+              //       Icon(Icons.chevron_right)
+              //     ],
+              //   ),
+              // ),
 
               const Divider(color: Colors.grey),
 

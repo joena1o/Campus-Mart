@@ -33,12 +33,11 @@ class _WrapperState extends State<Wrapper> {
           final userAuth = UserModel.fromJson(user);
           context.read<UserProvider>().loadDetails();
           readValue('passcode').then((passcode){
-            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth!.email, passcode, context);
+            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth!.email, passcode, context, callbackToUserCredentials);
           });
         }
       });
     });
-
   }
 
   @override
@@ -46,5 +45,8 @@ class _WrapperState extends State<Wrapper> {
     return const WelcomeScreen();
   }
 
+  void callbackToUserCredentials(UserModel userModel, passcode){
+    context.read<UserProvider>().setUserDetails(userModel, passcode);
+  }
 
 }

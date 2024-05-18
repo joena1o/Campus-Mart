@@ -100,10 +100,14 @@ class _ProductScreenState extends State<ProductScreen> {
                 child:  Text("${product?.title}", style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w600),),
               ),
 
+              5.height,
+
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
                 child: Text("${product?.adCategory}", style: const TextStyle(fontSize: 13, color: primary, fontWeight: FontWeight.w600),),
               ),
+
+              5.height,
 
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

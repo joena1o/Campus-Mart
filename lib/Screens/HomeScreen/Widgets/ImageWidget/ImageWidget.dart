@@ -16,7 +16,7 @@ class _ImageWidgetState extends State<ImageWidget> {
     return  CachedNetworkImage(
         imageUrl: widget.url.toString(),
         fit: BoxFit.cover,
-        placeholder: (context, url) => const CircleAvatar(),
+        placeholder: (context, url) => Container(color: Colors.grey,),
         errorWidget: (context, url, error) => const Icon(Icons.error),
       );
   }

@@ -1,7 +1,9 @@
+import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Screens/EditAdScreen/EditAdScreen.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +24,17 @@ class _MyAdScreenState extends State<MyAdScreen> {
   @override
   void initState(){
     super.initState();
+    context.read<ProductProvider>().resetMyAdsItems();
     context.read<ProductProvider>().getMyAds(context.read<UserProvider>().userDetails?.id, context.read<AuthProvider>().accessToken);
   }
 
-  void _onRefresh() async{
-    context.read<ProductProvider>().getProduct("", 1, context, false, context.read<AuthProvider>().accessToken);
+  void _onLoading() async{
+    context.read<ProductProvider>().getMyAds(context.read<UserProvider>().userDetails?.id, context.read<AuthProvider>().accessToken);
   }
 
   static const images = ['Camera.jpeg','detergent.jpeg','earbuds.jpeg','watch.jpeg'];
   String? selectedId;
+  ProductModel? selectedAd;
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +61,9 @@ class _MyAdScreenState extends State<MyAdScreen> {
           children: [
          Expanded(
         child: SmartRefresher(
-        enablePullDown: false,
+            enablePullDown: false,
             enablePullUp: true,
-            onRefresh: _onRefresh,
-            onLoading: _onRefresh,
+            onLoading: _onLoading,
             controller: context.read<ProductProvider>().refreshController,
             child: Consumer<ProductProvider>(
                 builder: (_, bar, __) {
@@ -74,9 +77,9 @@ class _MyAdScreenState extends State<MyAdScreen> {
                         crossAxisSpacing: 10,
                         children: List.generate(bar.myProductList!.toList().length, (index) {
                           UserModel user = UserModel.fromJson(bar.myProductList![index].user![0]);
-                          // print(bar.myProductList![index].images![0]['url'].toString());
                           return GestureDetector(
                               onTap: (){
+                                print(bar.myProductList![index].id);
                                 //Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductScreen(product: bar.myProductList![index])));
                               },
                               child: SizedBox(
@@ -110,8 +113,9 @@ class _MyAdScreenState extends State<MyAdScreen> {
                                               visible: bar.myProductList![index].adType != "Free",
                                               child: Container(
                                                   padding: const EdgeInsets.all(5),
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.orangeAccent
+                                                  decoration:  BoxDecoration(
+                                                      color: bar.myProductList![index].adType == "Standard" ? Colors.orangeAccent
+                                                          : Colors.green
                                                   ),
                                                   child: Text("${bar.myProductList![index].adType} Ad",
                                                     style: const TextStyle(color: Colors.white, fontSize: 10),
@@ -125,6 +129,7 @@ class _MyAdScreenState extends State<MyAdScreen> {
                                               child: IconButton(
                                                   onPressed: () {
                                                     setState(()=> selectedId = bar.myProductList![index].id);
+                                                    setState(()=> selectedAd = bar.myProductList![index]);
                                                     print(selectedId);
                                                     customBottomSheet(context);
                                                   },
@@ -197,12 +202,20 @@ class _MyAdScreenState extends State<MyAdScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children:  [
 
-                Row(
-                  children: const [
-                    Icon(Icons.edit, color: Colors.grey, size: 30,),
-                    SizedBox(width: 20,),
-                    Text("Edit", style: TextStyle(fontSize: 16),)
-                  ],
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_)=> EditAdScreen(product: selectedAd!))
+                    );
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.edit, color: Colors.grey, size: 30,),
+                      SizedBox(width: 20,),
+                      Text("Edit", style: TextStyle(fontSize: 16),)
+                    ],
+                  ),
                 ),
 
               const SizedBox(height: 30,),

@@ -97,8 +97,9 @@ class _WishListAdGridState extends State<WishListAdGrid> {
                                         visible: products![index].product![0].adType != "Free",
                                         child: Container(
                                             padding: const EdgeInsets.all(5),
-                                            decoration: const BoxDecoration(
-                                                color: Colors.orangeAccent
+                                            decoration: BoxDecoration(
+                                                color: products![index].product![0].adType == "Standard" ? Colors.orangeAccent
+                                                    : Colors.green
                                             ),
                                             child: Text("${products![index].product![0].adType} Ad",
                                               style: const TextStyle(color: Colors.white, fontSize: 10),

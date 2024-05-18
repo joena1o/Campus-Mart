@@ -31,6 +31,9 @@ class Auth{
   String verifyOtpUrl  = "$conn/forgot-password/verify";
   String resetPasswordUrl = "$conn/forgot-password/reset-password";
 
+  String requestVerifyEmailUrl = "$conn/user/requestVerifyEmail";
+  String verifyEmailAddressUrl = "$conn/user/verifyEmailAddress";
+
   Future<AuthModel> loginUser(data){
     headers  = {
       "Accept": "application/json",
@@ -178,6 +181,44 @@ class Auth{
       });
     }
 
+
+  Future requestVerifyEmail(email){
+    SuccessMessageModel? successMessageModel;
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    return networkHelper.post(requestVerifyEmailUrl, body:{
+      "email": email
+    }, headers: headers)
+        .then((dynamic value) async{
+      successMessageModel = SuccessMessageModel.fromJson(value);
+      return successMessageModel;
+    }).catchError((err){
+      print(err);
+      errorHandler.handleError(err['body']);
+    });
+  }
+
+  Future verifyEmailAddressOtp(otp, email){
+    VerifyTokenModel? verifyTokenModel;
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    return networkHelper.post(verifyEmailAddressUrl, body:{
+      "email": email,
+      "otp": otp
+    }, headers: headers)
+        .then((dynamic value) async{
+      verifyTokenModel = VerifyTokenModel.fromJson(value);
+      return verifyTokenModel;
+    }).catchError((err){
+      print(err);
+      errorHandler.handleError(err['body']);
+    });
+  }
+
   Future requestForgottenPasswordOtp(email){
     SuccessMessageModel? successMessageModel;
     headers  = {
@@ -216,7 +257,7 @@ class Auth{
   }
 
   Future resetPassword(token, newPassword){
-    VerifyTokenModel? verifyTokenModel;
+    SuccessMessageModel? successMessageModel;
     headers  = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -226,8 +267,8 @@ class Auth{
       "password": newPassword,
     }, headers: headers)
         .then((dynamic value) async{
-      verifyTokenModel = VerifyTokenModel.fromJson(value);
-      return verifyTokenModel;
+      successMessageModel = SuccessMessageModel.fromJson(value);
+      return successMessageModel;
     }).catchError((err){
       print(err);
       errorHandler.handleError(err['body']);

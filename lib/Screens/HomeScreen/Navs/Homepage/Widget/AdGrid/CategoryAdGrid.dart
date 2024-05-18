@@ -96,8 +96,9 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
                                               visible: bar.categoryProductList![index].adType != "Free",
                                               child: Container(
                                                   padding: const EdgeInsets.all(5),
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.orangeAccent
+                                                  decoration:  BoxDecoration(
+                                                      color: bar.categoryProductList![index].adType == "Standard" ? Colors.orangeAccent
+                                                          : Colors.green
                                                   ),
                                                   child: Text("${bar.categoryProductList![index].adType} Ad",
                                                     style: const TextStyle(color: Colors.white, fontSize: 10),

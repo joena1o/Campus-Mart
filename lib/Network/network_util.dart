@@ -71,9 +71,9 @@ class NetworkHelper {
   /// A function to do any post request with the url and headers
   /// then sends back a json decoded result
   Future<dynamic> post(String url, {Map<String, String>? headers, body, encoding}) {
-    // print(url);
-    // print(headers);
-    // print(body);
+    print(url);
+    print(headers);
+    print(body);
     try {
       return http
           .post(Uri.parse(url),
@@ -85,6 +85,7 @@ class NetworkHelper {
           "code":response.statusCode,
           "body": response.body
         };
+        print(myResponse);
 
         final int statusCode = response.statusCode;
         var result = _decoder.convert(res);

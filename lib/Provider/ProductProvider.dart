@@ -7,8 +7,10 @@ import 'package:campus_mart/Model/ReviewModel.dart';
 import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Model/WishProductModel.dart';
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
+import 'package:campus_mart/Screens/EditSuccessful/EditSuccessful.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class ProductProvider extends ChangeNotifier{
@@ -62,6 +64,8 @@ class ProductProvider extends ChangeNotifier{
   bool processingPayment = false;
   bool processingPaymentFailed = false;
 
+  bool editingAd = false;
+
   void setContext(BuildContext context){
     ctx = context;
     notifyListeners();
@@ -82,13 +86,23 @@ class ProductProvider extends ChangeNotifier{
     });
   }
 
+  void resetMyAdsItems(){
+    myAdsIndex = 1;
+    myProductList = [];
+  }
+
   void getMyAds(id, token){
     isGettingMyProduct = true;
-    product.getMyProducts(id, token).then((value){
+    product.getMyProducts(id, myAdsIndex, token).then((value){
       isGettingMyProduct = false;
-      myProductList = value;
+      if(value.length > 0){
+        myProductList += value;
+        myAdsIndex += 1;
+      }
+      refreshController.loadComplete();
       notifyListeners();
     }).catchError((onError){
+      refreshController.loadComplete();
       isGettingMyProduct = false;
       notifyListeners();
     });
@@ -156,7 +170,6 @@ class ProductProvider extends ChangeNotifier{
     });
   }
 
-
   void getUserReviews(id, token){
     loadingReviews = true;
     product.getReviews(id, token).then((value){
@@ -198,6 +211,8 @@ class ProductProvider extends ChangeNotifier{
   int indexCat = 1;
   int searchIndex = 1;
 
+  int myAdsIndex = 1;
+
   void resetItems(){
     indexCat = 1;
     categoryProductList = [];
@@ -237,11 +252,55 @@ class ProductProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void updateProductStatusForEdit(data, token, ctx) async{
+    processingPayment = true;
+    processingPaymentFailed = false;
+    try{
+      await product.updatePaymentStatus(data, token);
+      Navigator.of(ctx).pushReplacement(
+          MaterialPageRoute(
+              builder: (_)=> const EditSuccessful()
+          )
+      );
+    }catch(e){
+      showMessage(e.toString(), ctx);
+      processingPaymentFailed = true;
+    }finally{
+      processingPayment = false;
+    }
+    notifyListeners();
+  }
+
+  void editProduct(Map<String, dynamic> data, String token, ctx, Function callback) async{
+    editingAd = true;
+    try{
+      await product.editProduct(data, token);
+      (data["paid"] != false) ? Navigator.of(ctx).pushReplacement(
+        MaterialPageRoute(
+            builder: (_)=> const EditSuccessful()
+        )
+      ) : callback();
+    }catch(e){
+      showMessage(e.toString(), ctx);
+    }finally{
+      editingAd = false;
+    }
+    notifyListeners();
+  }
+
+  void saveSearch(data, token) async{
+    try{
+      await product.saveSearch(data, token);
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
   void searchProductByCategory(query, token, ctx) async{
     categoryProductList = [];
     isGettingProduct = true;
     try{
-      categoryProductList += await product.searchCategoryProduct(query, searchIndex, currentCategory, token);;
+      categoryProductList += await product.searchCategoryProduct(query, searchIndex, currentCategory, token);
     }catch(e){
       showMessage(e.toString(), ctx);
     }finally{

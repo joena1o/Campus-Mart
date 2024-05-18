@@ -1,4 +1,5 @@
 import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Screens/AllCategoryScreen/AllCategoryScreen.dart';
 import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
 import 'package:campus_mart/Utils/Categories.dart';
 import 'package:campus_mart/Utils/colors.dart';
@@ -36,9 +37,15 @@ class _CategoryState extends State<Category> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const[
-               Text("Select category", style: TextStyle(fontSize: 16,  fontWeight: FontWeight.w600),),
-               Text("View all", style: TextStyle(fontSize: 15, color: primary, fontWeight: FontWeight.normal),),
+            children: [
+               const Text("Select category", style: TextStyle(fontSize: 16,  fontWeight: FontWeight.w600),),
+               GestureDetector(
+                   onTap: (){
+                     Navigator.of(context).push(
+                       MaterialPageRoute(builder: (_)=> const AllCategoryScreen())
+                     );
+                   },
+                   child: const Text("View all", style: TextStyle(fontSize: 15, color: primary, fontWeight: FontWeight.normal),)),
             ],
           ),
 
