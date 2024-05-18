@@ -16,17 +16,20 @@ class _HomepageNavState extends State<HomepageNav> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        SearchBar(),
-        Category(),
+      children:  const [
         Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 17),
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child:  SearchBar(),
+        ),
+         Category(),
+          Padding(
+          padding: EdgeInsets.only(top: 20, bottom: 17, left: 15),
           child: Text(
             "Recent Ads",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
-        AdGrid(grid: 1, category: "",)
+         AdGrid(grid: 1, category: "",)
       ],
     );
   }

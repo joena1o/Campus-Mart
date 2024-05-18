@@ -53,85 +53,88 @@ class _NotificationListState extends State<NotificationList> {
 
 
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
 
-                        // dateHeader,
+                          // dateHeader,
 
-                        Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                 Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: CircleAvatar(
-                                      radius: 20,
-                                      child: Text(
-                                        bar.notificationList[i].title.toString().substring(0,1).toUpperCase(),
-                                        style: const TextStyle(fontSize: 17),
-                                      ),
-                                    )),
+                          Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                   Padding(
+                                      padding: const EdgeInsets.only(right: 15),
+                                      child: CircleAvatar(
+                                        radius: 20,
+                                        child: Text(
+                                          bar.notificationList[i].title.toString().substring(0,1).toUpperCase(),
+                                          style: const TextStyle(fontSize: 17),
+                                        ),
+                                      )),
 
-                                10.width,
+                                  10.width,
 
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children:  [
-                                      Text(
-                                        bar.notificationList[i].title.toString(),
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Wrap(
-                                        children: [
-                                          Text(
-                                            "${bar.notificationList[i].description}.",
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 14),
-                                          ),
-                                          const SizedBox(width: 10,),
-                                          Text(getTimeDifference(bar.notificationList[i].createdAt!),
-                                            style: const TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.black45),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        bar.notificationList[i].notificationType.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black45),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      const Divider(),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children:  [
+                                        Text(
+                                          bar.notificationList[i].title.toString(),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Wrap(
+                                          children: [
+                                            Text(
+                                              "${bar.notificationList[i].description}.",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 14),
+                                            ),
+                                            const SizedBox(width: 10,),
+                                            Text(getTimeDifference(bar.notificationList[i].createdAt!),
+                                              style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black45),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          bar.notificationList[i].notificationType.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black45),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        const Divider(),
 
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ))
-                      ],
+                                ],
+                              ))
+                        ],
+                      ),
                     );
                   })):Expanded(
                     child: Center(child:Column(

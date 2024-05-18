@@ -35,18 +35,21 @@ class _CategoryState extends State<Category> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-               const Text("Select category", style: TextStyle(fontSize: 16,  fontWeight: FontWeight.w600),),
-               GestureDetector(
-                   onTap: (){
-                     Navigator.of(context).push(
-                       MaterialPageRoute(builder: (_)=> const AllCategoryScreen())
-                     );
-                   },
-                   child: const Text("View all", style: TextStyle(fontSize: 15, color: primary, fontWeight: FontWeight.normal),)),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                 const Text("Select category", style: TextStyle(fontSize: 16,  fontWeight: FontWeight.w600),),
+                 GestureDetector(
+                     onTap: (){
+                       Navigator.of(context).push(
+                         MaterialPageRoute(builder: (_)=> const AllCategoryScreen())
+                       );
+                     },
+                     child: const Text("View all", style: TextStyle(fontSize: 15, color: primary, fontWeight: FontWeight.normal),)),
+              ],
+            ),
           ),
 
           SizedBox(
@@ -57,7 +60,7 @@ class _CategoryState extends State<Category> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (ctx, i) {
                 return Container(
-                  margin: const EdgeInsets.only(right: 20,top: 9),
+                  margin: const EdgeInsets.only(left: 15,top: 9),
                   child: GestureDetector(
                       onTap: (){
                         context.read<ProductProvider>().currentCategory = categories[i];

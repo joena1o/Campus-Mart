@@ -43,6 +43,7 @@ class AuthProvider with ChangeNotifier {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomeScreen()));
     }catch(e){
       showMessage(e.toString(), context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const LoginScreen()));
     }finally{
       isLoading = false;
     }

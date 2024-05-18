@@ -1,6 +1,7 @@
-package com.example.campus_mart
+package com.pollex.campus_mart
 
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity: FlutterActivity() {
+
 }

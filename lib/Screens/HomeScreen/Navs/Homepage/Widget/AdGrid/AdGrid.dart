@@ -52,106 +52,109 @@ class _AdGridState extends State<AdGrid> {
                 }
 
                 return !bar.getIsGettingProduct ? SingleChildScrollView(
-                    child: StaggeredGrid.count(
-                    crossAxisCount:2,
-                    mainAxisSpacing: 10,
-                    axisDirection: AxisDirection.down,
-                    crossAxisSpacing: 10,
-                    children: List.generate(bar.productList!.toList().length, (index) {
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      axisDirection: AxisDirection.down,
+                      crossAxisSpacing: 10,
+                      children: List.generate(bar.productList!.toList().length, (index) {
 
-                    UserModel user = UserModel.fromJson(bar.productList![index].user![0]);
+                      UserModel user = UserModel.fromJson(bar.productList![index].user![0]);
 
               return GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductScreen(product: bar.productList![index])));
                 },
-                child: SizedBox(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                Container(
-                width: size.width * .5,
-                height: index%2==0? size.width * .34 : size.width * .4,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey,
-                ),
-                child: Stack(
-                  children: [
-
-
-
-                    Positioned(child: Opacity(
-                        opacity: 0.78,
-                        child: SizedBox(
-                      width: size.width * .5,
-                      height: index%2==0? size.width * .34 : size.width * .4,
-                      child: bar.productList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
-                      fit: BoxFit.cover,
-                      ):ImageWidget(url: bar.productList![index].images![0]['url'].toString()),
-                    ))),
-
-                    Positioned(
-                        right: 0,
-                        child: IconButton(
-                            onPressed: () {},
-                            icon:  Icon(
-                              bar.productList![index].wishList!.isEmpty ? Icons.favorite_border:
-                              Icons.favorite,
-                              color: Colors.white,
-                            ))),
-
-
-                    Positioned(
-                      top: 0,
-                      child: Visibility(
-                        visible: bar.productList![index].adType != "Free",
-                        child: Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration:  BoxDecoration(
-                                color: bar.productList![index].adType == "Standard" ? Colors.orangeAccent
-                                    : Colors.green
-                            ),
-                            child: Text("${bar.productList![index].adType} Ad",
-                            style: const TextStyle(color: Colors.white, fontSize: 10),
-                            )
-                        ),
-                      ),
-                    ),
-
-                  ],
-                ),
-              ),
-              Container(
-                width: size.width,
-                padding: const EdgeInsets.all(10),
+                  child: Container(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:  [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 7),
-                      child: Text("${bar.productList![index].title}",
-                        style: const TextStyle(color: Colors.black, fontSize: 13),
-                      ),
-                    ),
-                    Text("${bar.productList![index].adCategory}",
-                        style: const TextStyle(color: primary, fontSize: 12)),
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
 
-                    Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
-                    child:Text("${user.campus}",
-                        style: const TextStyle(color: Colors.black, fontSize: 12)))
-                  ],
+                  Container(
+                  width: size.width * .5,
+                  height: index%2==0? size.width * .34 : size.width * .4,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey,
+                  ),
+                  child: Stack(
+                      children: [
+
+
+
+                        Positioned(child: Opacity(
+                            opacity: 0.78,
+                            child: SizedBox(
+                          width: size.width * .5,
+                          height: index%2==0? size.width * .34 : size.width * .4,
+                          child: bar.productList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
+                          fit: BoxFit.cover,
+                          ):ImageWidget(url: bar.productList![index].images![0]['url'].toString()),
+                        ))),
+
+                        Positioned(
+                            right: 0,
+                            child: IconButton(
+                                onPressed: () {},
+                                icon:  Icon(
+                                  bar.productList![index].wishList!.isEmpty ? Icons.favorite_border:
+                                  Icons.favorite,
+                                  color: Colors.white,
+                                ))),
+
+
+                        Positioned(
+                          top: 0,
+                          child: Visibility(
+                            visible: bar.productList![index].adType != "Free",
+                            child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration:  BoxDecoration(
+                                    color: bar.productList![index].adType == "Standard" ? Colors.orangeAccent
+                                        : Colors.green
+                                ),
+                                child: Text("${bar.productList![index].adType} Ad",
+                                style: const TextStyle(color: Colors.white, fontSize: 10),
+                                )
+                            ),
+                          ),
+                        ),
+
+                      ],
+                  ),
                 ),
-              ),
+                Container(
+                  width: size.width,
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:  [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
+                          child: Text("${bar.productList![index].title}",
+                            style: const TextStyle(color: Colors.black, fontSize: 13),
+                          ),
+                        ),
+                        Text("${bar.productList![index].adCategory}",
+                            style: const TextStyle(color: primary, fontSize: 12)),
+
+                        Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 7),
+                        child:Text("${user.campus}",
+                            style: const TextStyle(color: Colors.black, fontSize: 12)))
+                      ],
+                  ),
+                ),
 
 
             ],
           ),
         ));
       }),
-    )
+    ),
+                    )
         ): const Center(
                   child:  CircularProgressIndicator(),
                 ) ; })

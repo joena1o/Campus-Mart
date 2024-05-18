@@ -403,10 +403,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   Consumer<SignUpProvider>(builder: (_, data, __) { return !data.getSigningUser ? GestureDetector(
                   onTap: () {
+                    if(cPassword.text != password.text){
+                      showMessageError("Password do not match", context);
+                      return;
+                    }
                     if(_formKey2.currentState!.validate()) {
                       UserModel userModel = UserModel(firstName: firstName.text.toString(), countryId: country,
                       lastName: lastName.text.toString(), email: email.text.toString(), password: password.text.toString(),
-                            state: state, campus: campus, username: username.text.toString(), phone: phone.text.toString()
+                            state: state, campus: campus, username: username.text.toString(), phone: phone.text.toString(),
+                            emailVerified: false
                           );
                       context.read<SignUpProvider>().signUpUser(userModel.toJson2(), context);
                     }

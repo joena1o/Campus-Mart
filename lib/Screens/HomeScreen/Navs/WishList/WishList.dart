@@ -20,7 +20,7 @@ class _WishListtState extends State<WishListt> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            padding: const EdgeInsets.only(left: 5),
+            padding: const EdgeInsets.only(left: 20),
             child: const Text(
               "WishList",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),

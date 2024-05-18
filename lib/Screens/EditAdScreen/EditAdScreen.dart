@@ -484,9 +484,9 @@ class _AdScreenState extends State<EditAdScreen> {
   updatePaymentStatus(){
     Provider.of<ProductProvider>(context, listen: false).updateProductStatusForEdit(
         {
-          "productId": productModel?.id,
-          "title": productModel?.title,
-          "description": productModel?.description,
+          "productId": productModel!.id,
+          "title": productModel!.title,
+          "description": productModel!.description,
           "paid": true
         },
         context.read<AuthProvider>().accessToken,

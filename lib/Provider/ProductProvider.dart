@@ -9,7 +9,6 @@ import 'package:campus_mart/Model/WishProductModel.dart';
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
 import 'package:campus_mart/Screens/EditSuccessful/EditSuccessful.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -310,7 +309,6 @@ class ProductProvider extends ChangeNotifier{
   }
 
   void getProduct(category,val,context,cat,token) async{
-    categoryProductList = [];
     isGettingProduct = true;
     await product.fetchProduct(category, category.toString().isEmpty ? indexAll : indexCat, token).then((value){
       isGettingProduct = false;

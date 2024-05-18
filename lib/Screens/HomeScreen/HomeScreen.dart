@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
         width: size.width,
         height: size.height,
-        padding: EdgeInsets.symmetric(horizontal: size.width * .037),
+        //padding: EdgeInsets.symmetric(horizontal: size.width * .037),
         child: (currentNav == 1)
             ? const HomepageNav()
             : ((currentNav == 2)
