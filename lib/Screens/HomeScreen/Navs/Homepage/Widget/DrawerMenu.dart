@@ -31,7 +31,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
               },
               child: const ListTile(
                 leading: Icon(EvaIcons.alertTriangleOutline),
-                title: Text("Ad Alert"),
+                title: Text("Buzz Me"),
               )),
 
       GestureDetector(

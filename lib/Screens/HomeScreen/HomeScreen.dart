@@ -1,3 +1,4 @@
+import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
@@ -33,8 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState(){
     super.initState();
     //Subscribe User
-    String? user = context.read<UserProvider>().userDetails?.id.toString();
-    OneSignal.shared.setExternalUserId(user ?? "");
+    UserModel? user = context.read<UserProvider>().userDetails;
+    OneSignal.shared.setExternalUserId(user!.id.toString());
+
+    OneSignal.shared.sendTag("campus", user!.campus); // Campus Tag
+    OneSignal.shared.sendTag("state", user!.state); // State Tag
+
     Provider.of<UserProvider>(context, listen: false).loadDetails();
   }
 
@@ -84,7 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
         width: size.width,
         height: size.height,
-        //padding: EdgeInsets.symmetric(horizontal: size.width * .037),
         child: (currentNav == 1)
             ? const HomepageNav()
             : ((currentNav == 2)

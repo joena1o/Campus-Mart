@@ -65,6 +65,7 @@ class _AdScreenState extends State<AdScreen> {
     productModel.countryId = context.read<UserProvider>().userDetails!.countryId;
     productModel.state = context.read<UserProvider>().userDetails!.state;
     productModel.contactForPrice = false;
+    productModel.negotiable = false;
     super.initState();
   }
 
@@ -73,7 +74,7 @@ class _AdScreenState extends State<AdScreen> {
 
   List<PaymentTypeModel> paymentPlan = [
     PaymentTypeModel(value: "Premium", text: "Premium Ad - N500", amount: 50000),
-    PaymentTypeModel(value: "Standard", text: "Standard Ad - N200", amount: 50000),
+    PaymentTypeModel(value: "Standard", text: "Standard Ad - N200", amount: 20000),
     PaymentTypeModel(value: "Free", text: "Basic Ad - FREE", amount: 0),
   ];
 
@@ -224,7 +225,7 @@ class _AdScreenState extends State<AdScreen> {
 
                 Row(
                   children: [
-                    Checkbox(value: productModel.negotiable ?? false,
+                    Checkbox(value: (productModel.negotiable) ?? false,
                         onChanged: (bool? val){
                           setState(()=> productModel.negotiable = val!);
                         }),
@@ -297,7 +298,14 @@ class _AdScreenState extends State<AdScreen> {
               if(!_formKey.currentState!.validate()){
                   return;
               }else{
-                _images.isNotEmpty ? _uploadImages() : uploadProduct();
+                if(selectPayment?.value == "Free"){
+                  _images.isNotEmpty ? _uploadImages(false) : {
+                    uploadProduct()
+                  };
+                }else{
+                  _images.isNotEmpty ? _uploadImages(true) : payStackCheckOut();
+                }
+
               }
             },):const Center(
               child: CircularProgressIndicator()
@@ -343,17 +351,20 @@ class _AdScreenState extends State<AdScreen> {
   }
 
   void uploadProduct(){
-    productModel.adType == "Free" ? productModel.paid = true : productModel.paid = false;
+    setState(()=> isUploading = true);
+    Provider.of<ProductProvider>(context, listen: false).initProductStatus();
     productModel.title = title.text.toString();
     productModel.description = description.text.toString();
     productModel.price = !productModel.contactForPrice! ? int.parse(price.text.toString().replaceAll("N","")):0;
     product.addProduct(productModel.toJson2(), context.read<AuthProvider>().accessToken)
     .then((value){
       setState(()=> isUploading = false);
-       setState(() => prePaidProductModel = PrePaidProductModel.fromJson(value));
-       (productModel.paid != false) ? setState(()=> isSuccessful = true) : payStackCheckOut();
+      Provider.of<ProductProvider>(context, listen: false).updateProductStatus(true);
+      setState(()=> isSuccessful = true);
     }).catchError((onError){
       setState(()=> isUploading = false);
+      setState(()=> isSuccessful = true);
+      Provider.of<ProductProvider>(context, listen: false).updateProductStatus(false);
       ErrorModel error = ErrorModel.fromJson(onError);
       showMessage(error.message, context);
     });
@@ -381,7 +392,7 @@ class _AdScreenState extends State<AdScreen> {
     }
   }
 
-   Future<List<dynamic>> _uploadImages() async {
+   Future<List<dynamic>> _uploadImages(bool withPayment) async {
     setState(()=> isUploading = true);
     final url = Uri.parse('$conn/upload-images');
     http.MultipartRequest request = http.MultipartRequest('POST', url,);
@@ -397,13 +408,15 @@ class _AdScreenState extends State<AdScreen> {
       final resp_string = await result.stream.bytesToString();
       final connValue = jsonDecode(resp_string);
       productModel.images = connValue['data'];
-      uploadProduct();
+      withPayment ? payStackCheckOut() : uploadProduct();
       return connValue['data'];
     } else {
       setState(()=> isUploading = false);
       return [];
     }
   }
+
+
 
   payStackCheckOut() async{
     final userDetails = context.read<UserProvider>().userDetails;
@@ -414,15 +427,21 @@ class _AdScreenState extends State<AdScreen> {
       ..email = userDetails?.email;
     CheckoutResponse response = await plugin.checkout(
       context,
+      logo: const Image(image: AssetImage("assets/logo_orange.png"), width: 50,),
       fullscreen: false,
-      //logo: const Image(image: AssetImage("assets/launcher/launcher.png")),
       method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
       charge: charge,
     );
+
     if(response.message == "Success"){
+      setState(()=>productModel.paid = true);
       setState(()=> processingPayment = true);
       setState(()=> isSuccessful = true);
-      updatePaymentStatus();
+      //updatePaymentStatus();
+      uploadProduct();
+    }else{
+      setState(()=> productModel.paid = false);
+      showMessageError("Error encountered while processing payment", context);
     }
   }
 
@@ -438,16 +457,6 @@ class _AdScreenState extends State<AdScreen> {
       platform = "WEB";
     }
     return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
-  }
-
-  updatePaymentStatus(){
-    Provider.of<ProductProvider>(context, listen: false).updateProductStatus(
-        {"productId": prePaidProductModel?.product!.id,
-          "title": prePaidProductModel?.product!.title,
-          "description": prePaidProductModel?.product!.description,
-          "paid": true},
-        context.read<AuthProvider>().accessToken,
-        context);
   }
 
 }

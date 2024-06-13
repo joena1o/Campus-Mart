@@ -18,6 +18,7 @@ class ProductProvider extends ChangeNotifier{
 
   List<WishProductModel>? wishProductModel;
   List<ProductModel> productList = [];
+  List<ProductModel> pendingAdsList = [];
   List<ProductModel> categoryProductList = [];
   List<NotificationModel> notificationList = [];
   List<AdAlertModel> adAlertList = [];
@@ -87,7 +88,9 @@ class ProductProvider extends ChangeNotifier{
 
   void resetMyAdsItems(){
     myAdsIndex = 1;
+    pendingAdsIndex = 1;
     myProductList = [];
+    pendingAdsList = [];
   }
 
   void getMyAds(id, token){
@@ -97,6 +100,23 @@ class ProductProvider extends ChangeNotifier{
       if(value.length > 0){
         myProductList += value;
         myAdsIndex += 1;
+      }
+      refreshController.loadComplete();
+      notifyListeners();
+    }).catchError((onError){
+      refreshController.loadComplete();
+      isGettingMyProduct = false;
+      notifyListeners();
+    });
+  }
+
+  void getMyPendingAds(id, token){
+    isGettingMyProduct = true;
+    product.getMyPendingProducts(id, pendingAdsIndex, token).then((value){
+      isGettingMyProduct = false;
+      if(value.length > 0){
+        pendingAdsList += value;
+        pendingAdsIndex += 1;
       }
       refreshController.loadComplete();
       notifyListeners();
@@ -150,7 +170,6 @@ class ProductProvider extends ChangeNotifier{
       notifyListeners();
     });
   }
-
 
 
   void deleteAdAlert(id,context,userId,token){
@@ -211,6 +230,7 @@ class ProductProvider extends ChangeNotifier{
   int searchIndex = 1;
 
   int myAdsIndex = 1;
+  int pendingAdsIndex = 1;
 
   void resetItems(){
     indexCat = 1;
@@ -237,16 +257,19 @@ class ProductProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateProductStatus(data, token, ctx) async{
+  void initProductStatus(){
     processingPayment = true;
     processingPaymentFailed = false;
-    try{
-      await product.updatePaymentStatus(data, token);
-    }catch(e){
-      showMessage(e.toString(), ctx);
-      processingPaymentFailed = true;
-    }finally{
+    notifyListeners();
+  }
+
+  void updateProductStatus(bool isSuccess) async{
+    if(isSuccess){
       processingPayment = false;
+      processingPaymentFailed = false;
+    }else{
+      processingPayment = false;
+      processingPaymentFailed = true;
     }
     notifyListeners();
   }
@@ -270,15 +293,11 @@ class ProductProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void editProduct(Map<String, dynamic> data, String token, ctx, Function callback) async{
+  void editProduct(Map<String, dynamic> data, String token, ctx) async{
     editingAd = true;
     try{
       await product.editProduct(data, token);
-      (data["paid"] != false) ? Navigator.of(ctx).pushReplacement(
-        MaterialPageRoute(
-            builder: (_)=> const EditSuccessful()
-        )
-      ) : callback();
+      Navigator.of(ctx).pushReplacement(MaterialPageRoute(builder: (_)=> const EditSuccessful()));
     }catch(e){
       showMessage(e.toString(), ctx);
     }finally{

@@ -164,27 +164,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
             height: 20,
           ),
 
-          Consumer<SignUpProvider>(builder: (_, data, __) { return !data.loadingCountries ?  DropdownButton<String>(
-            value: country,
-            hint: SizedBox(width: size.width * .75, child: const Text("Select Country")),
-            icon: const Icon(Icons.keyboard_arrow_down),
-            underline: Container(),
-            items: data.countries?.map((CountryModel item) {
-              return DropdownMenuItem<String>(
-                value: item.countryModelId,
-                child: SizedBox(width: size.width * .75, child: Text(item.name.toString())),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(()=> country = newValue);
-              setState(()=> countryCode = data.countries!.firstWhere((element) => element.countryModelId == newValue).countryCode);
-              context.read<SignUpProvider>().fetchStates(context, newValue);
-            },
-              ): const Center(child:CircularProgressIndicator());
+          Consumer<SignUpProvider>(builder: (_, data, __) { return !data.loadingCountries ?  Column(
+            children: [
+              DropdownButton<String>(
+                value: country,
+                hint: SizedBox(width: size.width * .75, child: const Text("Select Country")),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                underline: Container(),
+                items: data.countries?.map((CountryModel item) {
+                  return DropdownMenuItem<String>(
+                    value: item.countryModelId,
+                    child: SizedBox(width: size.width * .75, child: Text(item.name.toString())),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(()=> country = newValue);
+                  setState(()=> countryCode = data.countries!.firstWhere((element) => element.countryModelId == newValue).countryCode);
+                  context.read<SignUpProvider>().fetchStates(context, newValue);
+                },
+              ),
+
+              Visibility(
+                  visible: !data.loadingCountries,
+                  child: const Divider(color: Colors.black)),
+
+            ],
+          ):  Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(top: 20),
+              child: const CircularProgressIndicator());
             }
           ),
 
-          const Divider(color: Colors.black),
+
 
           Container(
             height: 20,
@@ -308,26 +320,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 20,
                   ),
 
-                  Consumer<SignUpProvider>(builder: (_, data, __) { return !data.loadingCampus ? DropdownButton(
-                    value: campus,
-                    hint: SizedBox(width: size.width - 90, child: data.campuses.toList().isEmpty ? const Text("Fetching Campuses")
-                        : const Text("Select Campus")),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    underline: Container(),
-                    items: data.campuses.map((Campus item) {
-                      return DropdownMenuItem(
-                        value: item.campus,
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            width: size.width - 90, child: Text(item.campus.toString())),
-                      );
-                    }).toList(),
-                    onChanged: (dynamic newValue) {
-                      setState(()=> campus = newValue);
-                    },
+                  Consumer<SignUpProvider>(builder: (_, data, __) { return !data.loadingCampus ? Column(
+                    children: [
+                      DropdownButton(
+                        value: campus,
+                        hint: SizedBox(width: size.width - 90, child: data.campuses.toList().isEmpty ? const Text("Fetching Campuses")
+                            : const Text("Select Campus")),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        underline: Container(),
+                        items: data.campuses.map((Campus item) {
+                          return DropdownMenuItem(
+                            value: item.campus,
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                width: size.width - 90, child: Text(item.campus.toString())),
+                          );
+                        }).toList(),
+                        onChanged: (dynamic newValue) {
+                          setState(()=> campus = newValue);
+                        },
+                      ),
+
+                      Visibility(
+                          visible: !data.loadingCampus,
+                          child: const Divider(color: Colors.black)),
+
+                    ],
                   ) : const Center(child:CircularProgressIndicator()); }),
 
-                  const Divider(color: Colors.black),
 
                   const SizedBox(height: 20,),
 

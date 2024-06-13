@@ -46,7 +46,6 @@ class _AdGridState extends State<AdGrid> {
             : context.read<ProductProvider>().refreshController2,
             child: Consumer<ProductProvider>(
               builder: (_, bar, __) {
-
                 if(bar.productList.isEmpty && !bar.getIsGettingProduct){
                   return const Center(child: Text("No Ads Found"));
                 }
@@ -81,8 +80,6 @@ class _AdGridState extends State<AdGrid> {
                   ),
                   child: Stack(
                       children: [
-
-
 
                         Positioned(child: Opacity(
                             opacity: 0.78,

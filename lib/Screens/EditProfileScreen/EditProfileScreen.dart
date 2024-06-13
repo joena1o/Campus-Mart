@@ -7,6 +7,7 @@ import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:campus_mart/Utils/states.dart';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field2/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -27,17 +28,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController lastName = TextEditingController();
   TextEditingController phone = TextEditingController();
 
+  String? countryCode;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Map<String, dynamic>? currentDate;
 
   @override
   void initState() {
     super.initState();
+
     firstName.text = context.read<UserProvider>().userDetails!.firstName!.toString();
     lastName.text = context.read<UserProvider>().userDetails!.lastName!.toString();
     phone.text = "${context.read<UserProvider>().userDetails!.phone}";
     state = context.read<UserProvider>().userDetails!.state;
     campus = context.read<UserProvider>().userDetails!.campus;
     context.read<SignUpProvider>().fetchCampuses(state, context);
+
+    currentDate = {
+      "email": context.read<UserProvider>().userDetails!.email,
+      "firstName": context.read<UserProvider>().userDetails!.firstName!.toString(),
+      "lastName": context.read<UserProvider>().userDetails!.lastName!.toString(),
+      "state": context.read<UserProvider>().userDetails!.state,
+      "phone": context.read<UserProvider>().userDetails!.phone,
+      "campus": context.read<UserProvider>().userDetails!.campus,
+    };
+
   }
 
   @override
@@ -173,19 +188,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Container(
                       height: 20,
                     ),
-                    TextFormField(
+
+                    IntlPhoneField(
                       controller: phone,
-                      validator: (String? value) {
-                        if (value!.isEmpty || value.length < 11) {
-                          showMessage(
-                              "Please enter a valid phone number", context);
+                      decoration: const InputDecoration(
+                        labelStyle: TextStyle(
+                            fontSize: 14
+                        ),
+                        // border: InputBorder.none
+                      ),
+                      initialCountryCode: "NG",
+                      flagWidth: 140,
+                      flagsButtonMargin: const EdgeInsets.only(top: 20, bottom: 20),
+                      textFieldPadding:  const EdgeInsets.only(top: 22, bottom: 20),
+                      showCountryFlag: true,
+                      validator: (value){
+                        if(value!.number.isEmpty){
+                          showMessage("Please enter a valid phone number", context);
                           return "Please enter a valid valid phone number";
                         }
                         return null;
                       },
-                      decoration:
-                          const InputDecoration(hintText: "Phone number"),
                     ),
+
                     Container(
                       height: 20,
                     ),

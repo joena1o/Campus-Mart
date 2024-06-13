@@ -1,14 +1,13 @@
-import 'package:campus_mart/Provider/AdsProvider.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/SignUpProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Utils/conn.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -18,10 +17,9 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  //MobileAds.instance.initialize();
-
+  const isLive = false;
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-  OneSignal.shared.setAppId("4e46778f-4e06-4ed1-a774-12e34ba10da1");
+  OneSignal.shared.setAppId(isLive ? "815ab166-c7fb-4e29-a26b-1e2a15efdbf3" : "4e46778f-4e06-4ed1-a774-12e34ba10da1");
   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
     print("Accepted permission: $accepted");
   });
@@ -30,10 +28,7 @@ void main() async{
       MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_)=> AdProvider()),
-        ChangeNotifierProvider(
-          create: (BuildContext context) => AuthProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_)=> ProductProvider()),
         ChangeNotifierProvider(create: (_)=> SignUpProvider())
       ],

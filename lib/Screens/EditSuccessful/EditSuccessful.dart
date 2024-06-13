@@ -1,4 +1,6 @@
+import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -51,7 +53,13 @@ class _EditSuccessfulState extends State<EditSuccessful> {
                   width: size.width*.8,
                   child: const Text("Continue", style: TextStyle(color:Colors.white),),
                 ), onTap: (){
+
+                  Provider.of<ProductProvider>(context, listen: false).resetMyAdsItems();
+                  Provider.of<ProductProvider>(context, listen: false).getMyAds(
+                      context.read<UserProvider>().userDetails?.id, context.read<AuthProvider>().accessToken
+                  );
                   Navigator.pop(context);
+
                 },)
 
               ],

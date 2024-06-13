@@ -14,7 +14,6 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class MyAdScreen extends StatefulWidget {
   const MyAdScreen({Key? key}) : super(key: key);
-
   @override
   State<MyAdScreen> createState() => _MyAdScreenState();
 }
@@ -33,6 +32,7 @@ class _MyAdScreenState extends State<MyAdScreen> {
   }
 
   static const images = ['Camera.jpeg','detergent.jpeg','earbuds.jpeg','watch.jpeg'];
+
   String? selectedId;
   ProductModel? selectedAd;
 
@@ -77,94 +77,89 @@ class _MyAdScreenState extends State<MyAdScreen> {
                         crossAxisSpacing: 10,
                         children: List.generate(bar.myProductList!.toList().length, (index) {
                           UserModel user = UserModel.fromJson(bar.myProductList![index].user![0]);
-                          return GestureDetector(
-                              onTap: (){
-                                print(bar.myProductList![index].id);
-                                //Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductScreen(product: bar.myProductList![index])));
-                              },
-                              child: SizedBox(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
+                          return SizedBox(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
 
-                                    Container(
-                                      width: size.width * .5,
-                                      height: index%2==0? size.width * .34 : size.width * .4,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey,
-                                      ),
-                                      child: Stack(
-                                        children: [
+                                Container(
+                                  width: size.width * .5,
+                                  height: index%2==0? size.width * .34 : size.width * .4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey,
+                                  ),
+                                  child: Stack(
+                                    children: [
 
-                                          Positioned(child: Opacity(
-                                              opacity: 0.78,
-                                              child: SizedBox(
-                                                width: size.width * .5,
-                                                height: index%2==0? size.width * .34 : size.width * .4,
-                                                child: bar.myProductList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
-                                                  fit: BoxFit.cover,
-                                                ):ImageWidget(url: bar.myProductList![index].images![0]['url'].toString()),
-                                              ))),
+                                      Positioned(child: Opacity(
+                                          opacity: 0.78,
+                                          child: SizedBox(
+                                            width: size.width * .5,
+                                            height: index%2==0? size.width * .34 : size.width * .4,
+                                            child: bar.myProductList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
+                                              fit: BoxFit.cover,
+                                            ):ImageWidget(url: bar.myProductList![index].images![0]['url'].toString()),
+                                          ))),
 
-                                          Positioned(
-                                            top: 0,
-                                            child: Visibility(
-                                              visible: bar.myProductList![index].adType != "Free",
-                                              child: Container(
-                                                  padding: const EdgeInsets.all(5),
-                                                  decoration:  BoxDecoration(
-                                                      color: bar.myProductList![index].adType == "Standard" ? Colors.orangeAccent
-                                                          : Colors.green
-                                                  ),
-                                                  child: Text("${bar.myProductList![index].adType} Ad",
-                                                    style: const TextStyle(color: Colors.white, fontSize: 10),
-                                                  )
+                                      Positioned(
+                                        top: 0,
+                                        child: Visibility(
+                                          visible: bar.myProductList![index].adType != "Free",
+                                          child: Container(
+                                              padding: const EdgeInsets.all(5),
+                                              decoration:  BoxDecoration(
+                                                  color: bar.myProductList![index].adType == "Standard" ? Colors.orangeAccent
+                                                      : Colors.green
                                               ),
-                                            ),
+                                              child: Text("${bar.myProductList![index].adType} Ad",
+                                                style: const TextStyle(color: Colors.white, fontSize: 10),
+                                              )
                                           ),
-
-                                          Positioned(
-                                              right: 0,
-                                              child: IconButton(
-                                                  onPressed: () {
-                                                    setState(()=> selectedId = bar.myProductList![index].id);
-                                                    setState(()=> selectedAd = bar.myProductList![index]);
-                                                    print(selectedId);
-                                                    customBottomSheet(context);
-                                                  },
-                                                  icon:  const Icon(
-                                                    Icons.more_horiz,
-                                                    color: Colors.white,
-                                                  ))),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                    Container(
-                                      width: size.width,
-                                      padding: const EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children:  [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 7),
-                                            child: Text("${bar.myProductList![index].title}",
-                                              style: const TextStyle(color: Colors.black, fontSize: 13),
-                                            ),
-                                          ),
-                                          Text("${bar.myProductList![index].adCategory}",
-                                              style: const TextStyle(color: primary, fontSize: 12)),
 
-                                          Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 7),
-                                              child:Text("${user.campus}",
-                                                  style: const TextStyle(color: Colors.black, fontSize: 12)))
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                      Positioned(
+                                          right: 0,
+                                          child: IconButton(
+                                              onPressed: () {
+                                                setState(()=> selectedId = bar.myProductList![index].id);
+                                                setState(()=> selectedAd = bar.myProductList![index]);
+                                                print(selectedId);
+                                                customBottomSheet(context);
+                                              },
+                                              icon:  const Icon(
+                                                Icons.more_horiz,
+                                                color: Colors.white,
+                                              ))),
+                                    ],
+                                  ),
                                 ),
-                              ));
+                                Container(
+                                  width: size.width,
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children:  [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 7),
+                                        child: Text("${bar.myProductList![index].title}",
+                                          style: const TextStyle(color: Colors.black, fontSize: 13),
+                                        ),
+                                      ),
+                                      Text("${bar.myProductList![index].adCategory}",
+                                          style: const TextStyle(color: primary, fontSize: 12)),
+
+                                      Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 7),
+                                          child:Text("${user.campus}",
+                                              style: const TextStyle(color: Colors.black, fontSize: 12)))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
                         }),
                       )
                   )): const Center(
@@ -235,9 +230,6 @@ class _MyAdScreenState extends State<MyAdScreen> {
                     Text("Delete", style: TextStyle(fontSize: 16))
                   ],
                 )),
-
-
-
 
 
             ],

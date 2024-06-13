@@ -19,7 +19,6 @@ class SignUpProvider extends ChangeNotifier{
   List<CountryModel>? countries;
   bool loadingCountries = false;
 
-
   bool validatingMail = false;
   Auth auth =  Auth();
 

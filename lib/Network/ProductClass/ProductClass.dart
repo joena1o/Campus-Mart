@@ -18,6 +18,7 @@ class ProductClass{
   String reviewEndpoint = "$conn/review";
   String addAlertEndpoint = "$conn/alert";
   String getMyProductEndpoint = "$conn/products/myads";
+  String getMyPendingProductEndpoint = "$conn/products/myPendingAds";
   String getNotificationEndpoint = "$conn/notification";
   String searchAdEndPoint = "$conn/products/search/";
 
@@ -43,6 +44,26 @@ class ProductClass{
     });
   }
 
+  Future getMyPendingProducts(id, pageNumber, token){
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    List<ProductModel>? productModel;
+    return networkHelper.get("$getMyPendingProductEndpoint/$id/$pageNumber", headers: headers)
+        .then((dynamic res) async{
+      Map<String, dynamic> response = res;
+      productModel = response['data']
+          .map<ProductModel>(
+              (json) => ProductModel.fromJson(json))
+          .toList();
+      return productModel;
+    }).catchError((err){
+      errorHandler.handleError(err['body']);
+    });
+  }
+
   Future fetchProduct(category, index, token){
     headers  = {
       "Accept": "application/json",
@@ -54,10 +75,7 @@ class ProductClass{
     return networkHelper.get(category.toString().isEmpty ? "$productEndpoint/$index" : "$url/$index", headers: headers)
         .then((dynamic res) async{
       Map<String, dynamic> response = res;
-      productModel = response['data']
-          .map<ProductModel>(
-              (json) => ProductModel.fromJson(json))
-          .toList();
+      productModel = response['data'].map<ProductModel>((json) => ProductModel.fromJson(json)).toList();
       return productModel;
     }).catchError((err){
       errorHandler.handleError(err['body']);

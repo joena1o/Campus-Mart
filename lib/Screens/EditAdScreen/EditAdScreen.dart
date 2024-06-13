@@ -73,6 +73,8 @@ class _AdScreenState extends State<EditAdScreen> {
     productModel.description = widget.product.description;
     productModel.paid = widget.product.paid;
     productModel.id = widget.product.id;
+    productModel.negotiable = widget.product.negotiable;
+    productModel.images = widget.product.images;
 
     contact = widget.product.contactForPrice!;
     title.text = widget.product.title!;
@@ -83,6 +85,7 @@ class _AdScreenState extends State<EditAdScreen> {
     productModel.contactForPrice = widget.product.contactForPrice!;
     selectPayment = paymentPlan.where((element) => element.value == widget.product.adType).first;
 
+    print(areObjectsEqual(widget.product.toJson2(), productModel.toJson2()));
     super.initState();
   }
 
@@ -254,7 +257,7 @@ class _AdScreenState extends State<EditAdScreen> {
 
                     Row(
                       children: [
-                        Checkbox(value: productModel.negotiable ?? false,
+                        Checkbox(value: (productModel.negotiable) ?? false,
                             onChanged: (bool? val){
                               setState(()=> productModel.negotiable = val!);
                             }),
@@ -329,7 +332,7 @@ class _AdScreenState extends State<EditAdScreen> {
 
 
                 Container(
-                  height: 10,
+                  height: 15,
                 ),
 
                 !isUploading ? GestureDetector(child:Container(
@@ -337,17 +340,25 @@ class _AdScreenState extends State<EditAdScreen> {
                   padding: const EdgeInsets.all(15),
                   margin: const EdgeInsets.only(bottom: 30),
                   decoration: BoxDecoration(
-                      color: Colors.orangeAccent,
+                      color: areObjectsEqual(widget.product.toJson2(), productModel.toJson2())
+                       ? Colors.grey : Colors.orangeAccent,
                       borderRadius: BorderRadius.circular(10)
                   ),
                   width: size.width*.8,
                   child: const Text("Edit Ad", style: TextStyle(color:Colors.white),),
                 ), onTap: (){
+                 areObjectsEqual(widget.product.toJson2(), productModel.toJson2());
                   // payStackCheckOut();
-                  if(!_formKey.currentState!.validate()){
+                  if(!_formKey.currentState!.validate() || areObjectsEqual(widget.product.toJson2(), productModel.toJson2())){
                     return;
                   }else{
-                    _images.isNotEmpty ? _uploadImages() : uploadProduct();
+                    if(selectPayment?.value != "Free" && widget.product.adType == "Free"){
+                      _images.isNotEmpty ? _uploadImages(true) : payStackCheckOut();
+                    }else{
+                      _images.isNotEmpty ? _uploadImages(false) : {
+                        uploadProduct()
+                      };
+                    }
                   }
                 },):const Center(
                     child: CircularProgressIndicator()
@@ -394,10 +405,8 @@ class _AdScreenState extends State<EditAdScreen> {
 
   void uploadProduct(){
     productModel.images = productModel.images ?? widget.product.images;
-    print(productModel.toJson());
-    productModel.adType == "Free" ? productModel.paid = true : productModel.paid = false;
     Provider.of<ProductProvider>(context, listen: false).editProduct(
-        productModel.toJson(), context.read<AuthProvider>().accessToken, context, payStackCheckOut);
+        productModel.toJson(), context.read<AuthProvider>().accessToken, context);
   }
 
   void _pickImages() async {
@@ -422,7 +431,7 @@ class _AdScreenState extends State<EditAdScreen> {
     }
   }
 
-  Future<List<dynamic>> _uploadImages() async {
+  Future<List<dynamic>> _uploadImages(bool withPayment) async {
     setState(()=> isUploading = true);
     final url = Uri.parse('$conn/upload-images');
     http.MultipartRequest request = http.MultipartRequest('POST', url,);
@@ -438,7 +447,7 @@ class _AdScreenState extends State<EditAdScreen> {
       final resp_string = await result.stream.bytesToString();
       final connValue = jsonDecode(resp_string);
       productModel.images = connValue['data'];
-      uploadProduct();
+      withPayment ? payStackCheckOut() : uploadProduct();
       return connValue['data'];
     } else {
       setState(()=> isUploading = false);
@@ -461,9 +470,12 @@ class _AdScreenState extends State<EditAdScreen> {
       charge: charge,
     );
     if(response.message == "Success"){
+      setState(()=> productModel.paid = true);
       setState(()=> processingPayment = true);
       setState(()=> isSuccessful = true);
-      updatePaymentStatus();
+      uploadProduct();
+    }else{
+      setState(()=> productModel.paid = false);
     }
   }
 
@@ -481,16 +493,23 @@ class _AdScreenState extends State<EditAdScreen> {
     return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
   }
 
-  updatePaymentStatus(){
-    Provider.of<ProductProvider>(context, listen: false).updateProductStatusForEdit(
-        {
-          "productId": productModel!.id,
-          "title": productModel!.title,
-          "description": productModel!.description,
-          "paid": true
-        },
-        context.read<AuthProvider>().accessToken,
-        context);
+
+  bool areObjectsEqual(Map obj1, Map obj2) {
+    // Get the keys of the objects
+    List<dynamic> keys1 = obj1.keys.toList();
+    List<dynamic> keys2 = obj2.keys.toList();
+    // Check if the number of keys is the same
+    if (keys1.length != keys2.length) {
+      return false;
+    }
+    // Check if the values for each key are equal
+    for (var key in keys1) {
+      if (obj1[key] != obj2[key]) {
+        return false;
+      }
+    }
+    // If all key-value pairs are equal, return true
+    return true;
   }
 
 }

@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:app_updater/app_updater.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/OnboardingScreen/OnboardingScreen.dart';
 import 'package:campus_mart/Screens/WelcomeScreen/WelcomeScreen.dart';
+import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/savePrefs.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +26,7 @@ class _WrapperState extends State<Wrapper> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    showUpdate();
     Timer(const Duration(seconds: 4), () {
       read("user").then((user){
         if(user==null){
@@ -33,7 +37,7 @@ class _WrapperState extends State<Wrapper> {
           final userAuth = UserModel.fromJson(user);
           context.read<UserProvider>().loadDetails();
           readValue('passcode').then((passcode){
-            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth!.email, passcode, context, callbackToUserCredentials);
+            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth.email, passcode, context, callbackToUserCredentials);
           });
         }
       });
@@ -47,6 +51,52 @@ class _WrapperState extends State<Wrapper> {
 
   void callbackToUserCredentials(UserModel userModel, passcode){
     context.read<UserProvider>().setUserDetails(userModel, passcode);
+  }
+
+
+  void showUpdate(){
+    checkAppUpdate(
+      context,
+      appName: 'Campus Mart',
+      iosAppId: '6444196255',
+      androidAppBundleId: 'com.pollex.campus_mart',
+      isDismissible: false,
+      customDialog: true,
+      customAndroidDialog:
+      AlertDialog(
+        title: const Text('Update Available'),
+        content: const Text('Please update the app to continue'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              OpenStore.instance.open(
+                androidAppBundleId: 'com.pollex.campus_mart',
+              );
+              // Navigator.pop(context);
+            },
+            child: const Text('Update'),
+          ),
+        ],
+      ),
+      customIOSDialog: CupertinoAlertDialog(
+        title: const Text('Update Available', style: TextStyle(fontFamily: "Raleway", fontSize: 14),),
+        content: const Text('Please update the app to continue',
+            style: TextStyle(fontFamily: "Raleway", fontSize: 12)
+        ),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () {
+              OpenStore.instance.open(
+                appName: 'Campus Mart',
+                appStoreId: '6444196255',
+              );
+              // Navigator.pop(context);
+            },
+            child: const Text('Update', style: TextStyle(color: primary)),
+          ),
+        ],
+      ),
+    );
   }
 
 }
