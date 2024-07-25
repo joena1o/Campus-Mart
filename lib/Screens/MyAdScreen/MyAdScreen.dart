@@ -24,7 +24,9 @@ class _MyAdScreenState extends State<MyAdScreen> {
   void initState(){
     super.initState();
     context.read<ProductProvider>().resetMyAdsItems();
-    context.read<ProductProvider>().getMyAds(context.read<UserProvider>().userDetails?.id, context.read<AuthProvider>().accessToken);
+    context.read<ProductProvider>().getMyAds(
+        context.read<UserProvider>().userDetails!.id,
+        context.read<AuthProvider>().accessToken);
   }
 
   void _onLoading() async{
@@ -243,7 +245,7 @@ class _MyAdScreenState extends State<MyAdScreen> {
 
   void deleteAd(){
     Navigator.pop(context);
-    context.read<ProductProvider>().deleteAd(selectedId, context,
+    context.read<ProductProvider>().deleteAd(selectedId,
         context.read<UserProvider>().userDetails?.id,
         context.read<AuthProvider>().accessToken
     );

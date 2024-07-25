@@ -69,7 +69,7 @@ class _BottomNavState extends State<BottomNav> {
               onTap: () {
                 user!.emailVerified! ?  Navigator.of(context)
                     .push(MaterialPageRoute(builder: (_) => const AdScreen())) :
-                showMessageWithButton("Verify your email address", context, (){
+                showMessageWithButton("Verify your email address", (){
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (_)=> const VerifyEmailScreen())
                   );

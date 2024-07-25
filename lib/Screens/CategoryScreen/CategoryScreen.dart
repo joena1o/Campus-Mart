@@ -44,7 +44,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     if(widget.index!=-1){
       current = widget.index;
       context.read<ProductProvider>().getProduct(removeSpecialCharactersAndSpaces(
-          categories[current]), 2, context, true,
+          categories[current]), 2,
           context.read<AuthProvider>().accessToken);
     }
     _loadAd();
@@ -148,11 +148,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               child: GestureDetector(
                                   onTap: (){
                                     setState(()=> current = i);
-                                    context.read<ProductProvider>().currentCategory = categories[current];
+                                    //context.read<ProductProvider>().currentCategory = categories[current];
                                     context.read<ProductProvider>().resetItems();
                                     context.read<ProductProvider>().getProduct(
                                         removeSpecialCharactersAndSpaces(categories[i]),
-                                        2, context, true, context.read<AuthProvider>().accessToken);
+                                        2, context.read<AuthProvider>().accessToken);
                                   },
                                   child: chip(categories[i], i))
 

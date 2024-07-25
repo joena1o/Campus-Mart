@@ -1,4 +1,9 @@
 import 'dart:convert';
+import 'package:campus_mart/Utils/timeAndDate.dart';
+import 'package:flutter/material.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+
+// Models
 import 'package:campus_mart/Model/AdAlertModel.dart';
 import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:campus_mart/Model/NotificationModel.dart';
@@ -6,351 +11,328 @@ import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/ReviewModel.dart';
 import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Model/WishProductModel.dart';
+
+// Network
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
-import 'package:campus_mart/Screens/EditSuccessful/EditSuccessful.dart';
+
+// Utils
 import 'package:campus_mart/Utils/snackBar.dart';
-import 'package:flutter/material.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-class ProductProvider extends ChangeNotifier{
+class ProductProvider extends ChangeNotifier {
+  final ProductClass _product = ProductClass();
 
-  List<WishProductModel>? wishProductModel;
-  List<ProductModel> productList = [];
-  List<ProductModel> pendingAdsList = [];
-  List<ProductModel> categoryProductList = [];
-  List<NotificationModel> notificationList = [];
-  List<AdAlertModel> adAlertList = [];
-  List<ProductModel> myProductList = [];
+  List<WishProductModel>? _wishProductModel;
+  List<ProductModel> _productList = [];
+  List<ProductModel> _pendingAdsList = [];
+  List<ProductModel> _categoryProductList = [];
+  List<NotificationModel> _notificationList = [];
+  List<AdAlertModel> _adAlertList = [];
+  List<ProductModel> _myProductList = [];
+  List<WishProductModel> _availableItems = [];
 
-  List<WishProductModel> availableItems = [];
+  ReviewModel? _reviews;
+  String? _currentCategory;
 
-  ReviewModel? reviews;
+  bool _loadingWishList = false;
+  bool _loadingReviews = false;
+  bool _isGettingProduct = false;
+  bool _isGettingMyProduct = false;
+  bool _uploadingReview = false;
+  bool _loadingNotifications = false;
+  bool _uploadingAdAlert = false;
+  bool _fetchAdAlerts = true;
+  bool _deleteAdAlertStatus = false;
 
-  final RefreshController refreshController = RefreshController(initialRefresh: false);
-  final RefreshController refreshController2 = RefreshController(initialRefresh: false);
-  final RefreshController refreshController3 = RefreshController(initialRefresh: false);
+  int _indexAll = 1;
+  int _indexCat = 1;
+  int _searchIndex = 1;
+  int _myAdsIndex = 1;
+  int _pendingAdsIndex =1;
 
-  ProductClass product = ProductClass();
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController2 = RefreshController(initialRefresh: false);
 
-  String? currentCategory;
+  // Getters
+  List<WishProductModel>? get wishProductModel => _wishProductModel;
+  List<ProductModel> get productList => _productList;
+  List<ProductModel> get pendingAdsList => _pendingAdsList;
+  List<ProductModel> get categoryProductList => _categoryProductList;
+  List<NotificationModel> get notificationList => _notificationList;
+  List<AdAlertModel> get adAlertList => _adAlertList;
+  List<ProductModel> get myProductList => _myProductList;
+  List<WishProductModel> get availableItems => _availableItems;
+  ReviewModel? get reviews => _reviews;
+  String? get currentCategory => _currentCategory;
 
-  bool loadingWishList = false;
-  bool get isLoadingWishList => loadingWishList;
+  bool get isLoadingWishList => _loadingWishList;
+  bool get isLoadingReviews => _loadingReviews;
+  bool get isGettingProduct => _isGettingProduct;
+  bool get isGettingMyProduct => _isGettingMyProduct;
+  bool get isUploadingReview => _uploadingReview;
+  bool get isLoadingNotifications => _loadingNotifications;
+  bool get isUploadingAlert => _uploadingAdAlert;
+  bool get isFetchingAdAlerts => _fetchAdAlerts;
+  bool get isDeletingAdAlert => _deleteAdAlertStatus;
 
-  bool loadingReviews = false;
-  bool get getLoadingReviews => loadingReviews;
+  RefreshController get refreshController => _refreshController;
+  RefreshController get refreshController2 => _refreshController2;
 
-  bool isGettingProduct = false;
-  bool get getIsGettingProduct => isGettingProduct;
-
-  bool isGettingMyProduct = false;
-  bool get getIsGettingMyProduct => isGettingMyProduct;
-
-  bool uploadingReview = false;
-  bool get getUploadingReview => uploadingReview;
-
-  bool loadingNotifications = false;
-  bool get getLoadingNotifications => loadingNotifications;
-
-  bool uploadingAdAlert = false;
-  bool get isUploadingAlert => uploadingAdAlert;
-
-  bool fetchAdAlerts = true;
-  bool get isFetchingAdAlerts => fetchAdAlerts;
-
-  bool deleteAdAlertStatus = false;
-  bool get deletingAdAlert => deleteAdAlertStatus;
-
-  bool processingPayment = false;
-  bool processingPaymentFailed = false;
-
-  bool editingAd = false;
-
-
-  void getWishList(username, token){
-    loadingWishList = true;
-    product.fetchWishList(username, token).then((value){
-      loadingWishList = false;
-      wishProductModel = value;
-      availableItems = wishProductModel!.where((element) => element.product!.isNotEmpty).toList();
-      notifyListeners();
-    }).catchError((onError){
-      print(onError);
-      loadingWishList = false;
-      wishProductModel = [];
-      notifyListeners();
-    });
-  }
-
-  void resetMyAdsItems(){
-    myAdsIndex = 1;
-    pendingAdsIndex = 1;
-    myProductList = [];
-    pendingAdsList = [];
-  }
-
-  void getMyAds(id, token){
-    isGettingMyProduct = true;
-    product.getMyProducts(id, myAdsIndex, token).then((value){
-      isGettingMyProduct = false;
-      if(value.length > 0){
-        myProductList += value;
-        myAdsIndex += 1;
-      }
-      refreshController.loadComplete();
-      notifyListeners();
-    }).catchError((onError){
-      refreshController.loadComplete();
-      isGettingMyProduct = false;
-      notifyListeners();
-    });
-  }
-
-  void getMyPendingAds(id, token){
-    isGettingMyProduct = true;
-    product.getMyPendingProducts(id, pendingAdsIndex, token).then((value){
-      isGettingMyProduct = false;
-      if(value.length > 0){
-        pendingAdsList += value;
-        pendingAdsIndex += 1;
-      }
-      refreshController.loadComplete();
-      notifyListeners();
-    }).catchError((onError){
-      refreshController.loadComplete();
-      isGettingMyProduct = false;
-      notifyListeners();
-    });
-  }
-
-  void deleteAd(id,context,userId, token){
-    isGettingMyProduct = true;
+  // ----- Wishlist -----
+  Future<void> getWishList(String? username, String token) async {
+    _loadingWishList = true;
     notifyListeners();
-    product.deleteProduct(id, token).then((value){
-      SuccessMessageModel successMessageModel = SuccessMessageModel.fromJson(jsonDecode(value));
-      showMessage(successMessageModel.message, context);
+
+    try {
+      _wishProductModel = await _product.fetchWishList(username, token);
+      _availableItems = _wishProductModel!.where((element) => element.product!.isNotEmpty).toList();
+    } catch (onError) {
+      print(onError);
+      _wishProductModel = [];
+    } finally {
+      _loadingWishList = false;
+      notifyListeners();
+    }
+  }
+
+  // ----- My Ads -----
+  void resetMyAdsItems() {
+    _myAdsIndex = 1;
+    _pendingAdsIndex = 1;
+    _myProductList = [];
+    _pendingAdsList = [];
+  }
+
+  Future<void> _getMoreAds(String id, String token, bool isPending) async {
+    try {
+      final List<ProductModel> newAds = isPending
+          ? await _product.getMyPendingProducts(id, _pendingAdsIndex, token)
+          : await _product.getMyProducts(id, _myAdsIndex, token);
+
+      if (newAds.isNotEmpty) {
+        if (isPending) {
+          _pendingAdsList.addAll(newAds);
+          _pendingAdsIndex++;
+        } else {
+          _myProductList.addAll(newAds);
+          _myAdsIndex++;
+        }
+      }
+    } catch (onError) {
+      // Handle error
+    } finally {
+      _refreshController.loadComplete();
+    }
+  }
+
+  Future<void> getMyAds(String? id, String token) async {
+    _isGettingMyProduct = true;
+    await _getMoreAds(id!, token, false);
+    _isGettingMyProduct = false;
+    notifyListeners();
+  }
+
+  Future<void> getMyPendingAds(String? id, String token) async {
+    _isGettingMyProduct = true;
+    await _getMoreAds(id!, token, true);
+    _isGettingMyProduct = false;
+    notifyListeners();
+  }
+
+  Future<void> deleteAd(String? id, String? userId, String token) async {
+    _isGettingMyProduct = true;
+    try {
+      final String response = await _product.deleteProduct(id, token);
+      final SuccessMessageModel successMessage = SuccessMessageModel.fromJson(jsonDecode(response));
+      showMessage(successMessage.message);
       resetMyAdsItems();
       getMyAds(userId, token);
-    }).catchError((onError){
-      isGettingMyProduct = false;
+    } catch (onError) {
+      // Handle error
+    } finally {
+      _isGettingMyProduct = false;
       notifyListeners();
-    });
+    }
   }
 
-
-  void addAdAlert(context,data, userId, token){
-    uploadingAdAlert = true;
-    product.adAlert(data, token).then((value){
-      uploadingAdAlert = false;
-      ErrorModel errorModel = ErrorModel.fromJson((value));
-      Navigator.of(context).pop();
-      showMessage(errorModel.message, context);
-      getAdAlerts(userId, token);
+  // ----- Ad Alerts -----
+  Future<void> addAdAlert(BuildContext context, Map<String, dynamic> data, String userId, String token) async {
+    _uploadingAdAlert = true;
+    try {
+      final dynamic response = await _product.adAlert(data, token);
+        final ErrorModel errorModel = ErrorModel.fromJson(response);
+        showMessage(errorModel.message);
+        getAdAlerts(userId, token);
+    } catch (onError) {
+      final ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError as String));
+      showMessage(errorModel.message);
+    } finally {
+      _uploadingAdAlert = false;
       notifyListeners();
-    }).catchError((onError){
-      uploadingAdAlert = false;
-      ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(errorModel.message, context);
-      notifyListeners();
-    });
+    }
   }
 
-
-  void getAdAlerts(userId, token){
-    adAlertList = [];
-    fetchAdAlerts = true;
-    product.getAdAlerts(userId, token).then((value){
-      fetchAdAlerts = false;
-      adAlertList = value;
-      notifyListeners();
-    }).catchError((onError){
-      fetchAdAlerts = false;
+  Future<void> getAdAlerts(String userId, String token) async {
+    _adAlertList = [];
+    _fetchAdAlerts = true;
+    try {
+      _adAlertList = await _product.getAdAlerts(userId, token);
+    } catch (onError) {
       print(onError);
+    } finally {
+      _fetchAdAlerts = false;
       notifyListeners();
-    });
+    }
   }
 
-
-  void deleteAdAlert(id,context,userId,token){
-    deleteAdAlertStatus = true;
-    try{
-      dynamic successMessageModel = product.deleteAdAlert(id, token);
-      showMessage(successMessageModel, context);
-    }catch(e){
+  Future<void> deleteAdAlert(String? id, BuildContext context, String? userId, String token) async {
+    _deleteAdAlertStatus = true;
+    try {
+      final dynamic successMessage = await _product.deleteAdAlert(id, token);
+      showMessage(successMessage);
+    } catch (e) {
       print(e);
-    }finally{
-      deleteAdAlertStatus = false;
+    } finally {
+      _deleteAdAlertStatus = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  void getUserReviews(id, token){
-    loadingReviews = true;
-    product.getReviews(id, token).then((value){
-      loadingReviews = false;
-      reviews = value;
-      print(reviews!.data?.length);
-      notifyListeners();
-    }).catchError((onError){
+  // ----- Reviews -----
+  Future<void> getUserReviews(String? id, String? token) async {
+    _loadingReviews = true;
+    try {
+      _reviews = await _product.getReviews(id, token);
+      print(_reviews!.data?.length);
+    } catch (onError) {
       print(onError);
-      loadingReviews = false;
+    } finally {
+      _loadingReviews = false;
       notifyListeners();
-    });
-  }
-
-  Future addReview(data, token) async{
-    uploadingReview = true;
-    product.addReview(data, token).then((value){
-      uploadingReview = true;
-      notifyListeners();
-    }).catchError((onError){
-      uploadingReview = false;
-      notifyListeners();
-    });
-  }
-
-  Future getNotifications(userId, token) async{
-    loadingNotifications = true;
-    product.getNotifications(userId, token).then((value){
-      loadingNotifications = false;
-      notificationList = value;
-      notifyListeners();
-    }).catchError((onError){
-      loadingNotifications = false;
-      notifyListeners();
-    });
-  }
-
-  int indexAll = 1;
-  int indexCat = 1;
-  int searchIndex = 1;
-
-  int myAdsIndex = 1;
-  int pendingAdsIndex = 1;
-
-  void resetItems(){
-    indexCat = 1;
-    categoryProductList = [];
-    notifyListeners();
-  }
-
-  void resetMyProduct(){
-    indexAll = 1;
-    productList = [];
-    notifyListeners();
-  }
-
-  void searchProduct(query, token, ctx) async{
-    categoryProductList = [];
-    isGettingProduct = true;
-    try{
-      categoryProductList += await product.searchProduct(query, searchIndex, token);;
-    }catch(e){
-      showMessage(e.toString(), ctx);
-    }finally{
-      isGettingProduct = false;
     }
-    notifyListeners();
   }
 
-  void initProductStatus(){
-    processingPayment = true;
-    processingPaymentFailed = false;
-    notifyListeners();
-  }
-
-  void updateProductStatus(bool isSuccess) async{
-    if(isSuccess){
-      processingPayment = false;
-      processingPaymentFailed = false;
-    }else{
-      processingPayment = false;
-      processingPaymentFailed = true;
+  Future<void> addReview(Map<String, dynamic> data, String token) async {
+    _uploadingReview= true;
+    try {
+      await _product.addReview(data, token);
+    } catch (onError) {// Handle error
+    } finally {
+      _uploadingReview = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  void updateProductStatusForEdit(data, token, ctx) async{
-    processingPayment = true;
-    processingPaymentFailed = false;
-    try{
-      await product.updatePaymentStatus(data, token);
-      Navigator.of(ctx).pushReplacement(
-          MaterialPageRoute(
-              builder: (_)=> const EditSuccessful()
-          )
-      );
-    }catch(e){
-      showMessage(e.toString(), ctx);
-      processingPaymentFailed = true;
-    }finally{
-      processingPayment = false;
+
+  // ----- Notifications -----
+  Future<void> getNotifications(String? userId, String token) async {
+    _loadingNotifications = true;
+    try {
+      _notificationList = await _product.getNotifications(userId, token);
+      _notificationList.sort(compareTimestamps);
+      _notificationList = _notificationList.reversed.toList();
+    } catch (onError) {// Handle error
+    } finally {
+      _loadingNotifications = false;
+      notifyListeners();
     }
+  }
+
+  // ----- Products -----
+  void resetItems() {
+    _indexCat = 1;
+    _categoryProductList = [];
     notifyListeners();
   }
 
-  void editProduct(Map<String, dynamic> data, String token, ctx) async{
-    editingAd = true;
-    try{
-      await product.editProduct(data, token);
-      Navigator.of(ctx).pushReplacement(MaterialPageRoute(builder: (_)=> const EditSuccessful()));
-    }catch(e){
-      showMessage(e.toString(), ctx);
-    }finally{
-      editingAd = false;
+  void resetMyProduct() {
+    _indexAll = 1;
+    _productList = [];
+    notifyListeners();
+  }
+
+  Future<void> searchProduct(String? query, String token, BuildContext context) async {
+    _categoryProductList = [];
+    _isGettingProduct =true;
+    try {
+      _categoryProductList = await _product.searchProduct(query, _searchIndex, token);
+    } catch (e) {
+      showMessage(e.toString());
+    } finally {
+      _isGettingProduct = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  void saveSearch(data, token) async{
-    try{
-      await product.saveSearch(data, token);
-    }catch(e){
+  Future<void> searchProductByCategory(String? query, String token, BuildContext context) async {
+    _categoryProductList = [];
+    _isGettingProduct = true;
+    try {
+      _categoryProductList = await _product.searchCategoryProduct(query, _searchIndex, _currentCategory!, token);
+    } catch (e) {
+      showMessageError(e.toString());
+    } finally {
+      _isGettingProduct = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _getMoreProducts(String category, String token, bool isAll) async {
+    try {
+      final List<ProductModel> newProducts = await _product.fetchProduct(category, isAll ? _indexAll : _indexCat, token);
+      if (newProducts.isNotEmpty) {
+        if (isAll) {
+          _productList.addAll(newProducts);
+          _indexAll++;
+        } else {
+          _categoryProductList.addAll(newProducts);
+          _indexCat++;
+        }
+      }
+    } catch (onError) {
+      // Handle error
+    }
+  }
+
+  Future<void> getProduct(String? category, int val, String token) async {
+    _isGettingProduct = true;
+    try {
+      await _getMoreProducts(category!, token, category.isEmpty);
+      if (val == 1) {
+        _refreshController.loadComplete();
+      } else {
+        _refreshController2.loadComplete();
+      }
+    } catch (onError) {
+      _refreshController.loadComplete();
+      _refreshController2.loadComplete();
+      final ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError as String));
+      showMessageError(errorModel.message);
+    } finally {
+      _isGettingProduct = false;
+      notifyListeners();
+    }
+  }
+
+  // ----- Edit Ad -----
+  Future<void> editProduct(Map<String, dynamic> data, String token, VoidCallback onSuccess) async {
+    _isGettingProduct = true;
+    try {
+      await _product.editProduct(data, token);
+      onSuccess();
+    } catch (e) {
+      showMessage(e.toString());
+    } finally {
+      _isGettingProduct = false;
+      notifyListeners();
+    }
+  }
+
+  // ----- Save Search -----
+  Future<void> saveSearch(Map<String, dynamic> data, String token) async {
+    try {
+      await _product.saveSearch(data, token);
+    } catch (e) {
       print(e.toString());
     }
   }
-
-  void searchProductByCategory(query, token, ctx) async{
-    categoryProductList = [];
-    isGettingProduct = true;
-    try{
-      categoryProductList += await product.searchCategoryProduct(query, searchIndex, currentCategory, token);
-    }catch(e){
-      showMessage(e.toString(), ctx);
-    }finally{
-      isGettingProduct = false;
-    }
-    notifyListeners();
-  }
-
-  void getProduct(category,val,context,cat,token) async{
-    isGettingProduct = true;
-    await product.fetchProduct(category, category.toString().isEmpty ? indexAll : indexCat, token).then((value){
-      isGettingProduct = false;
-      if(category.toString().isEmpty){
-          if(value is List<ProductModel> && value.isNotEmpty){
-            productList += value;
-            indexAll += 1;
-          }
-      }else{
-        if(value is List<ProductModel> && value.isNotEmpty){
-          categoryProductList += value;
-          indexCat += 1;
-        }
-      }
-      if(val==1){
-        refreshController.loadComplete();
-      }else{
-        refreshController2.loadComplete();
-      }
-    }).catchError((onError){
-      isGettingProduct = false;
-      refreshController.loadComplete();
-      refreshController2.loadComplete();
-      ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessageError(errorModel.message, context);
-    });
-    notifyListeners();
-  }
-
 }

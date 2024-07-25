@@ -111,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomAppBar(
+        padding: EdgeInsets.zero,
         child: BottomNav(
           index: currentNav,
           callback: updateNav,
@@ -123,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     badgeContent: Text("${provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id ).length}"),
                     showBadge: provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id).isNotEmpty,
                     child: FloatingActionButton(
+                    backgroundColor: primary,
                     onPressed: (){
                         // showMessageError("Feature not ready yet", context);
                       Navigator.push(context, MaterialPageRoute(builder: (_)=> const MessageScreen()));

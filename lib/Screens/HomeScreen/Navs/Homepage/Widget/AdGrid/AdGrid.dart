@@ -26,11 +26,11 @@ class _AdGridState extends State<AdGrid> {
   @override
   void initState(){
     super.initState();
-      context.read<ProductProvider>().getProduct(widget.category, 1, context, false, context.read<AuthProvider>().accessToken);
+      context.read<ProductProvider>().getProduct(widget.category, 1, context.read<AuthProvider>().accessToken);
   }
 
   void _onRefresh() async{
-    context.read<ProductProvider>().getProduct(widget.category, 1, context, false, context.read<AuthProvider>().accessToken);
+    context.read<ProductProvider>().getProduct(widget.category, 1, context.read<AuthProvider>().accessToken);
   }
 
   @override
@@ -46,11 +46,11 @@ class _AdGridState extends State<AdGrid> {
             : context.read<ProductProvider>().refreshController2,
             child: Consumer<ProductProvider>(
               builder: (_, bar, __) {
-                if(bar.productList.isEmpty && !bar.getIsGettingProduct){
+                if(bar.productList.isEmpty && !bar.isGettingProduct){
                   return const Center(child: Text("No Ads Found"));
                 }
 
-                return !bar.getIsGettingProduct ? SingleChildScrollView(
+                return !bar.isGettingProduct ? SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: StaggeredGrid.count(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:campus_mart/main.dart';
 import 'package:flutter/material.dart';
 
 // Models
@@ -53,9 +54,10 @@ class AuthProvider with ChangeNotifier {
       final UserModel user = UserModel.fromJson(_authModel!.data!.toJson());
       await saveJsonDetails("user", user);
 
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
-    } catch (e) {showMessageError(e.toString(), context);
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const HomeScreen()));
+    } catch (e) {
+      showMessageError(e.toString());
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -69,9 +71,9 @@ class AuthProvider with ChangeNotifier {
 
     try {
       _successMessageModel = await _auth.requestVerifyEmail(email);
-      showMessage(_successMessageModel?.message, context);
+      showMessage(_successMessageModel?.message);
     } catch (e) {
-      showMessageError(e.toString(), context);
+      showMessageError(e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -81,14 +83,14 @@ class AuthProvider with ChangeNotifier {
   Future<void> verifyEmailAddress(String otp, String email, BuildContext context, Timer timer) async {
     _isLoading = true;
     notifyListeners();
-
+    final BuildContext storedContext = context;
     try {
       _verifyTokenModel = await _auth.verifyEmailAddressOtp(otp, email);
       timer.cancel();
-      showMessage(_verifyTokenModel?.message, context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const Wrapper()));
+      showMessage(_verifyTokenModel?.message);
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const Wrapper()));
     } catch (e) {
-      showMessageError(e.toString(), context);
+      showMessageError(e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -102,14 +104,14 @@ class AuthProvider with ChangeNotifier {
 
     try {
       _successMessageModel = await _auth.requestForgottenPasswordOtp(email);
-      showMessage(_successMessageModel?.message, context);
+      showMessage(_successMessageModel?.message);
       if (callback == null) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => VerifyOtpScreen(email: email)));
+        navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => VerifyOtpScreen(email: email)));
       } else {
         callback();
       }
     } catch (e) {
-      showMessageError(e.toString(), context);
+      showMessageError(e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -123,10 +125,10 @@ class AuthProvider with ChangeNotifier {
     try {
       _verifyTokenModel =await _auth.verifyOtp(otp, email);
       _resetToken = _verifyTokenModel?.token;
-      showMessage(_verifyTokenModel?.message, context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ResetPasswordScreen()));
+      showMessage(_verifyTokenModel?.message);
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const ResetPasswordScreen()));
     } catch (e) {
-      showMessageError(e.toString(), context);
+      showMessageError(e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -139,10 +141,10 @@ class AuthProvider with ChangeNotifier {
 
     try {
       _successMessageModel = await _auth.resetPassword(_resetToken!, password);
-      showMessage(_successMessageModel?.message, context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      showMessage(_successMessageModel?.message);
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     } catch (e) {
-      showMessageError(e.toString(), context);
+      showMessageError(e.toString());
     } finally {
       _isLoading = false;
       notifyListeners();

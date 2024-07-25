@@ -24,7 +24,6 @@ class FeedbackClass{
       successMessageModel = SuccessMessageModel.fromJson(value);
       return successMessageModel;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }

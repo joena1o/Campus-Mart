@@ -21,7 +21,7 @@ class _AdAlertsState extends State<AdAlerts> {
   void initState() {
     super.initState();
     context.read<ProductProvider>().getAdAlerts(
-        context.read<UserProvider>().userDetails?.id,
+        context.read<UserProvider>().userDetails!.id.toString(),
         context.read<AuthProvider>().accessToken);
   }
 
@@ -59,7 +59,7 @@ class _AdAlertsState extends State<AdAlerts> {
         width: size.width,
         height: size.height,
         child: Consumer<ProductProvider>(builder: (_, bar, __) {
-          return !bar.fetchAdAlerts ?
+          return !bar.isFetchingAdAlerts ?
 
           bar.adAlertList.isNotEmpty ? ListView.builder(
               itemCount: bar.adAlertList.length,
@@ -113,8 +113,8 @@ class _AdAlertsState extends State<AdAlerts> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                children: const [
+              const Row(
+                children:  [
                   Icon(
                     Icons.edit,
                     color: Colors.grey,
@@ -141,8 +141,8 @@ class _AdAlertsState extends State<AdAlerts> {
                         context.read<UserProvider>().userDetails?.id,
                         context.read<AuthProvider>().accessToken);
                   },
-                  child: Row(
-                    children: const [
+                  child: const Row(
+                    children:  [
                       Icon(
                         Icons.delete,
                         color: Colors.red,

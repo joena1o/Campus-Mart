@@ -17,6 +17,7 @@ import 'package:campus_mart/Utils/conn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,6 @@ class AdScreen extends StatefulWidget {
 
 class _AdScreenState extends State<AdScreen> {
 
-  var publicKey = 'pk_test_c1025aaf085e2f65db15176d53378af42b1b1767';
   final plugin = PaystackPayment();
 
   bool contact = false;
@@ -59,7 +59,7 @@ class _AdScreenState extends State<AdScreen> {
 
   @override
   void initState(){
-    plugin.initialize(publicKey: publicKey);
+    plugin.initialize(publicKey: dotenv.env['PAY_STACK_PUBLIC_KEY']!);
     productModel.userId = context.read<UserProvider>().userDetails!.id;
     productModel.campus = context.read<UserProvider>().userDetails!.campus;
     productModel.countryId = context.read<UserProvider>().userDetails!.countryId;
@@ -294,7 +294,6 @@ class _AdScreenState extends State<AdScreen> {
               width: size.width*.8,
               child: const Text("Upload Ad", style: TextStyle(color:Colors.white),),
             ), onTap: (){
-              // payStackCheckOut();
               if(!_formKey.currentState!.validate()){
                   return;
               }else{
@@ -303,7 +302,8 @@ class _AdScreenState extends State<AdScreen> {
                     uploadProduct()
                   };
                 }else{
-                  _images.isNotEmpty ? _uploadImages(true) : payStackCheckOut();
+                  _images.isNotEmpty ? _uploadImages(true) :
+                  payStackCheckOut();
                 }
 
               }
@@ -324,8 +324,8 @@ class _AdScreenState extends State<AdScreen> {
         return  CupertinoAlertDialog(
           title:  const Text(
               "Choose action", style: TextStyle(fontSize: 14),),
-          content: Column(
-            children: const [
+          content: const Column(
+            children:  [
                 Text(
                   "Upload either from gallery or camera"),
             ],
@@ -352,21 +352,20 @@ class _AdScreenState extends State<AdScreen> {
 
   void uploadProduct(){
     setState(()=> isUploading = true);
-    Provider.of<ProductProvider>(context, listen: false).initProductStatus();
     productModel.title = title.text.toString();
     productModel.description = description.text.toString();
     productModel.price = !productModel.contactForPrice! ? int.parse(price.text.toString().replaceAll("N","")):0;
     product.addProduct(productModel.toJson2(), context.read<AuthProvider>().accessToken)
     .then((value){
       setState(()=> isUploading = false);
-      Provider.of<ProductProvider>(context, listen: false).updateProductStatus(true);
+      // Provider.of<ProductProvider>(context, listen: false).updateProductStatus(true);
       setState(()=> isSuccessful = true);
     }).catchError((onError){
       setState(()=> isUploading = false);
       setState(()=> isSuccessful = true);
-      Provider.of<ProductProvider>(context, listen: false).updateProductStatus(false);
+      // Provider.of<ProductProvider>(context, listen: false).updateProductStatus(false);
       ErrorModel error = ErrorModel.fromJson(onError);
-      showMessage(error.message, context);
+      showMessage(error.message);
     });
   }
 
@@ -408,7 +407,9 @@ class _AdScreenState extends State<AdScreen> {
       final resp_string = await result.stream.bytesToString();
       final connValue = jsonDecode(resp_string);
       productModel.images = connValue['data'];
-      withPayment ? payStackCheckOut() : uploadProduct();
+      withPayment ?
+      payStackCheckOut()
+          : uploadProduct();
       return connValue['data'];
     } else {
       setState(()=> isUploading = false);
@@ -441,7 +442,7 @@ class _AdScreenState extends State<AdScreen> {
       uploadProduct();
     }else{
       setState(()=> productModel.paid = false);
-      showMessageError("Error encountered while processing payment", context);
+      showMessageError("Error encountered while processing payment");
     }
   }
 

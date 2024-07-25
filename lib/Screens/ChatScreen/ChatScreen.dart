@@ -52,13 +52,15 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
+          toolbarHeight: 70,
           backgroundColor: Colors.white,
           title: Row(
             children: [
               widget.user.image == null ? const CircleAvatar(
-                radius: 25,
+                radius: 20,
                 child: Text("HJ",style: TextStyle(fontSize: 14),),
               ): ClipRRect(
                 borderRadius: BorderRadius.circular(100),
@@ -76,6 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:  [
                     Text("${widget.user.firstName} ${widget.user.lastName}", overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14),),
+                    const SizedBox(height: 5,),
                     Text(provider.userIsOnline ? "online" : 'offline', style: const TextStyle(fontSize: 12))
                   ],
                 );

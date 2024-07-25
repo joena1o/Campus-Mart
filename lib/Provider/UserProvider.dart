@@ -53,7 +53,7 @@ class UserProvider extends ChangeNotifier{
       updatingDp = false;
       Navigator.pop(context);
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessageError(errorModel.message, context);
+      showMessageError(errorModel.message);
       notifyListeners();
     });
   }
@@ -63,10 +63,10 @@ class UserProvider extends ChangeNotifier{
     try{
       userDetails = await user.editProfile(data, token);
       await saveJsonDetails("user", userDetails);
-      showMessage("Profile edited successfully", context);
+      showMessage("Profile edited successfully");
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const Wrapper()));
     }catch(e){
-      showMessageError(e.toString(), context);
+      showMessageError(e.toString());
     }finally{
       editingProfile = false;
     }

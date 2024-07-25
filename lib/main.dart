@@ -14,16 +14,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService.initialize();
+
+  await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   const isLive = false;
-  const onesignalAppId = isLive ? "815ab166-c7fb-4e29-a26b-1e2a15efdbf3" : "4e46778f-4e06-4ed1-a774-12e34ba10da1";
+  String onesignalAppId = isLive ? dotenv.env['ONE_SIGNAL_APP_ID_LIVE']! : dotenv.env['ONE_SIGNAL_APP_ID_TEST']!;
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
   OneSignal.shared.setAppId(onesignalAppId);
 
@@ -51,9 +58,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
+      color: Colors.white,
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
       theme: ThemeData(
         primarySwatch: Colors.orange,
           fontFamily: "Poppins",

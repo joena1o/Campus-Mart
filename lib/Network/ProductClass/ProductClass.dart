@@ -168,7 +168,6 @@ class ProductClass{
     return networkHelper.post("$productEndpoint/updatePaidStatus", headers: headers, body: data,
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
-      print(res);
       productModel = ProductModel.fromJson(res);
       return productModel;
     }).catchError((err){
@@ -249,7 +248,6 @@ class ProductClass{
     ReviewModel? reviewModel;
     return networkHelper.get("$reviewEndpoint/$id", headers: headers)
         .then((dynamic res) async{
-          print(res);
       reviewModel = ReviewModel.fromJson(res);
       return reviewModel;
     }).catchError((err){
@@ -268,7 +266,6 @@ class ProductClass{
     return networkHelper.get("$getNotificationEndpoint/$userId", headers: headers)
         .then((dynamic res) async{
           List response = res as List;
-          print(res);
       notificationModel = response.map((json)=> NotificationModel.fromJson(json)).toList();
       return notificationModel;
     }).catchError((err){
@@ -301,7 +298,6 @@ class ProductClass{
     return networkHelper.post("$productEndpoint/saveSearch", headers: headers, body: data,
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
-      print(res);
       return res;
     }).catchError((err){
       errorHandler.handleError(err['body']);

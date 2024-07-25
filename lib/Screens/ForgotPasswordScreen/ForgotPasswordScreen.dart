@@ -49,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         if(email.text.isNotEmpty){
                           Provider.of<AuthProvider>(context, listen: false).requestForgotPassword(email.text, context, null);
                         }else{
-                          showMessage("Enter your email address", context);
+                          showMessage("Enter your email address");
                         }
                       },
                       child: Container(

@@ -61,7 +61,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               onTap: (){
 
                 if(password.text != confirmedPassword.text){
-                  showMessage("Passwords do not match", context);
+                  showMessage("Passwords do not match");
                 }else{
                   Provider.of<AuthProvider>(context, listen: false).resetPassword(password.text, context);
                 }

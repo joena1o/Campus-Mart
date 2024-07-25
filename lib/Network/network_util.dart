@@ -208,7 +208,7 @@ class NetworkHelper {
   /// then sends back a json decoded result
   Future<dynamic> delete(String url, {Map<String, String>? headers}) {
     try {
-      print(url);
+      // print(url);
       return http.delete(Uri.parse(url), headers: headers).then((http.Response response) {
         final String res = response.body;
         final int statusCode = response.statusCode;

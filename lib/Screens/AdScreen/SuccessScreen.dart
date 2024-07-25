@@ -23,59 +23,59 @@ class SuccessScreen extends StatelessWidget {
 
             const Spacer(),
 
-             Visibility(
-               visible: !provider.processingPayment && !provider.processingPaymentFailed,
-               child: SizedBox(
-                width: size.width*.5,
-                height: size.width*.5,
-                child: Lottie.asset('assets/Lottie/success.json', repeat: false),
-              ),
-             ),
-
-            Visibility(
-              visible: provider.processingPayment && !provider.processingPaymentFailed,
-              child:
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                width: size.width*.25,
-                height: size.width*.25,
-                child: const CircularProgressIndicator(strokeWidth: 5,)
-              ),
-            ),
-
-            Visibility(
-              visible: !provider.processingPayment && provider.processingPaymentFailed,
-              child: SizedBox(
-                  width: size.width*.5,
-                  height: size.width*.5,
-                  child: Lottie.asset('assets/Lottie/error_dialog.json', repeat: false),
-              ),
-            ),
-
-            const SizedBox(height: 20,),
-
-            Visibility(
-                visible: !provider.processingPayment && !provider.processingPaymentFailed,
-                child: const Padding(
-                  padding:  EdgeInsets.all(15.0),
-                  child:  Text("Your Ad was uploaded Successfully", style: TextStyle(fontSize: 18),),
-                )),
-
-            Visibility(
-                visible: provider.processingPayment && !provider.processingPaymentFailed,
-                child: const Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text("Please wait, while processing", style: TextStyle(fontSize: 18),),
-                )),
-
-            Visibility(
-                visible: !provider.processingPayment && provider.processingPaymentFailed,
-                child: const Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child:  Text("Error occured while processing your request", style: TextStyle(fontSize: 18),))),
-
-
-            const Spacer(),
+            //  Visibility(
+            //    visible: !provider.processingPayment && !provider.processingPaymentFailed,
+            //    child: SizedBox(
+            //     width: size.width*.5,
+            //     height: size.width*.5,
+            //     child: Lottie.asset('assets/Lottie/success.json', repeat: false),
+            //   ),
+            //  ),
+            //
+            // Visibility(
+            //   visible: provider.processingPayment && !provider.processingPaymentFailed,
+            //   child:
+            //   Container(
+            //     margin: const EdgeInsets.only(bottom: 20),
+            //     width: size.width*.25,
+            //     height: size.width*.25,
+            //     child: const CircularProgressIndicator(strokeWidth: 5,)
+            //   ),
+            // ),
+            //
+            // Visibility(
+            //   visible: !provider.processingPayment && provider.processingPaymentFailed,
+            //   child: SizedBox(
+            //       width: size.width*.5,
+            //       height: size.width*.5,
+            //       child: Lottie.asset('assets/Lottie/error_dialog.json', repeat: false),
+            //   ),
+            // ),
+            //
+            // const SizedBox(height: 20,),
+            //
+            // Visibility(
+            //     visible: !provider.processingPayment && !provider.processingPaymentFailed,
+            //     child: const Padding(
+            //       padding:  EdgeInsets.all(15.0),
+            //       child:  Text("Your Ad was uploaded Successfully", style: TextStyle(fontSize: 18),),
+            //     )),
+            //
+            // Visibility(
+            //     visible: provider.processingPayment && !provider.processingPaymentFailed,
+            //     child: const Padding(
+            //       padding: EdgeInsets.all(15.0),
+            //       child: Text("Please wait, while processing", style: TextStyle(fontSize: 18),),
+            //     )),
+            //
+            // Visibility(
+            //     visible: !provider.processingPayment && provider.processingPaymentFailed,
+            //     child: const Padding(
+            //       padding: EdgeInsets.all(15.0),
+            //       child:  Text("Error occured while processing your request", style: TextStyle(fontSize: 18),))),
+            //
+            //
+            // const Spacer(),
 
               GestureDetector(child:Container(
                 alignment: Alignment.center,

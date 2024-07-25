@@ -104,7 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: firstName,
             validator: (String? value){
               if(value!.isEmpty || value.length < 2){
-                showMessage("Please enter valid first name", context);
+                showMessage("Please enter valid first name");
                 return "Please enter valid first name";
               }
               return null;
@@ -120,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: lastName,
             validator: (String? value){
               if(value!.isEmpty || value.length < 2){
-                showMessageError("Please enter valid last name", context);
+                showMessageError("Please enter valid last name");
                 return "Please enter valid last name";
               }
               return null;
@@ -136,7 +136,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: email,
             validator: (String? value){
               if(value!.isEmpty){
-                showMessageError("Please enter valid email address", context);
+                showMessageError("Please enter valid email address");
                 return "Please enter valid email address";
               }
               return null;
@@ -152,7 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: username,
             validator: (String? value){
               if(value!.isEmpty){
-                showMessageError("Please enter a preferred display name", context);
+                showMessageError("Please enter a preferred display name");
                 return "Please enter a preferred display name";
               }
               return null;
@@ -207,7 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onTap: () {
               if(_formKey.currentState!.validate()){
                 if(country == null || country!.isEmpty){
-                  showMessageError("Please select your country", context);
+                  showMessageError("Please select your country");
                   return;
                 }
                 validateEmail(email.text.toString(), context);
@@ -367,7 +367,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     showCountryFlag: true,
                     validator: (value){
                       if(value!.number.isEmpty){
-                        showMessageError("Please enter a valid phone number", context);
+                        showMessageError("Please enter a valid phone number");
                         return "Please enter a valid valid phone number";
                       }
                       return null;
@@ -384,7 +384,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   obscureText: showPassword,
                   validator: (String? value){
                     if(value!.isEmpty){
-                      showMessageError("Please enter password", context);
+                      showMessageError("Please enter password");
                       return "Please enter password";
                     }
                     return null;
@@ -406,7 +406,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   obscureText: showPassword,
                   validator: (String? value){
                     if(value!.isEmpty){
-                      showMessageError("Please confirm password", context);
+                      showMessageError("Please confirm password");
                       return "Please confirm password";
                     }
                     return null;
@@ -425,11 +425,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Consumer<SignUpProvider>(builder: (_, data, __) { return !data.getSigningUser ? GestureDetector(
                   onTap: () {
                     if(phone.text.isEmpty || phone.text.length < 10){
-                      showMessageError("Enter a valid phone number", context);
+                      showMessageError("Enter a valid phone number");
                       return;
                     }
                     if(cPassword.text != password.text){
-                      showMessageError("Password do not match", context);
+                      showMessageError("Password do not match");
                       return;
                     }
                     if(_formKey2.currentState!.validate()) {
@@ -494,7 +494,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }).catchError((onError){
       validatingMail = false;
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessageError(errorModel.message, context);
+      showMessageError(errorModel.message);
     });
   }
 

@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }).catchError((onError){
       setState(()=> isLoading = false);
       ErrorModel error = ErrorModel.fromJson(jsonDecode(onError));
-      showMessageError(error.message, context);
+      showMessageError(error.message);
     });
   }
 

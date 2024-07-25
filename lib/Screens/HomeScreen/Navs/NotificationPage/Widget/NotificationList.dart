@@ -30,15 +30,12 @@ class _NotificationListState extends State<NotificationList> {
     Size size = MediaQuery.of(context).size;
     return Consumer<ProductProvider>(builder: (_, bar, __) {
 
-      return !bar.getLoadingNotifications
+      return !bar.isLoadingNotifications
           ? bar.notificationList.isNotEmpty ? Expanded(
               child: ListView.builder(
                   padding: const EdgeInsets.only(top: 5),
                   itemCount: bar.notificationList.length,
                   itemBuilder: (BuildContext ctx, int i) {
-
-                    bar.notificationList.sort(compareTimestamps);
-                    bar.notificationList = bar.notificationList.reversed.toList();
 
                     bool isNewDay = i == 0 || isSameDay(bar.notificationList[i - 1].createdAt!, bar.notificationList[i].createdAt!);
 
@@ -136,11 +133,11 @@ class _NotificationListState extends State<NotificationList> {
                         ],
                       ),
                     );
-                  })):Expanded(
+                  })): const Expanded(
                     child: Center(child:Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(Icons.notifications_none, size: 40, color: Colors.black45,),
                         SizedBox(height: 20,),
                         Text("No Notifications", style: TextStyle(fontSize: 17),)
@@ -165,23 +162,6 @@ class _NotificationListState extends State<NotificationList> {
       return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'minute' : 'minutes'} ago';
     } else {
       return 'Just now';
-    }
-  }
-
-  int compareTimestamps(NotificationModel a, NotificationModel b) {
-    // Compare timestamps based on years, months, days, hours, and minutes
-    if (a.createdAt!.year != b.createdAt!.year) {
-      return a.createdAt!.year.compareTo(b.createdAt!.year);
-    } else if (a.createdAt!.month != b.createdAt!.month) {
-      return a.createdAt!.month.compareTo(b.createdAt!.month);
-    } else if (a.createdAt!.day != b.createdAt!.day) {
-      return a.createdAt!.day.compareTo(b.createdAt!.day);
-    } else if (a.createdAt!.hour != b.createdAt!.hour) {
-      return a.createdAt!.hour.compareTo(b.createdAt!.hour);
-    } else if (a.createdAt!.minute != b.createdAt!.minute) {
-      return a.createdAt!.minute.compareTo(b.createdAt!.minute);
-    } else {
-      return 0; // Timestamps are equal
     }
   }
 

@@ -61,7 +61,6 @@ class Auth{
       userModel = UserModel.fromJson(response);
       return userModel;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -79,7 +78,6 @@ class Auth{
           campus = res.map<Campus>((val)=> Campus.fromJson(val)).toList();
           return campus;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -158,7 +156,6 @@ class Auth{
       "dp": dp
     }, headers: headers)
         .then((dynamic value) async{
-          print(value);
       return true;
     }).catchError((err){
       errorHandler.handleError(err['body']);
@@ -196,7 +193,6 @@ class Auth{
       successMessageModel = SuccessMessageModel.fromJson(value);
       return successMessageModel;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -215,7 +211,6 @@ class Auth{
       verifyTokenModel = VerifyTokenModel.fromJson(value);
       return verifyTokenModel;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -233,7 +228,6 @@ class Auth{
       successMessageModel = SuccessMessageModel.fromJson(value);
       return successMessageModel;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -252,7 +246,6 @@ class Auth{
       verifyTokenModel = VerifyTokenModel.fromJson(value);
       return verifyTokenModel;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }
@@ -271,7 +264,6 @@ class Auth{
       successMessageModel = SuccessMessageModel.fromJson(value);
       return successMessageModel;
     }).catchError((err){
-      print(err);
       errorHandler.handleError(err['body']);
     });
   }

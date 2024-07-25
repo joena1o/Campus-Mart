@@ -175,7 +175,7 @@ class _ProductScreenState extends State<ProductScreen> {
             builder: (_, data, __) {
               var length = data.reviews;
               return
-                !data.getLoadingReviews ? Column(
+                !data.isLoadingReviews ? Column(
                 children: List.generate(length == null ? 0 : length.data!.length, (index) =>
                   ReviewCard(data: length!.data![index])
                 ),
@@ -196,10 +196,10 @@ class _ProductScreenState extends State<ProductScreen> {
 
   addWishList(){
     productClass.addToWishlist({"username":user?.username, "productId": product?.id}, accessToken).then((value){
-      showMessage(value['message'], context);
+      showMessage(value['message']);
     }).catchError((onError){
       ErrorModel error = ErrorModel.fromJson(jsonDecode(onError));
-      showMessage(error.message, context);
+      showMessage(error.message);
     });
   }
 
@@ -288,12 +288,12 @@ class _ProductScreenState extends State<ProductScreen> {
                       }, accessToken).then((value){
                         setState(()=> isLoading = false);
                         Navigator.of(context).pop();
-                        showMessage("Review submitted", context);
+                        showMessage("Review submitted");
                         context.read<ProductProvider>().getUserReviews(product?.userId, accessToken);
                       }).catchError((onError){
                         setState(()=> isLoading = false);
                         ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-                        showMessageError(errorModel.message, context);
+                        showMessageError(errorModel.message);
                       });
                     }
                   },

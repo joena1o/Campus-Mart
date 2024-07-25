@@ -14,7 +14,7 @@ class FeedbackProvider extends ChangeNotifier{
     notifyListeners();
     try{
       SuccessMessageModel successMessageModel = await feedbackClass.uploadFeedback(token, data);
-      showMessage(successMessageModel.message, ctx);
+      showMessage(successMessageModel.message);
     }catch(e){
       print(e);
     }finally{

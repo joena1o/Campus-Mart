@@ -16,7 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
+//import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,7 +31,7 @@ class EditAdScreen extends StatefulWidget {
 class _AdScreenState extends State<EditAdScreen> {
 
   var publicKey = 'pk_test_c1025aaf085e2f65db15176d53378af42b1b1767';
-  final plugin = PaystackPayment();
+  //final plugin = PaystackPayment();
 
   bool contact = false;
   bool negotiable = false;
@@ -59,7 +59,7 @@ class _AdScreenState extends State<EditAdScreen> {
   @override
   void initState(){
 
-    plugin.initialize(publicKey: publicKey);
+   //plugin.initialize(publicKey: publicKey);
 
     productModel.userId = context.read<UserProvider>().userDetails!.id;
     productModel.campus = context.read<UserProvider>().userDetails!.campus;
@@ -353,7 +353,8 @@ class _AdScreenState extends State<EditAdScreen> {
                     return;
                   }else{
                     if(selectPayment?.value != "Free" && widget.product.adType == "Free"){
-                      _images.isNotEmpty ? _uploadImages(true) : payStackCheckOut();
+                      _images.isNotEmpty ? _uploadImages(true) : print("In Progress");
+                      //payStackCheckOut();
                     }else{
                       _images.isNotEmpty ? _uploadImages(false) : {
                         uploadProduct()
@@ -406,7 +407,8 @@ class _AdScreenState extends State<EditAdScreen> {
   void uploadProduct(){
     productModel.images = productModel.images ?? widget.product.images;
     Provider.of<ProductProvider>(context, listen: false).editProduct(
-        productModel.toJson(), context.read<AuthProvider>().accessToken, context);
+        productModel.toJson(), context.read<AuthProvider>().accessToken, (){});
+
   }
 
   void _pickImages() async {
@@ -447,7 +449,9 @@ class _AdScreenState extends State<EditAdScreen> {
       final resp_string = await result.stream.bytesToString();
       final connValue = jsonDecode(resp_string);
       productModel.images = connValue['data'];
-      withPayment ? payStackCheckOut() : uploadProduct();
+      withPayment ? print("In Progress")
+      //payStackCheckOut()
+          : uploadProduct();
       return connValue['data'];
     } else {
       setState(()=> isUploading = false);
@@ -455,29 +459,29 @@ class _AdScreenState extends State<EditAdScreen> {
     }
   }
 
-  payStackCheckOut() async{
-    final userDetails = context.read<UserProvider>().userDetails;
-    Charge charge = Charge()
-      ..amount = selectPayment!.amount!
-      ..reference = _getReference()
-    // or ..accessCode = _getAccessCodeFrmInitialization()
-      ..email = userDetails?.email;
-    CheckoutResponse response = await plugin.checkout(
-      context,
-      fullscreen: false,
-      //logo: const Image(image: AssetImage("assets/launcher/launcher.png")),
-      method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
-      charge: charge,
-    );
-    if(response.message == "Success"){
-      setState(()=> productModel.paid = true);
-      setState(()=> processingPayment = true);
-      setState(()=> isSuccessful = true);
-      uploadProduct();
-    }else{
-      setState(()=> productModel.paid = false);
-    }
-  }
+  // payStackCheckOut() async{
+  //   final userDetails = context.read<UserProvider>().userDetails;
+  //   Charge charge = Charge()
+  //     ..amount = selectPayment!.amount!
+  //     ..reference = _getReference()
+  //   // or ..accessCode = _getAccessCodeFrmInitialization()
+  //     ..email = userDetails?.email;
+  //   CheckoutResponse response = await plugin.checkout(
+  //     context,
+  //     fullscreen: false,
+  //     //logo: const Image(image: AssetImage("assets/launcher/launcher.png")),
+  //     method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
+  //     charge: charge,
+  //   );
+  //   if(response.message == "Success"){
+  //     setState(()=> productModel.paid = true);
+  //     setState(()=> processingPayment = true);
+  //     setState(()=> isSuccessful = true);
+  //     uploadProduct();
+  //   }else{
+  //     setState(()=> productModel.paid = false);
+  //   }
+  // }
 
   String _getReference() {
     String platform;

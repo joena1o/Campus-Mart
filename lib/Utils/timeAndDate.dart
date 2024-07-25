@@ -1,3 +1,4 @@
+import "package:campus_mart/Model/NotificationModel.dart";
 import "package:intl/intl.dart";
 
 String timeAgo(DateTime pastTime) {
@@ -75,4 +76,22 @@ String getDateDescriptionChat(DateTime date) {
 // Helper function to check if two dates are on the same day
 bool isSameDay(DateTime date1, DateTime date2) {
   return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
+}
+
+
+int compareTimestamps(NotificationModel a, NotificationModel b) {
+  // Compare timestamps based on years, months, days, hours, and minutes
+  if (a.createdAt!.year != b.createdAt!.year) {
+    return a.createdAt!.year.compareTo(b.createdAt!.year);
+  } else if (a.createdAt!.month != b.createdAt!.month) {
+    return a.createdAt!.month.compareTo(b.createdAt!.month);
+  } else if (a.createdAt!.day != b.createdAt!.day) {
+    return a.createdAt!.day.compareTo(b.createdAt!.day);
+  } else if (a.createdAt!.hour != b.createdAt!.hour) {
+    return a.createdAt!.hour.compareTo(b.createdAt!.hour);
+  } else if (a.createdAt!.minute != b.createdAt!.minute) {
+    return a.createdAt!.minute.compareTo(b.createdAt!.minute);
+  } else {
+    return 0; // Timestamps are equal
+  }
 }

@@ -66,7 +66,7 @@ class _PendingAdsPageState extends State<PendingAdsPage> {
                     controller: context.read<ProductProvider>().refreshController,
                     child: Consumer<ProductProvider>(
                         builder: (_, bar, __) {
-                          return !bar.getIsGettingProduct ? Container(
+                          return !bar.isGettingMyProduct ? Container(
                               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                               child: SingleChildScrollView(
                                   child: StaggeredGrid.count(
@@ -204,8 +204,8 @@ class _PendingAdsPageState extends State<PendingAdsPage> {
                   //     MaterialPageRoute(builder: (_)=> EditAdScreen(product: selectedAd!))
                   // );
                 },
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Icon(Icons.upload, color: Colors.grey, size: 30,),
                     SizedBox(width: 20,),
                     Text("Upload Ad", style: TextStyle(fontSize: 16),)
@@ -218,13 +218,13 @@ class _PendingAdsPageState extends State<PendingAdsPage> {
               GestureDetector(
                   onTap: (){
                     Navigator.pop(context);
-                    context.read<ProductProvider>().deleteAd(selectedId, context,
+                    context.read<ProductProvider>().deleteAd(selectedId,
                         context.read<UserProvider>().userDetails?.id,
                         context.read<AuthProvider>().accessToken
                     );
                   },
-                  child:Row(
-                    children: const [
+                  child: const Row(
+                    children:  [
                       Icon(Icons.delete, color: Colors.red, size: 30,),
                       SizedBox(width: 20,),
                       Text("Delete", style: TextStyle(fontSize: 16))

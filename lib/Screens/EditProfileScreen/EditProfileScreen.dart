@@ -98,7 +98,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: firstName,
                       validator: (String? value) {
                         if (value!.isEmpty || value.length < 2) {
-                          showMessage("Please enter valid first name", context);
+                          showMessage("Please enter valid first name");
                           return "Please enter valid first name";
                         }
                         return null;
@@ -112,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: lastName,
                       validator: (String? value) {
                         if (value!.isEmpty || value.length < 2) {
-                          showMessage("Please enter valid last name", context);
+                          showMessage("Please enter valid last name");
                           return "Please enter valid last name";
                         }
                         return null;
@@ -207,7 +207,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       showCountryFlag: true,
                       validator: (value){
                         if(value!.number.isEmpty){
-                          showMessage("Please enter a valid phone number", context);
+                          showMessage("Please enter a valid phone number");
                           return "Please enter a valid valid phone number";
                         }
                         return null;

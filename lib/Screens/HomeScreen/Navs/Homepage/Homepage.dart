@@ -14,12 +14,12 @@ class _HomepageNavState extends State<HomepageNav> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children:  const [
+      children:  [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child:  SearchBar(),
+          child:  SearchBarWidget(),
         ),
          Category(),
           Padding(

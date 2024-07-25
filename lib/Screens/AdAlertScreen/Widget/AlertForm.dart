@@ -78,7 +78,7 @@ class _AlertFormState extends State<AlertForm> {
         ), onTap: (){
               context.read<ProductProvider>().addAdAlert(context, {
                 "userId": context.read<UserProvider>().userDetails?.id.toString(), "category": removeSpecialCharactersAndSpaces(category.toString()), "item": title.text.toString(),
-              }, context.read<UserProvider>().userDetails?.id.toString(), context.read<AuthProvider>().accessToken);
+              }, context.read<UserProvider>().userDetails!.id.toString(), context.read<AuthProvider>().accessToken);
         },):const Center(
           child: CircularProgressIndicator(),
           ); })

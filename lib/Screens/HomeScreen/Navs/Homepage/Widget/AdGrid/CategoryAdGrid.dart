@@ -31,7 +31,7 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
   void _onRefresh() async{
     context.read<ProductProvider>().getProduct(
         removeSpecialCharactersAndSpaces(widget.category),
-        widget.grid, context, true, context.read<AuthProvider>().accessToken);
+        widget.grid, context.read<AuthProvider>().accessToken);
   }
 
   @override
@@ -49,7 +49,7 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
             child: Consumer<ProductProvider>(
                 builder: (_, bar, __) {
 
-                  if(bar.categoryProductList.isEmpty && !bar.getIsGettingProduct){
+                  if(bar.categoryProductList.isEmpty && !bar.isGettingProduct){
                     return const Center(child: Text("No Ads Found"));
                   }
 
