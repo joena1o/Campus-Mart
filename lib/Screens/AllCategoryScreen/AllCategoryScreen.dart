@@ -23,8 +23,9 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
         child: Container(
           width: size.width,
           height: size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           child: GridView.builder(
+            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
               itemCount: categories.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -41,7 +42,7 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
                     child: Container(
                       margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 0.5),
+                        border: Border.all(color: Colors.grey, width: .7),
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: Column(
@@ -52,7 +53,7 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
                             height: 100,
                             child: Icon(icons[i], size: 30, color: Colors.orangeAccent,),
                           ),
-                          Text(categories[i], style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),)
+                          Text(categories[i], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),)
                         ],
                       ),
                     ),

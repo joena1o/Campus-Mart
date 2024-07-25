@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadAd();
+    // _loadAd();
   }
 
   @override
@@ -47,8 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final userDetails = context.read<UserProvider>().userDetails;
 
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-        child: Column(
+    return Column(
       children: [
         Container(
           height: kToolbarHeight * 1.5,
@@ -83,7 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text("${userDetails?.firstName} ${userDetails?.lastName}")),
+            child:
+                Text("${userDetails?.firstName} ${userDetails?.lastName}")),
         10.height,
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -128,9 +128,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 const Divider(color: Colors.grey),
                 GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_)=> const AdAlerts())
-                      );
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const AdAlerts()));
                     },
                     child: Container(
                       width: size.width * .75,
@@ -168,9 +167,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     )),
                 30.height,
               ],
-            ))
+            )),
+        30.height,
+        // _bannerAd == null
+        //     // Nothing to render yet.
+        //     ? const SizedBox()
+        //     // The actual ad.
+        //     : AdWidget(ad: _bannerAd!)
       ],
-    ));
+    );
   }
 
   void _pickImages() async {
@@ -283,7 +288,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _loadAd() {
     final bannerAd = BannerAd(
       size: AdSize.banner,
-      adUnitId: bannerAdUnit,
+      adUnitId: iOSBannerAdUnit,
       request: const AdRequest(),
       listener: BannerAdListener(
         // Called when an ad is successfully received.

@@ -35,8 +35,6 @@ String normalizeAmount(int amount) {
   return formatter.format(amount);
 }
 
-
-
 String getDateDescription(DateTime date) {
   DateTime now = DateTime.now();
   Duration difference = now.difference(date);
@@ -56,6 +54,25 @@ String getDateDescription(DateTime date) {
   }
 }
 
+String getDateDescriptionChat(DateTime date) {
+  DateTime now = DateTime.now();
+  Duration difference = now.difference(date);
+  DateFormat timeFormat = DateFormat('HH:mm');
+  DateFormat weekdayFormat = DateFormat('EEEE');
+  DateFormat fullDateFormat = DateFormat('dd/MM/yyyy');
+
+  if (isSameDay(now, date)) {
+    return timeFormat.format(date);
+  } else if (difference.inDays == 1) {
+    return 'Yesterday';
+  } else if (difference.inDays < 7) {
+    return weekdayFormat.format(date);
+  } else {
+    return fullDateFormat.format(date);
+  }
+}
+
+// Helper function to check if two dates are on the same day
 bool isSameDay(DateTime date1, DateTime date2) {
   return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
 }

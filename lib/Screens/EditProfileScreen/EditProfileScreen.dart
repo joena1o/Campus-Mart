@@ -44,6 +44,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     campus = context.read<UserProvider>().userDetails!.campus;
     context.read<SignUpProvider>().fetchCampuses(state, context);
 
+    print(phone.text.toString() + " " + context.read<UserProvider>().userDetails!.phone.toString());
+
     currentDate = {
       "email": context.read<UserProvider>().userDetails!.email,
       "firstName": context.read<UserProvider>().userDetails!.firstName!.toString(),
@@ -136,6 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() => state = newValue);
+                        setState(()=> campus = null);
                         context
                             .read<SignUpProvider>()
                             .fetchCampuses(newValue, context);
@@ -266,7 +269,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (firstName.text.toString() == user.firstName &&
         lastName.text.toString() == user.lastName &&
         phone.text.toString() == user.phone &&
-        state == user.state && campus == null) {
+        state == user.state && campus == context.read<UserProvider>().userDetails!.campus || campus == null) {
       return false;
     }
     return true;

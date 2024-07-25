@@ -74,6 +74,7 @@ class Auth{
     List<Campus> campus = [];
     return networkHelper.get("$campusEndpoint/$state", headers: headers)
         .then((dynamic value) async{
+          print(value);
           final res = value as List;
           campus = res.map<Campus>((val)=> Campus.fromJson(val)).toList();
           return campus;

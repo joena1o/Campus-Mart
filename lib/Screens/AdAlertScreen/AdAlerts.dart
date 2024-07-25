@@ -59,7 +59,9 @@ class _AdAlertsState extends State<AdAlerts> {
         width: size.width,
         height: size.height,
         child: Consumer<ProductProvider>(builder: (_, bar, __) {
-          return ListView.builder(
+          return !bar.fetchAdAlerts ?
+
+          bar.adAlertList.isNotEmpty ? ListView.builder(
               itemCount: bar.adAlertList.length,
               itemBuilder: (BuildContext ctx, i) {
                 return ListTile(
@@ -77,7 +79,12 @@ class _AdAlertsState extends State<AdAlerts> {
                       },
                       icon: const Icon(Icons.more_horiz)),
                 );
-              });
+              }) : const Center(
+            child: Text("No Buzz", style: TextStyle(fontSize: 17),),
+          )
+                : const Center(
+              child:  CircularProgressIndicator(),
+          );
         }),
       ),
     );

@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC_ankTrYn-9V7Ck2hx8FCfK6_vii7rEKw',
-    appId: '1:24001240351:android:95487d54085eaffd54e42a',
+    appId: '1:24001240351:android:7023ac9a8f4d957054e42a',
     messagingSenderId: '24001240351',
     projectId: 'campusmart-5aac2',
     storageBucket: 'campusmart-5aac2.appspot.com',
@@ -63,12 +63,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCrFFsv9zoRh6QwRx0XZZrMZ_yng6QzAj8',
-    appId: '1:24001240351:ios:af85f04b9ccb144f54e42a',
+    appId: '1:24001240351:ios:cbfabf5a23d16d3054e42a',
     messagingSenderId: '24001240351',
     projectId: 'campusmart-5aac2',
     storageBucket: 'campusmart-5aac2.appspot.com',
-    iosClientId: '24001240351-7tt3l65cgua68aqtl1md4kjmajj37vt8.apps.googleusercontent.com',
-    iosBundleId: 'com.example.campusMart',
+    iosBundleId: 'com.pollex.campus-mart',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

@@ -56,37 +56,45 @@ class SuccessScreen extends StatelessWidget {
 
             Visibility(
                 visible: !provider.processingPayment && !provider.processingPaymentFailed,
-                child: const Text("Your Ad was uploaded Successfully", style: TextStyle(fontSize: 18),)),
+                child: const Padding(
+                  padding:  EdgeInsets.all(15.0),
+                  child:  Text("Your Ad was uploaded Successfully", style: TextStyle(fontSize: 18),),
+                )),
 
             Visibility(
                 visible: provider.processingPayment && !provider.processingPaymentFailed,
-                child: const Text("Please wait, while processing", style: TextStyle(fontSize: 18),)),
+                child: const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text("Please wait, while processing", style: TextStyle(fontSize: 18),),
+                )),
 
             Visibility(
                 visible: !provider.processingPayment && provider.processingPaymentFailed,
-                child: const Text("Error occured while processing your request", style: TextStyle(fontSize: 18),)),
+                child: const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child:  Text("Error occured while processing your request", style: TextStyle(fontSize: 18),))),
 
 
             const Spacer(),
 
-            GestureDetector(child:Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(15),
-              margin: const EdgeInsets.only(bottom: 30),
-              decoration: BoxDecoration(
-                  color: primary,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              width: size.width*.8,
-              child: const Text("Continue", style: TextStyle(color:Colors.white),),
-            ), onTap: (){
-              Navigator.pop(context);
-            },)
+              GestureDetector(child:Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.only(bottom: 30),
+                decoration: BoxDecoration(
+                    color: primary,
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                width: size.width*.8,
+                child: const Text("Continue", style: TextStyle(color:Colors.white),),
+              ), onTap: (){
+                Navigator.pop(context);
+              },)
 
-          ],
-        );
-        },
-      ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

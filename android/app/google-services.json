@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:24001240351:android:95487d54085eaffd54e42a",
+        "mobilesdk_app_id": "1:24001240351:android:7023ac9a8f4d957054e42a",
         "android_client_info": {
-          "package_name": "com.example.campus_mart"
+          "package_name": "com.pollex.campus_mart"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "24001240351-knko5r8huj8e4vc3eh5lds2ommd2mqd5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "24001240351-7tt3l65cgua68aqtl1md4kjmajj37vt8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.campusMart"
+              }
             }
           ]
         }

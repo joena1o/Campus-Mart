@@ -60,7 +60,7 @@ class _CategoryState extends State<Category> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (ctx, i) {
                 return Container(
-                  margin: const EdgeInsets.only(left: 15,top: 9),
+                  margin: const EdgeInsets.only(left: 13,top: 9, right: 5),
                   child: GestureDetector(
                       onTap: (){
                         context.read<ProductProvider>().currentCategory = categories[i];

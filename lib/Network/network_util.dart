@@ -29,7 +29,7 @@ class NetworkHelper {
           encoding: encoding)
           .then((http.Response response) {
         final String res = response.body;
-        print(res);
+        // print(res);
         final int statusCode = response.statusCode;
         var result = _decoder.convert(res);
         if (statusCode < 200 || statusCode > 400) {
@@ -71,9 +71,9 @@ class NetworkHelper {
   /// A function to do any post request with the url and headers
   /// then sends back a json decoded result
   Future<dynamic> post(String url, {Map<String, String>? headers, body, encoding}) {
-    print(url);
-    print(headers);
-    print(body);
+    // print(url);
+    // print(headers);
+    // print(body);
     try {
       return http
           .post(Uri.parse(url),
@@ -108,9 +108,9 @@ class NetworkHelper {
   /// A function to do any post request with the url and headers
   /// then sends back a json decoded result
   Future<dynamic> patch(String url, {Map<String, String>? headers, body, encoding}) {
-    print(url);
-    print(headers);
-    print(body);
+    // print(url);
+    // print(headers);
+    // print(body);
     try {
       return http
           .patch(Uri.parse(url),

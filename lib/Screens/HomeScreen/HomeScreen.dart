@@ -1,6 +1,9 @@
 import 'package:campus_mart/Model/UserModel.dart';
+import 'package:campus_mart/Network/NotificationServiceClass.dart';
+import 'package:campus_mart/Provider/MessageProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/WebSocketProvider.dart';
 import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Homepage.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/DrawerMenu.dart';
@@ -8,11 +11,16 @@ import 'package:campus_mart/Screens/HomeScreen/Navs/NotificationPage/Notificatio
 import 'package:campus_mart/Screens/HomeScreen/Navs/ProfilePage/ProfilePage.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/WishList/WishList.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/BottomNav/BottomNav.dart';
+import 'package:campus_mart/Screens/MessageScreen/MessageScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/Utils/snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,14 +41,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState(){
     super.initState();
+
+    NotificationService.requestPermissions();
     //Subscribe User
     UserModel? user = context.read<UserProvider>().userDetails;
     OneSignal.shared.setExternalUserId(user!.id.toString());
 
-    OneSignal.shared.sendTag("campus", user!.campus); // Campus Tag
-    OneSignal.shared.sendTag("state", user!.state); // State Tag
+    OneSignal.shared.sendTag("campus", user.campus); // Campus Tag
+    OneSignal.shared.sendTag("state", user.state); // State Tag
 
     Provider.of<UserProvider>(context, listen: false).loadDetails();
+    Provider.of<MessageProvider>(context, listen: false).initProvider(user!);
+
   }
 
   @override
@@ -104,6 +116,24 @@ class _HomeScreenState extends State<HomeScreen> {
           callback: updateNav,
         ),
       ),
+      floatingActionButton: Consumer<MessageProvider>(
+        builder: (context, provider, child) {
+            return badges.Badge(
+                    position: badges.BadgePosition.topStart(start: 43),
+                    badgeContent: Text("${provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id ).length}"),
+                    showBadge: provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id).isNotEmpty,
+                    child: FloatingActionButton(
+                    onPressed: (){
+                        // showMessageError("Feature not ready yet", context);
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=> const MessageScreen()));
+                    },
+                    child: const FaIcon(FontAwesomeIcons.message, color: Colors.white,),
+                  ),
+                );
+            },
+      ),
     );
   }
+
+
 }

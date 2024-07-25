@@ -1,3 +1,4 @@
+import 'package:campus_mart/Provider/MessageProvider.dart';
 import 'package:campus_mart/Screens/AboutUsScreen/AboutUs.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlert.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlerts.dart';
@@ -7,6 +8,7 @@ import 'package:campus_mart/Screens/OptionScreen/OptionScreen.dart';
 import 'package:campus_mart/Utils/savePrefs.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DrawerMenu extends StatefulWidget {
   const DrawerMenu({Key? key}) : super(key: key);
@@ -34,15 +36,16 @@ class _DrawerMenuState extends State<DrawerMenu> {
                 title: Text("Buzz Me"),
               )),
 
-      GestureDetector(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) =>  const FeedbackPage()));
-        },
-        child:const ListTile(
-            leading: Icon(EvaIcons.messageCircleOutline),
-            title: Text("Feedback"),
-          )),
+          GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .push(
+                    MaterialPageRoute(builder: (_) => const FeedbackPage()));
+              },
+              child: const ListTile(
+                leading: Icon(EvaIcons.messageCircleOutline),
+                title: Text("Feedback"),
+              )),
 
           GestureDetector(
               onTap: () {
@@ -64,15 +67,22 @@ class _DrawerMenuState extends State<DrawerMenu> {
               )),
 
           const Divider(),
-          GestureDetector(
-              onTap: () {
-                clearPrefs();
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const OptionScreen()));
-              },
-              child: const ListTile(
-                leading: Icon(EvaIcons.logInOutline),
-                title: Text("Logout"),
-              )),
+
+          Consumer<MessageProvider>(
+            builder: (context, provider, child) {
+              return GestureDetector(
+                  onTap: () {
+                    provider.disconnectWebSocket();
+                    clearPrefs();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (_) => const OptionScreen()));
+                  },
+                  child: const ListTile(
+                    leading: Icon(EvaIcons.logInOutline),
+                    title: Text("Logout"),
+                  ));
+            },
+          ),
         ],
       ),
     );

@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pollex.campus_mart">
     <uses-permission android:name="android.permission.INTERNET" />
-   <application
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <application
         android:label="Campus Mart"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">

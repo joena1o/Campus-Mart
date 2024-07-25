@@ -1,5 +1,6 @@
 import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
+import 'package:campus_mart/Screens/ChatScreen/ChatScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/timeAndDate.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,9 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
                   color: primary,
                 ),
               ), onTap: (){
-                launch("sms: ${user.phone}");
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_)=> ChatScreen(user: user, chats: [],))
+                );
               },)
 
             ],

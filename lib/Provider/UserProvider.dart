@@ -4,7 +4,8 @@ import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
 import 'package:campus_mart/Utils/savePrefs.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:campus_mart/Wrapper.dart';
+import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier{
 
@@ -62,7 +63,8 @@ class UserProvider extends ChangeNotifier{
     try{
       userDetails = await user.editProfile(data, token);
       await saveJsonDetails("user", userDetails);
-      Navigator.pop(context);
+      showMessage("Profile edited successfully", context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const Wrapper()));
     }catch(e){
       showMessageError(e.toString(), context);
     }finally{

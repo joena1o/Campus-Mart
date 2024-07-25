@@ -31,7 +31,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     resetOtpTimer();
     userDetails = context.read<UserProvider>().userDetails;
     Provider.of<AuthProvider>(context, listen: false).requestVerifyEmailAddress(
-        userDetails?.email, context);
+        userDetails!.email!, context);
     super.initState();
   }
 
@@ -79,7 +79,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   Container(height: kToolbarHeight*2,),
 
                   const Text("Verify Email Your Address", style: TextStyle(fontSize:23,fontWeight:FontWeight.bold)),
+
                   Container(height: 10,),
+
                   const Text("Input the otp code sent to your email address", style: TextStyle(fontSize:16)),
 
                   Container(height: 30,),
@@ -99,7 +101,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         // Code to execute when there is a change in the entered values
                       },
                       onCompleted: (value){
-                        Provider.of<AuthProvider>(context, listen: false).verifyEmailAddress(value, userDetails?.email, context, _timer);
+                        Provider.of<AuthProvider>(context, listen: false).verifyEmailAddress(value, userDetails!.email!, context, _timer);
                       },
                     ),
                   ),
@@ -115,7 +117,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       GestureDetector(
                           onTap: (){
                             isLoading ? null :
-                            Provider.of<AuthProvider>(context, listen: false).requestVerifyEmailAddress(userDetails?.email, context);
+                            Provider.of<AuthProvider>(context, listen: false).requestVerifyEmailAddress(userDetails!.email!, context);
 
                             isLoading ? null : resetOtpTimer();
                           },

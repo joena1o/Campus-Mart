@@ -67,7 +67,9 @@ class _MyAdScreenState extends State<MyAdScreen> {
             controller: context.read<ProductProvider>().refreshController,
             child: Consumer<ProductProvider>(
                 builder: (_, bar, __) {
-                  return !bar.getIsGettingProduct ? Container(
+                  return !bar.isGettingMyProduct ?
+
+                   bar.myProductList.isNotEmpty ? Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                       child: SingleChildScrollView(
                       child: StaggeredGrid.count(
@@ -162,9 +164,13 @@ class _MyAdScreenState extends State<MyAdScreen> {
                           );
                         }),
                       )
-                  )): const Center(
+                  )) : const Center(
+                     child: Text("No Ads", style: TextStyle(fontSize: 17),),
+                   )
+
+                       : const Center(
                     child:  CircularProgressIndicator(),
-                  ) ; })
+                  ); })
         ))
 
           ],
@@ -217,11 +223,7 @@ class _MyAdScreenState extends State<MyAdScreen> {
 
                 GestureDetector(
                     onTap: (){
-                        Navigator.pop(context);
-                        context.read<ProductProvider>().deleteAd(selectedId, context,
-                            context.read<UserProvider>().userDetails?.id,
-                            context.read<AuthProvider>().accessToken
-                        );
+                      deleteAd();
                     },
                     child:Row(
                     children: const [
@@ -236,6 +238,14 @@ class _MyAdScreenState extends State<MyAdScreen> {
           ),
         );
       },
+    );
+  }
+
+  void deleteAd(){
+    Navigator.pop(context);
+    context.read<ProductProvider>().deleteAd(selectedId, context,
+        context.read<UserProvider>().userDetails?.id,
+        context.read<AuthProvider>().accessToken
     );
   }
 

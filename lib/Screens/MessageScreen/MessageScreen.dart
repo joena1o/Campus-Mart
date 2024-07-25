@@ -1,6 +1,14 @@
+import 'package:campus_mart/Model/UserModel.dart';
+import 'package:campus_mart/Provider/AuthProvider.dart';
+import 'package:campus_mart/Provider/MessageProvider.dart';
+import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/ChatScreen/ChatScreen.dart';
+import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
+import 'package:campus_mart/Utils/basic.dart';
 import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/Utils/timeAndDate.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({Key? key}) : super(key: key);
@@ -10,72 +18,179 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+  
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+    Provider.of<MessageProvider>(context, listen: false).getMessages(
+        context.read<UserProvider>().userDetails?.id,
+        context.read<AuthProvider>().accessToken
+    );
+
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+
+   final userId = context.read<AuthProvider>().authModel.data!.id;
+   Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Messages", style: TextStyle(fontSize: 15),),
-        elevation: 0,
-      ),
+      backgroundColor: Colors.white,
       body: SizedBox(
         width: size.width,
-        height: size.height*.9,
-        child: ListView.builder(
-          padding: EdgeInsets.symmetric(horizontal: size.width*.05, vertical: 20),
-            itemCount: 10,
-            itemBuilder: (BuildContext ctx, i){
-              return GestureDetector(
-                  onTap: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_)=> const ChatScreen())
-                    );
-                  },
-                  child:Container(
-                  margin: const EdgeInsets.only(bottom: 30),
-                  child:Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                   const CircleAvatar(
-                     radius: 25,
-                        child: Text("HJ",style: TextStyle(fontSize: 14),),
-                    ),
-                    Container(width: 20,),
-                    Expanded(child:SizedBox(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:  const [
-                           Text("Jonathan Hyefur", style: TextStyle(fontWeight: FontWeight.w600),),
-                          SizedBox(height: 5,),
-                           Text("This is where your message is to appear and should very"),
-                           SizedBox(height: 10,),
-                           Divider()
-                        ],
-                      ),
-                    )),
-                    Container(width: 20,),
-                    SizedBox(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:  [
-                          const Text("12:00"),
-                          Container(
-                            margin: const EdgeInsets.only(top: 5),
-                            // decoration: BoxDecoration(
-                            //   color: primary,
-                            //   borderRadius: BorderRadius.circular(100),
-                            // ),
-                              padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
-                              child: const Text("2",style: TextStyle(fontSize: 14, color: primary),)),
-                        ],
-                      ),
-                    )
+        child: Column(
+          children: [
+
+            const SizedBox(height: kToolbarHeight*1.2,),
+
+            Container(
+              width: size.width,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  color: const Color.fromRGBO(250, 250, 250, 1),
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(onPressed: (){
+                    Navigator.of(context).pop();
+                  }, icon: const Icon(Icons.search, size: 25,)),
+
+                  Expanded(child:SizedBox(
+                      child: TextField(
+                        textInputAction: TextInputAction.search,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Search here",
+                          hintStyle: TextStyle(fontSize: 14),
+                        ),
+                        onSubmitted: (String? text){
+
+                        },
+                      ))),
+
                 ],
-              )));
-            }
+              ),
+            ),
+
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25,),
+              child: const Text("Messages", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
+            ),
+            
+            Consumer<MessageProvider>(
+              builder: (context, provider, child) {
+
+              return !provider.loadingMessages ? Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  itemCount: provider.messageModel?.length ?? 0,
+                  itemBuilder: (BuildContext ctx, i){
+
+                    final user = provider.messageModel![i].user2![0].id == userId ?
+                    provider.messageModel![i].user : provider.messageModel![i].user2;
+
+                    final chats = provider.messageModel?[i].chats;
+
+                    return GestureDetector(
+                        onTap: (){
+                          UserModel chattingWith = UserModel.fromJson(user[0].toJson());
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_)=> ChatScreen(user: chattingWith, chats: chats))
+                          );
+                        },
+                        child:Container(
+                        margin: const EdgeInsets.only(bottom: 30),
+                        child:Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                           user?[0].image == null ?  CircleAvatar(
+                             radius: 25,
+                                child: Text(getInitials("${user?[0].firstName} ${user?[0].lastName}"),style: TextStyle(fontSize: 14),),
+                            ): ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: SizedBox(
+                               width: 50,
+                               height: 50,
+                               child: ImageWidget(url: user![0].image.toString()),
+                           ),
+                          ),
+                          
+                          Container(width: 20,),
+                          
+                          Expanded(child:SizedBox(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children:   [
+
+                                 Text(user![0].firstName.toString(), style: const TextStyle(fontWeight: FontWeight.w600),),
+
+                                const SizedBox(height: 5,),
+
+                                 Visibility(
+                                     visible: chats!.isNotEmpty,
+                                     child: Padding(
+                                       padding: const EdgeInsets.only(top: 2.0),
+                                       child: Text(chats[chats.length-1].message),
+                                     )),
+                                 const SizedBox(height: 15,),
+                                 // Divider()
+                              ],
+                            ),
+                          )),
+                          
+                          
+                          Container(width: 20,),
+                          
+                          
+                          SizedBox(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children:  [
+                                
+                                Text(getDateDescriptionChat(chats[chats.length-1].updatedAt)),
+                                
+                                chats[chats.length-1].userId != context.read<UserProvider>().userDetails?.id ?
+                                    
+                                Container(
+                                    margin: const EdgeInsets.only(top: 5),
+                                    padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+                                    child: Visibility(
+                                      visible: chats.where((element) => element.seen == false).isNotEmpty,
+                                      child: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: primary,
+                                        child: Text(chats.where((element) => element.seen == false).length.toString(),
+                                          style: const TextStyle(fontSize: 12, color: Colors.white)
+                                        ),
+                                      ),
+                                    )): Container(
+                                        padding:  const EdgeInsets.only(top: 8.0),
+                                        child:  const Icon(Icons.check),
+                                      ),
+                                
+                              ],
+                            ),
+                          )
+                      ],
+                    )));
+                  }
+              ),
+            ) : const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          ),
+          ],
         ),
       )
     );

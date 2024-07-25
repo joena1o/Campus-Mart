@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>24001240351-7tt3l65cgua68aqtl1md4kjmajj37vt8.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.24001240351-7tt3l65cgua68aqtl1md4kjmajj37vt8</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCrFFsv9zoRh6QwRx0XZZrMZ_yng6QzAj8</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.campusMart</string>
+	<string>com.pollex.campus-mart</string>
 	<key>PROJECT_ID</key>
 	<string>campusmart-5aac2</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:24001240351:ios:af85f04b9ccb144f54e42a</string>
+	<string>1:24001240351:ios:cbfabf5a23d16d3054e42a</string>
 </dict>
 </plist>

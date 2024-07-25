@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'package:campus_mart/Provider/AuthProvider.dart';
+import 'package:campus_mart/Provider/FeedbackProvider.dart';
+import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -20,7 +24,7 @@ class _BugState extends State<Bug> {
   String? token;
   String? refreshToken;
 
-  TextEditingController feed = TextEditingController();
+  String feedback = "";
 
     @override
     Widget build(BuildContext context) {
@@ -49,7 +53,10 @@ class _BugState extends State<Bug> {
                         border: Border.all(color: const Color.fromRGBO(1, 1, 1, 0.1))),
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: TextField(
-                      controller: feed,
+                      style: const TextStyle(fontSize: 12),
+                      onChanged: (e){
+                        setState(()=> feedback = e);
+                      },
                       decoration: const InputDecoration(
                           hintText: "Report bug here",
                           hintStyle: TextStyle(fontSize: 12),
@@ -59,23 +66,47 @@ class _BugState extends State<Bug> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                      GestureDetector(
-                        onTap: (){
-                          if(feed.text.isNotEmpty){
-
-                          }
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: primary,
-                          ),
-                          child: const Text(
-                            "submit",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ))
+                    Consumer<FeedbackProvider>(
+                      builder: (context, provider, child) {
+                        return !provider.uploadingFeedback
+                            ? GestureDetector(
+                            onTap: () {
+                              if (feedback.isEmpty) {
+                                return;
+                              }
+                              Provider.of<FeedbackProvider>(context,
+                                  listen: false)
+                                  .uploadFeedback(
+                                  context
+                                      .read<AuthProvider>()
+                                      .accessToken,
+                                  {
+                                    "userId": context
+                                        .read<UserProvider>()
+                                        .userDetails
+                                        ?.id,
+                                    "type": "bug",
+                                    "message": feedback.toString()
+                                  },
+                                  context);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 30),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: feedback == "" ? Colors.grey : primary,
+                              ),
+                              child: const Text(
+                                "submit",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ))
+                            : const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    )
                   ],
                 )
               ],

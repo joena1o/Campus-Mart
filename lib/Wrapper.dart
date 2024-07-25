@@ -37,7 +37,7 @@ class _WrapperState extends State<Wrapper> {
           final userAuth = UserModel.fromJson(user);
           context.read<UserProvider>().loadDetails();
           readValue('passcode').then((passcode){
-            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth.email, passcode, context, callbackToUserCredentials);
+            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth.email!, passcode, context);
           });
         }
       });

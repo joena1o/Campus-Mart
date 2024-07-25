@@ -1,139 +1,151 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+
+// Models
 import 'package:campus_mart/Model/AuthModel.dart';
 import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Model/VerifyOtpModel.dart';
+
+// Network
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
+
+// Screens
 import 'package:campus_mart/Screens/ForgotPasswordScreen/ResetPasswordScreen.dart';
 import 'package:campus_mart/Screens/ForgotPasswordScreen/VerifyOtpScreen.dart';
 import 'package:campus_mart/Screens/HomeScreen/HomeScreen.dart';
 import 'package:campus_mart/Screens/LoginScreen/LoginScreen.dart';
+import 'package:campus_mart/Wrapper.dart';
+
+// Utils
 import 'package:campus_mart/Utils/savePrefs.dart';
 import 'package:campus_mart/Utils/snackBar.dart';
-import 'package:campus_mart/Wrapper.dart';
-import 'package:flutter/material.dart';
 
 class AuthProvider with ChangeNotifier {
-
+  final Auth _auth = Auth();
+  bool _isLoading = false;
   String _accessToken = '';
+  String? _resetToken;
 
-  Auth auth = Auth();
-  bool isLoading = false;
+  AuthModel? _authModel;
+  SuccessMessageModel? _successMessageModel;
+  VerifyTokenModel? _verifyTokenModel;
 
-  AuthModel? authModel;
-  SuccessMessageModel? successMessageModel;
-  VerifyTokenModel? verifyTokenModel;
+  AuthModel get authModel => _authModel!;
 
+  bool get isLoading => _isLoading;
   String get accessToken => _accessToken;
-  String? resetToken;
 
   set accessToken(String value) {
     _accessToken = value;
     notifyListeners();
   }
 
-  void loginUser(email, password, context, callback) async{
-    isLoading = true;
+  // ----- Login -----
+  Future<void> loginUser(String email, String password, BuildContext context) async {
+    _isLoading = true;
     notifyListeners();
-    try{
-      authModel = await auth.loginUser({"email": email, "password": password});
-      accessToken = authModel!.auth.toString();
-      await saveJsonDetails("user", UserModel.fromJson(authModel!.data!.toJson()));
-      callback(UserModel.fromJson(authModel!.data!.toJson()), password);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomeScreen()));
-    }catch(e){
-      showMessage(e.toString(), context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const LoginScreen()));
-    }finally{
-      isLoading = false;
+
+    try {
+      _authModel = await _auth.loginUser({"email": email, "password": password});
+      accessToken = _authModel!.auth.toString();
+
+      final UserModel user = UserModel.fromJson(_authModel!.data!.toJson());
+      await saveJsonDetails("user", user);
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
+    } catch (e) {showMessageError(e.toString(), context);
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  void requestVerifyEmailAddress(email, context) async{
-    isLoading = true;
-    try{
-      successMessageModel = await auth.requestVerifyEmail(email);
-      showMessage(successMessageModel?.message, context);
-    }catch(e){
+  // ----- Email Verification -----
+  Future<void> requestVerifyEmailAddress(String email, BuildContext context) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _successMessageModel = await _auth.requestVerifyEmail(email);
+      showMessage(_successMessageModel?.message, context);
+    } catch (e) {
       showMessageError(e.toString(), context);
-    }finally{
-      isLoading = false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-
-  void verifyEmailAddress(otp, email, context, Timer timer) async{
-    isLoading = true;
+  Future<void> verifyEmailAddress(String otp, String email, BuildContext context, Timer timer) async {
+    _isLoading = true;
     notifyListeners();
-    try{
-      verifyTokenModel = await auth.verifyEmailAddressOtp(otp, email);
+
+    try {
+      _verifyTokenModel = await _auth.verifyEmailAddressOtp(otp, email);
       timer.cancel();
-      showMessage(verifyTokenModel?.message, context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const Wrapper()));
-    }catch(e){
+      showMessage(_verifyTokenModel?.message, context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const Wrapper()));
+    } catch (e) {
       showMessageError(e.toString(), context);
-    }finally{
-      isLoading = false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  void requestForgotPassword(email, context, callback) async{
-    isLoading = true;
+  // ----- Forgot Password -----
+  Future<void> requestForgotPassword(String email, BuildContext context, [VoidCallback? callback]) async {
+    _isLoading = true;
     notifyListeners();
-    try{
-      successMessageModel = await auth.requestForgottenPasswordOtp(email);
-      showMessage(successMessageModel?.message, context);
-      if(callback == null){
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>  VerifyOtpScreen(email: email,)));
-      }else{
+
+    try {
+      _successMessageModel = await _auth.requestForgottenPasswordOtp(email);
+      showMessage(_successMessageModel?.message, context);
+      if (callback == null) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => VerifyOtpScreen(email: email)));
+      } else {
         callback();
       }
-    }catch(e){
+    } catch (e) {
       showMessageError(e.toString(), context);
-    }finally{
-      isLoading = false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  void verifyOtp(otp, email, context) async{
-    isLoading = true;
+  Future<void> verifyOtp(String otp, String email, BuildContext context) async {
+    _isLoading = true;
     notifyListeners();
-    try{
-      verifyTokenModel = await auth.verifyOtp(otp, email);
-      setResetToken(verifyTokenModel?.token);
-      showMessage(verifyTokenModel?.message, context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const ResetPasswordScreen()));
-    }catch(e){
+
+    try {
+      _verifyTokenModel =await _auth.verifyOtp(otp, email);
+      _resetToken = _verifyTokenModel?.token;
+      showMessage(_verifyTokenModel?.message, context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ResetPasswordScreen()));
+    } catch (e) {
       showMessageError(e.toString(), context);
-    }finally{
-      isLoading = false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  setResetToken(token){
-    resetToken = token;
-  }
-
-  void resetPassword(password, context) async{
-    isLoading = true;
+  Future<void> resetPassword(String password, BuildContext context) async {
+    _isLoading = true;
     notifyListeners();
-    try{
-      successMessageModel = await auth.resetPassword(resetToken, password);
-      showMessage(successMessageModel?.message, context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const LoginScreen()));
-    }catch(e){
+
+    try {
+      _successMessageModel = await _auth.resetPassword(_resetToken!, password);
+      showMessage(_successMessageModel?.message, context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+    } catch (e) {
       showMessageError(e.toString(), context);
-    }finally{
-      isLoading = false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
-
-
-
 }

@@ -14,8 +14,6 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class ProductProvider extends ChangeNotifier{
 
-  BuildContext? ctx;
-
   List<WishProductModel>? wishProductModel;
   List<ProductModel> productList = [];
   List<ProductModel> pendingAdsList = [];
@@ -23,6 +21,8 @@ class ProductProvider extends ChangeNotifier{
   List<NotificationModel> notificationList = [];
   List<AdAlertModel> adAlertList = [];
   List<ProductModel> myProductList = [];
+
+  List<WishProductModel> availableItems = [];
 
   ReviewModel? reviews;
 
@@ -66,17 +66,13 @@ class ProductProvider extends ChangeNotifier{
 
   bool editingAd = false;
 
-  void setContext(BuildContext context){
-    ctx = context;
-    notifyListeners();
-  }
 
   void getWishList(username, token){
     loadingWishList = true;
     product.fetchWishList(username, token).then((value){
       loadingWishList = false;
       wishProductModel = value;
-      print(wishProductModel?.length);
+      availableItems = wishProductModel!.where((element) => element.product!.isNotEmpty).toList();
       notifyListeners();
     }).catchError((onError){
       print(onError);
@@ -129,12 +125,15 @@ class ProductProvider extends ChangeNotifier{
 
   void deleteAd(id,context,userId, token){
     isGettingMyProduct = true;
+    notifyListeners();
     product.deleteProduct(id, token).then((value){
-      getMyAds(userId, token);
       SuccessMessageModel successMessageModel = SuccessMessageModel.fromJson(jsonDecode(value));
       showMessage(successMessageModel.message, context);
+      resetMyAdsItems();
+      getMyAds(userId, token);
     }).catchError((onError){
       isGettingMyProduct = false;
+      notifyListeners();
     });
   }
 
@@ -174,18 +173,15 @@ class ProductProvider extends ChangeNotifier{
 
   void deleteAdAlert(id,context,userId,token){
     deleteAdAlertStatus = true;
-    product.deleteAdAlert(id, token).then((value){
+    try{
+      dynamic successMessageModel = product.deleteAdAlert(id, token);
+      showMessage(successMessageModel, context);
+    }catch(e){
+      print(e);
+    }finally{
       deleteAdAlertStatus = false;
-      getAdAlerts(userId,token);
-      ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(value));
-      showMessage(errorModel.message, context);
-      notifyListeners();
-    }).catchError((onError){
-      deleteAdAlertStatus = false;
-      ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
-      showMessageError(errorModel.message, context);
-      notifyListeners();
-    });
+    }
+    notifyListeners();
   }
 
   void getUserReviews(id, token){

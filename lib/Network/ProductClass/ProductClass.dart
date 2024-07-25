@@ -3,6 +3,7 @@ import 'package:campus_mart/Model/AdAlertModel.dart';
 import 'package:campus_mart/Model/NotificationModel.dart';
 import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/ReviewModel.dart';
+import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Model/WishProductModel.dart';
 import 'package:campus_mart/Network/error_handler.dart';
 import 'package:campus_mart/Network/network_util.dart';
@@ -233,7 +234,6 @@ class ProductClass{
     return networkHelper.post(reviewEndpoint, headers: headers, body: data,
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
-
       return res;
     }).catchError((err){
       errorHandler.handleError(err['body']);
@@ -286,7 +286,6 @@ class ProductClass{
     return networkHelper.post(addAlertEndpoint, headers: headers, body: data,
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
-          print(res);
       return res;
     }).catchError((err){
       errorHandler.handleError(err['body']);
@@ -329,6 +328,7 @@ class ProductClass{
 
 
   Future deleteAdAlert(id, token){
+    SuccessMessageModel? successMessageModel;
     headers  = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -336,7 +336,9 @@ class ProductClass{
     };
     return networkHelper.delete("$addAlertEndpoint/$id", headers: headers)
         .then((dynamic res) async{
-      return res;
+          Map<String, dynamic> response = res;
+          successMessageModel = SuccessMessageModel.fromJson(response);
+      return successMessageModel;
     }).catchError((err){
       errorHandler.handleError(err['body']);
     });

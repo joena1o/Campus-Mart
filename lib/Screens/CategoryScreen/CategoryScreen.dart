@@ -5,9 +5,11 @@ import 'package:campus_mart/Provider/SignUpProvider.dart';
 import 'package:campus_mart/Screens/CategoryScreen/Widget/Navbar.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/AdGrid/CategoryAdGrid.dart';
 import 'package:campus_mart/Utils/Categories.dart';
+import 'package:campus_mart/Utils/adsAdUnit.dart';
 import 'package:campus_mart/Utils/states.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -21,7 +23,7 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
 
-  //BannerAd? _bannerAd;
+  BannerAd? _bannerAd;
 
   bool isgrid = true;
   int current = 0;
@@ -32,7 +34,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   void dispose() {
-    //_bannerAd?.dispose();
+    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -45,7 +47,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           categories[current]), 2, context, true,
           context.read<AuthProvider>().accessToken);
     }
-    //_loadAd();
+    _loadAd();
   }
 
   @override
@@ -171,11 +173,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
             CategoryAdGrid(category: categories[current], grid: 2,),
 
-            // _bannerAd == null
-            // // Nothing to render yet.
-            //     ? const SizedBox() : SizedBox(
-            //     height: 50,
-            //     child: AdWidget(ad: _bannerAd!)),
+            _bannerAd == null
+            // Nothing to render yet.
+                ? const SizedBox() : SizedBox(
+                height: 50,
+                child: AdWidget(ad: _bannerAd!)),
 
           ],
         ),
@@ -202,32 +204,32 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ));
   }
 
-  // void _loadAd() {
-  //   final bannerAd = BannerAd(
-  //     size: AdSize.banner,
-  //     adUnitId: bannerAdUnit,
-  //     request: const AdRequest(),
-  //     listener: BannerAdListener(
-  //       // Called when an ad is successfully received.
-  //       onAdLoaded: (ad) {
-  //         if (!mounted) {
-  //           ad.dispose();
-  //           return;
-  //         }
-  //         setState(() {
-  //           _bannerAd = ad as BannerAd;
-  //         });
-  //       },
-  //       // Called when an ad request failed.
-  //       onAdFailedToLoad: (ad, error) {
-  //         debugPrint('BannerAd failed to load: $error');
-  //         ad.dispose();
-  //       },
-  //     ),
-  //   );
-  //
-  //   // Start loading.
-  //   bannerAd.load();
-  // }
+  void _loadAd() {
+    final bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: bannerAdUnit,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+          if (!mounted) {
+            ad.dispose();
+            return;
+          }
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, error) {
+          debugPrint('BannerAd failed to load: $error');
+          ad.dispose();
+        },
+      ),
+    );
+
+    // Start loading.
+    bannerAd.load();
+  }
 }
 
