@@ -70,7 +70,6 @@ dependencies:
   flutter_local_notifications:
   popup_banner: ^1.0.0
   app_updater: ^1.0.6
-  dio: ^4.0.6
   intl: ^0.17.0
   pinput: ^4.0.0
 
