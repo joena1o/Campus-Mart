@@ -60,9 +60,7 @@ class Auth{
       final response = res;
       userModel = UserModel.fromJson(response);
       return userModel;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> errorHandler.handleError(err['body']));
   }
 
   Future fetchCampuses(state){

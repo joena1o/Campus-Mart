@@ -15,7 +15,6 @@ class _AdAlertState extends State<AdAlert> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: const Text(
           "Create an Ad Alert",
           style: TextStyle(fontSize: 15),

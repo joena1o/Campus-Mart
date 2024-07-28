@@ -1,10 +1,10 @@
 import 'package:campus_mart/Model/CampusModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/SignUpProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/sign_up_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Utils/states.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field2/intl_phone_field.dart';
@@ -63,12 +63,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: const Text(
             "Edit Profile",
             style: TextStyle(fontSize: 15),
           ),
-          foregroundColor: Colors.black,
           elevation: 0,
           leading: IconButton(
             onPressed: () {

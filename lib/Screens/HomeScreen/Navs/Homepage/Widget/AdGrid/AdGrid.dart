@@ -1,6 +1,6 @@
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Screens/ProductScreen/ProductScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
@@ -23,15 +23,19 @@ class _AdGridState extends State<AdGrid> {
 
   static const images = ['Camera.jpeg','detergent.jpeg','earbuds.jpeg','watch.jpeg'];
 
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+
   @override
   void initState(){
     super.initState();
-      context.read<ProductProvider>().getProduct(widget.category, 1, context.read<AuthProvider>().accessToken);
+      context.read<ProductProvider>().getProduct(widget.category, 1, context.read<AuthProvider>().accessToken, refreshControllerLoadComplete);
   }
 
   void _onRefresh() async{
-    context.read<ProductProvider>().getProduct(widget.category, 1, context.read<AuthProvider>().accessToken);
+    context.read<ProductProvider>().getProduct(widget.category, 1, context.read<AuthProvider>().accessToken, refreshControllerLoadComplete);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +46,7 @@ class _AdGridState extends State<AdGrid> {
             enablePullUp: true,
             onRefresh: _onRefresh,
             onLoading: _onRefresh,
-            controller: widget.grid ==1 ? context.read<ProductProvider>().refreshController
-            : context.read<ProductProvider>().refreshController2,
+            controller: _refreshController,
             child: Consumer<ProductProvider>(
               builder: (_, bar, __) {
                 if(bar.productList.isEmpty && !bar.isGettingProduct){
@@ -66,89 +69,87 @@ class _AdGridState extends State<AdGrid> {
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductScreen(product: bar.productList![index])));
                 },
-                  child: Container(
-                child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
 
-                  Container(
-                  width: size.width * .5,
-                  height: index%2==0? size.width * .34 : size.width * .4,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey,
-                  ),
-                  child: Stack(
-                      children: [
+                    Container(
+                    width: size.width * .5,
+                    height: index%2==0? size.width * .34 : size.width * .4,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey,
+                    ),
+                    child: Stack(
+                        children: [
 
-                        Positioned(child: Opacity(
-                            opacity: 0.78,
-                            child: SizedBox(
-                          width: size.width * .5,
-                          height: index%2==0? size.width * .34 : size.width * .4,
-                          child: bar.productList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
-                          fit: BoxFit.cover,
-                          ):ImageWidget(url: bar.productList![index].images![0]['url'].toString()),
-                        ))),
+                          Positioned(child: Opacity(
+                              opacity: 0.78,
+                              child: SizedBox(
+                            width: size.width * .5,
+                            height: index%2==0? size.width * .34 : size.width * .4,
+                            child: bar.productList![index].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
+                            fit: BoxFit.cover,
+                            ):ImageWidget(url: bar.productList![index].images![0]['url'].toString()),
+                          ))),
 
-                        Positioned(
-                            right: 0,
-                            child: IconButton(
-                                onPressed: () {},
-                                icon:  Icon(
-                                  bar.productList![index].wishList!.isEmpty ? Icons.favorite_border:
-                                  Icons.favorite,
-                                  color: Colors.white,
-                                ))),
+                          Positioned(
+                              right: 0,
+                              child: IconButton(
+                                  onPressed: () {},
+                                  icon:  Icon(
+                                    bar.productList![index].wishList!.isEmpty ? Icons.favorite_border:
+                                    Icons.favorite,
+                                    color: Colors.white,
+                                  ))),
 
 
-                        Positioned(
-                          top: 0,
-                          child: Visibility(
-                            visible: bar.productList![index].adType != "Free",
-                            child: Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration:  BoxDecoration(
-                                    color: bar.productList![index].adType == "Standard" ? Colors.orangeAccent
-                                        : Colors.green
-                                ),
-                                child: Text("${bar.productList![index].adType} Ad",
-                                style: const TextStyle(color: Colors.white, fontSize: 10),
-                                )
+                          Positioned(
+                            top: 0,
+                            child: Visibility(
+                              visible: bar.productList![index].adType != "Free",
+                              child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration:  BoxDecoration(
+                                      color: bar.productList![index].adType == "Standard" ? Colors.orangeAccent
+                                          : Colors.green
+                                  ),
+                                  child: Text("${bar.productList![index].adType} Ad",
+                                  style: const TextStyle(color: Colors.white, fontSize: 10),
+                                  )
+                              ),
                             ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                    ),
                   ),
-                ),
-                Container(
-                  width: size.width,
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children:  [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 7),
-                          child: Text("${bar.productList![index].title}",
-                            style: const TextStyle(color: Colors.black, fontSize: 13),
+                  Container(
+                    width: size.width,
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:  [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 7),
+                            child: Text("${bar.productList![index].title}",
+                              style: const TextStyle(color: Colors.black, fontSize: 13),
+                            ),
                           ),
-                        ),
-                        Text("${bar.productList![index].adCategory}",
-                            style: const TextStyle(color: primary, fontSize: 12)),
+                          Text("${bar.productList![index].adCategory}",
+                              style: const TextStyle(color: primary, fontSize: 12)),
 
-                        Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 7),
-                        child:Text("${user.campus}",
-                            style: const TextStyle(color: Colors.black, fontSize: 12)))
-                      ],
+                          Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
+                          child:Text("${user.campus}",
+                              style: const TextStyle(color: Colors.black, fontSize: 12)))
+                        ],
+                    ),
                   ),
-                ),
 
 
-            ],
-          ),
-        ));
+                              ],
+                            ));
       }),
     ),
                     )
@@ -156,6 +157,17 @@ class _AdGridState extends State<AdGrid> {
                   child:  CircularProgressIndicator(),
                 ) ; })
         ));
+  }
+
+  void refreshControllerLoadComplete(){
+    _refreshController.loadComplete();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _refreshController.dispose();
+    super.dispose();
   }
 
 }

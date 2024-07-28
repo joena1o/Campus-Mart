@@ -1,6 +1,6 @@
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';

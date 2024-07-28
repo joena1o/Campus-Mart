@@ -1,13 +1,22 @@
+import 'package:campus_mart/core/configs/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:spotify_clone/core/configs/theme/app_colors.dart';
 
 class AppTheme{
 
   static final lightTheme = ThemeData(
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.lightBackground,
+    drawerTheme: const DrawerThemeData(
+      shape: BeveledRectangleBorder()
+    ),
     brightness: Brightness.light,
-    fontFamily: 'Satoshi',
+     bottomAppBarTheme: const BottomAppBarTheme(
+       color: Colors.white,
+     ),
+      fontFamily: "Poppins",
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          shape: CircleBorder()
+      ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
@@ -25,7 +34,13 @@ class AppTheme{
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.darkBackground,
       brightness: Brightness.dark,
-      fontFamily: 'Satoshi',
+      fontFamily: "Poppins",
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          shape: CircleBorder()
+      ),
+      bottomAppBarTheme: const BottomAppBarTheme(
+        color: AppColors.darkBackground,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,

@@ -1,4 +1,6 @@
-String bannerAdUnit = "ca-app-pub-5148720861782075/5955735305";
-String interstitialAdUnit = "ca-app-pub-5148720861782075/5189448544";
-String rewardAdUnit = "ca-app-pub-5148720861782075/3701663901";
-String iOSBannerAdUnit = "ca-app-pub-5148720861782075/7921283972";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+String bannerAdUnit = dotenv.env['BANNER_AD']!;
+String interstitialAdUnit = dotenv.env['INTERSTITIAL_AD']!;
+String rewardAdUnit = dotenv.env['REWARDING_AD']!;
+String iOSBannerAdUnit = dotenv.env['IOS_BANNER_AD']!;

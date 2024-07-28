@@ -1,10 +1,10 @@
 import 'package:campus_mart/Model/MessageModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/MessageProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
-import 'package:campus_mart/Provider/WebSocketProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/message_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
+import 'package:campus_mart/Utils/basic.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
@@ -52,16 +52,18 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 0,
+          elevation: 1,
           toolbarHeight: 70,
-          backgroundColor: Colors.white,
+          leadingWidth: 50,
+          leading: const Icon(
+            Icons.arrow_back
+          ),
           title: Row(
             children: [
-              widget.user.image == null ? const CircleAvatar(
+              widget.user.image == null ?  CircleAvatar(
                 radius: 20,
-                child: Text("HJ",style: TextStyle(fontSize: 14),),
+                child: Text(getInitials("${widget.user.firstName} ${widget.user.lastName}"),style: TextStyle(fontSize: 14),),
               ): ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: SizedBox(
@@ -70,7 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: ImageWidget(url: widget.user.image!),
                 ),
               ),
-              Container(width: 20,),
+              Container(width: 10,),
               Expanded(
                 child: Consumer<MessageProvider>(
                   builder: (context, provider, child) {
@@ -133,23 +135,20 @@ class _ChatScreenState extends State<ChatScreen> {
                 builder: (context, provider, child) {
                   return Container(
                 width: size.width,
-                height: size.height*.08,
+                height: size.height*.09,
                 padding:  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
 
-                    Expanded(child:Padding(
-                      padding: const EdgeInsets.only(top:7),
-                      child:TextFormField(
-                       enabled: !provider.sendingMessages,
-                      controller: provider.messageText,
-                      decoration: const InputDecoration(
-                          hintText: 'Type message here..',
-                          hintStyle: TextStyle(fontSize: 14),
-                          border: InputBorder.none
-                          ),
+                    Expanded(child:TextFormField(
+                     enabled: !provider.sendingMessages,
+                    controller: provider.messageText,
+                    decoration: const InputDecoration(
+                        hintText: 'Type message here..',
+                        hintStyle: TextStyle(fontSize: 14),
+                        border: InputBorder.none
                         ),
                       ),
                     ),
@@ -181,10 +180,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 },
               ),
-
-              Container(
-                height: 20,
-              )
 
             ],
           );

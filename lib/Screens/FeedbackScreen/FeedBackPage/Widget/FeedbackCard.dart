@@ -15,7 +15,7 @@ class FeedbackCard extends StatelessWidget {
         dashPattern: [3,3,3],
         strokeWidth: 1,
         child: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             width: MediaQuery.of(context).size.width * .8,
             child: Text("$title", style: const TextStyle(fontWeight: FontWeight.w600),)));
   }

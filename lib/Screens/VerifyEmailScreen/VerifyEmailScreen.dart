@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';

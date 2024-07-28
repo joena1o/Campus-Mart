@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:app_updater/app_updater.dart';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/OnboardingScreen/OnboardingScreen.dart';
 import 'package:campus_mart/Screens/WelcomeScreen/WelcomeScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
@@ -37,7 +37,7 @@ class _WrapperState extends State<Wrapper> {
           final userAuth = UserModel.fromJson(user);
           context.read<UserProvider>().loadDetails();
           readValue('passcode').then((passcode){
-            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth.email!, passcode, context);
+            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth.email!, passcode);
           });
         }
       });
@@ -47,10 +47,6 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     return const WelcomeScreen();
-  }
-
-  void callbackToUserCredentials(UserModel userModel, passcode){
-    context.read<UserProvider>().setUserDetails(userModel, passcode);
   }
 
 

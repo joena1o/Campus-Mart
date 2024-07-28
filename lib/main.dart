@@ -1,11 +1,11 @@
 import 'package:campus_mart/Network/NotificationServiceClass.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/FeedbackProvider.dart';
-import 'package:campus_mart/Provider/MessageProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/SignUpProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
-import 'package:campus_mart/Provider/WebSocketProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/feed_back_provider.dart';
+import 'package:campus_mart/Provider/message_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/sign_up_provider.dart';
+import 'package:campus_mart/Provider/theme_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/conn.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/firebase_options.dart';
@@ -17,9 +17,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<
+    ScaffoldMessengerState>();
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService.initialize();
 
@@ -30,7 +31,9 @@ void main() async{
   );
 
   const isLive = false;
-  String onesignalAppId = isLive ? dotenv.env['ONE_SIGNAL_APP_ID_LIVE']! : dotenv.env['ONE_SIGNAL_APP_ID_TEST']!;
+  String onesignalAppId = isLive
+      ? dotenv.env['ONE_SIGNAL_APP_ID_LIVE']!
+      : dotenv.env['ONE_SIGNAL_APP_ID_TEST']!;
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
   OneSignal.shared.setAppId(onesignalAppId);
 
@@ -40,16 +43,16 @@ void main() async{
 
   runApp(
       MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_)=> ProductProvider()),
-        ChangeNotifierProvider(create: (_) => SignUpProvider()),
-        ChangeNotifierProvider(create: (_) => FeedbackProvider()),
-        ChangeNotifierProvider(create: (_) => MessageProvider()),
-        ChangeNotifierProvider(create: (_) => WebSocketProvider())
-      ],
-      child: const MyApp()));
+          providers: [
+            ChangeNotifierProvider(create: (_) => UserProvider()),
+            ChangeNotifierProvider(create: (_) => AuthProvider()),
+            ChangeNotifierProvider(create: (_) => ProductProvider()),
+            ChangeNotifierProvider(create: (_) => SignUpProvider()),
+            ChangeNotifierProvider(create: (_) => FeedbackProvider()),
+            ChangeNotifierProvider(create: (_) => MessageProvider()),
+            ChangeNotifierProvider(create: (_) => ThemeProvider()),
+          ],
+          child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -58,36 +61,34 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    return MaterialApp(
-      title: 'Flutter Demo',
-      color: Colors.white,
-      debugShowCheckedModeBanner: false,
-      navigatorKey: navigatorKey,
-      scaffoldMessengerKey: rootScaffoldMessengerKey,
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-          fontFamily: "Poppins",
-      ),
-
-      home: const MyHomePage(),
+    return Consumer<ThemeProvider>(
+      builder: (context, provider, child) {
+        return MaterialApp(
+          title: 'Campus Mart',
+          debugShowCheckedModeBanner: false,
+          navigatorKey: navigatorKey,
+          scaffoldMessengerKey: rootScaffoldMessengerKey,
+          theme: provider.isDark ? ThemeData.dark() : ThemeData.light(),
+          home: const MySplashPage(),
+        );
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MySplashPage extends StatefulWidget {
+  const MySplashPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MySplashPage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MySplashPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
-    return  const Wrapper();
+    return const Wrapper();
   }
 }

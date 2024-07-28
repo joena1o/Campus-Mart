@@ -268,9 +268,7 @@ class ProductClass{
           List response = res as List;
       notificationModel = response.map((json)=> NotificationModel.fromJson(json)).toList();
       return notificationModel;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> errorHandler.handleError(err['body']));
   }
 
 
@@ -299,9 +297,7 @@ class ProductClass{
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
       return res;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> errorHandler.handleError(err['body']));
   }
 
   Future getAdAlerts(userId, token){
@@ -335,9 +331,7 @@ class ProductClass{
           Map<String, dynamic> response = res;
           successMessageModel = SuccessMessageModel.fromJson(response);
       return successMessageModel;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> errorHandler.handleError(err['body']));
   }
 
 

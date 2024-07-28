@@ -14,14 +14,13 @@ class _FeedbackState extends State<FeedbackPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: const Text(
           "Feedback",
           style: TextStyle(fontSize: 15),
         ),
         elevation: 0,
       ),
-      body: FeedbackView(type: '',),
+      body: const FeedbackView(type: '',),
     );
   }
 }

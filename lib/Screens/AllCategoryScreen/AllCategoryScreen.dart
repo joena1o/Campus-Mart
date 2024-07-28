@@ -15,8 +15,6 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: SafeArea(
@@ -29,8 +27,8 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
               itemCount: categories.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 0,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 1,
               ),
               itemBuilder: (BuildContext ctx, i){
                   return GestureDetector(
@@ -48,9 +46,9 @@ class _AllCategoryScreenState extends State<AllCategoryScreen> {
                       child: Column(
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(top: 20),
-                            width: 100,
-                            height: 100,
+                            margin: const EdgeInsets.only(top: 10),
+                            width: 90,
+                            height: 90,
                             child: Icon(icons[i], size: 30, color: Colors.orangeAccent,),
                           ),
                           Text(categories[i], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),)

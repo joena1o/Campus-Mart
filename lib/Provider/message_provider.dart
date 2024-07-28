@@ -102,12 +102,11 @@ class MessageProvider extends ChangeNotifier{
     }));
 
     _streamSubscription = _channel!.stream.listen((message) {
-      final new_response = json.decode(message.toString());
-      print(new_response);
-      if (new_response['type'] == 'status_response'){
-        userIsOnline = new_response['isOnline'];
+      final newResponse = json.decode(message.toString());
+      if (newResponse['type'] == 'status_response'){
+        userIsOnline = newResponse['isOnline'];
       }else {
-        Chat newChatMessage = Chat.fromJson(new_response);
+        Chat newChatMessage = Chat.fromJson(newResponse);
         chats.add(newChatMessage);
         showLocalNotification(
             "new Message", json.decode(message.toString())['message']);
@@ -115,8 +114,6 @@ class MessageProvider extends ChangeNotifier{
       notifyListeners();
     });
   }
-
-  //List<Chat> message => myMessage;
 
   void checkUserStatus(userId){
     // Check the status of another user

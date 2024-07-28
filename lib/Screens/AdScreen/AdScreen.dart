@@ -6,12 +6,12 @@ import 'package:campus_mart/Model/PrePaidProductModel.dart';
 import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/AdScreen/SuccessScreen.dart';
 import 'package:campus_mart/Utils/categories.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/conn.dart';
 import 'package:flutter/cupertino.dart';
@@ -86,7 +86,6 @@ class _AdScreenState extends State<AdScreen> {
     return isSuccessful ?  const SuccessScreen()
     : Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: const Text("Post an ad", style: TextStyle(fontSize: 15),),
         foregroundColor: Colors.black,
         elevation: 0,

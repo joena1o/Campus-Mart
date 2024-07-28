@@ -1,4 +1,4 @@
-import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Screens/AllCategoryScreen/AllCategoryScreen.dart';
 import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
 import 'package:campus_mart/Utils/categories.dart';

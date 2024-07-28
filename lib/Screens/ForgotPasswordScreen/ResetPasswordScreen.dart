@@ -1,6 +1,6 @@
-import 'package:campus_mart/Provider/AuthProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

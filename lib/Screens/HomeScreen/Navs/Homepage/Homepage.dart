@@ -29,7 +29,7 @@ class _HomepageNavState extends State<HomepageNav> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ),
-         AdGrid(grid: 1, category: "",)
+         AdGrid(grid: 1, category: "")
       ],
     );
   }

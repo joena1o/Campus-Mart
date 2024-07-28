@@ -1,8 +1,8 @@
 import 'package:campus_mart/Model/NotificationModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/timeAndDate.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';

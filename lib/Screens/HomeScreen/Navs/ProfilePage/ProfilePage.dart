@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:campus_mart/Provider/AuthProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlerts.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
-import 'package:campus_mart/Screens/PendingAds/PendingAds.dart';
 import 'package:campus_mart/Utils/adsAdUnit.dart';
 import 'package:campus_mart/Utils/conn.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/EditProfileScreen/EditProfileScreen.dart';
 import 'package:campus_mart/Screens/MyAdScreen/MyAdScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
@@ -77,14 +76,18 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     );
             }))),
+
         Container(
           height: 20,
         ),
+
         Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child:
                 Text("${userDetails?.firstName} ${userDetails?.lastName}")),
+
         10.height,
+
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -94,12 +97,15 @@ class _ProfilePageState extends State<ProfilePage> {
             Text("${userDetails?.campus}")
           ],
         ),
+
         Container(
           height: 30,
         ),
+
         Container(
           height: 20,
         ),
+
         Container(
             width: size.width * .70,
             padding: const EdgeInsets.symmetric(vertical: 20),
@@ -114,9 +120,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Container(
                       width: size.width * .75,
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children:  [
                           Text(
                             "My Ads",
                             style: TextStyle(fontSize: 16),
@@ -125,7 +131,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     )),
+
                 const Divider(color: Colors.grey),
+
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -134,9 +142,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Container(
                       width: size.width * .75,
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children:  [
                           Text(
                             "Buzz Me",
                             style: TextStyle(fontSize: 16),
@@ -145,7 +153,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     )),
+
                 const Divider(color: Colors.grey),
+
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -154,9 +164,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Container(
                       width: size.width * .75,
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children:  [
                           Text(
                             "Edit Profile",
                             style: TextStyle(fontSize: 16),
@@ -168,12 +178,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 30.height,
               ],
             )),
+
         30.height,
-        // _bannerAd == null
-        //     // Nothing to render yet.
-        //     ? const SizedBox()
-        //     // The actual ad.
-        //     : AdWidget(ad: _bannerAd!)
+
+        _bannerAd == null
+            // Nothing to render yet.
+            ? const SizedBox()
+            // The actual ad.
+            : AdWidget(ad: _bannerAd!)
+
       ],
     );
   }
@@ -240,8 +253,8 @@ class _ProfilePageState extends State<ProfilePage> {
             "Choose action",
             style: TextStyle(fontSize: 14),
           ),
-          content: Column(
-            children: const [
+          content: const Column(
+            children:  [
               Text("Upload either from gallery or camera"),
             ],
           ),

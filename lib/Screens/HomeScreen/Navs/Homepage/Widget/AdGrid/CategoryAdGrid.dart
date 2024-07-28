@@ -1,6 +1,6 @@
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Screens/ProductScreen/ProductScreen.dart';
 import 'package:campus_mart/Utils/categories.dart';
@@ -31,7 +31,7 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
   void _onRefresh() async{
     context.read<ProductProvider>().getProduct(
         removeSpecialCharactersAndSpaces(widget.category),
-        widget.grid, context.read<AuthProvider>().accessToken);
+        widget.grid, context.read<AuthProvider>().accessToken, refreshControllerLoadComplete);
   }
 
   @override
@@ -44,8 +44,7 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
             enablePullUp: true,
             onRefresh: _onRefresh,
             onLoading: _onRefresh,
-            controller: widget.grid ==1 ? context.read<ProductProvider>().refreshController
-                : context.read<ProductProvider>().refreshController2,
+            controller: _refreshController,
             child: Consumer<ProductProvider>(
                 builder: (_, bar, __) {
 
@@ -151,4 +150,19 @@ class _CategoryAdGridState extends State<CategoryAdGrid> {
                   ) ; })
         ));
   }
+
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  void refreshControllerLoadComplete(){
+    _refreshController.loadComplete();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+
 }

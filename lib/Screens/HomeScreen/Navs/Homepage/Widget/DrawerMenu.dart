@@ -1,4 +1,4 @@
-import 'package:campus_mart/Provider/MessageProvider.dart';
+import 'package:campus_mart/Provider/message_provider.dart';
 import 'package:campus_mart/Screens/AboutUsScreen/AboutUs.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlert.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlerts.dart';
@@ -7,6 +7,7 @@ import 'package:campus_mart/Screens/HelpScreen/Help.dart';
 import 'package:campus_mart/Screens/OptionScreen/OptionScreen.dart';
 import 'package:campus_mart/Utils/savePrefs.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,8 @@ class DrawerMenu extends StatefulWidget {
 class _DrawerMenuState extends State<DrawerMenu> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           Container(

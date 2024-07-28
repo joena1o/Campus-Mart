@@ -10,17 +10,6 @@ const categories = [
   "Services"
 ];
 
-// const categoriesAll = [
-//   "All",
-//   "Accommodation",
-//   "Gadgets",
-//   "Clothing",
-//   "Tickets/Vouchers",
-//   "Utensils/Tools",
-//   "Tutor",
-//   "Services"
-// ];
-
 var icons = [
   FontAwesomeIcons.houseChimney,
   FontAwesomeIcons.laptopCode,
@@ -30,18 +19,6 @@ var icons = [
   FontAwesomeIcons.personChalkboard,
   FontAwesomeIcons.toolbox
 ];
-
-// var iconsAll = [
-//   FontAwesomeIcons.columns,
-//   FontAwesomeIcons.houseChimney,
-//   FontAwesomeIcons.laptopCode,
-//   FontAwesomeIcons.shirt,
-//   FontAwesomeIcons.ticket,
-//   FontAwesomeIcons.kitchenSet,
-//   FontAwesomeIcons.personChalkboard,
-//   FontAwesomeIcons.toolbox
-// ];
-
 
 String removeSpecialCharactersAndSpaces(String input) {
   // Define a regular expression pattern to match special characters and spaces

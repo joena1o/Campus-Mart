@@ -3,13 +3,13 @@ import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Screens/ProductScreen/Widget/ProductBottomNav.dart';
 import 'package:campus_mart/Screens/ProductScreen/Widget/ReviewCard.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,7 +61,6 @@ class _ProductScreenState extends State<ProductScreen> {
           return <Widget>[
             SliverAppBar(
               expandedHeight: size.height*.5,
-              backgroundColor: Colors.white,
               elevation: 0,
               foregroundColor: Colors.grey,
               systemOverlayStyle: const SystemUiOverlayStyle(
@@ -90,7 +89,6 @@ class _ProductScreenState extends State<ProductScreen> {
             )];
         },
         body: Container(
-          color: Colors.white,
           child: ListView(
             padding:  const EdgeInsets.only(top: 30),
             children: [
@@ -222,7 +220,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(topLeft: radiusCircular(20), topRight: radiusCircular(20)),
-            color: Colors.white, // Customize the background color
+            // Customize the background color
           ),// Set the desired height of the bottom sheet
 
           child: Column(

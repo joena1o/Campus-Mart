@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/FeedbackProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/feed_back_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,7 +30,7 @@ class _SuggestState extends State<Suggest> {
     Size size = MediaQuery.of(context).size;
     return DottedBorder(
         color: primary,
-        dashPattern: [3, 3, 3],
+        dashPattern: const [3, 3, 3],
         strokeWidth: 1,
         child: Container(
           width: size.width * .8,

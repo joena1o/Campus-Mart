@@ -16,7 +16,7 @@ import 'package:campus_mart/Model/WishProductModel.dart';
 import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
 
 // Utils
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 
 class ProductProvider extends ChangeNotifier {
   final ProductClass _product = ProductClass();
@@ -129,12 +129,6 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getMyPendingAds(String? id, String token) async {
-    _isGettingMyProduct = true;
-    await _getMoreAds(id!, token, true);
-    _isGettingMyProduct = false;
-    notifyListeners();
-  }
 
   Future<void> deleteAd(String? id, String? userId, String token) async {
     _isGettingMyProduct = true;
@@ -291,22 +285,16 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getProduct(String? category, int val, String token) async {
+  Future<void> getProduct(String? category, int val, String token, Function callback) async {
     _isGettingProduct = true;
     try {
       await _getMoreProducts(category!, token, category.isEmpty);
-      if (val == 1) {
-        _refreshController.loadComplete();
-      } else {
-        _refreshController2.loadComplete();
-      }
     } catch (onError) {
-      _refreshController.loadComplete();
-      _refreshController2.loadComplete();
       final ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError as String));
       showMessageError(errorModel.message);
     } finally {
       _isGettingProduct = false;
+      callback();
       notifyListeners();
     }
   }
@@ -333,4 +321,11 @@ class ProductProvider extends ChangeNotifier {
       print(e.toString());
     }
   }
+
+  void disposeControllers(){
+    _refreshController.dispose();
+    _refreshController2.dispose();
+  }
+
 }
+

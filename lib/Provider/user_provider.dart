@@ -3,24 +3,23 @@ import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
 import 'package:campus_mart/Utils/savePrefs.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier{
 
   UserModel? userDetails;
-  Auth user = Auth();
+  Auth auth = Auth();
 
-  bool updatingDp = false;
   String userDp = "";
 
   bool editingProfile = false;
+  bool updatingDp = false;
 
-  void setUserDetails(UserModel _userDetails, pass) async{
+  void setUserDetails(UserModel _userDetails) async{
     userDetails = _userDetails;
     await saveJsonDetails("user", userDetails);
-    await saveDetails("passcode", pass);
     if(userDetails?.image !=null){
       userDp = userDetails!.image!;
     }
@@ -44,7 +43,7 @@ class UserProvider extends ChangeNotifier{
 
   void updateDp(email, image, token, context){
     updatingDp = true;
-    user.updateDp(email, image, token).then((value){
+    auth.updateDp(email, image, token).then((value){
       updatingDp = false;
       userDp = image;
       Navigator.pop(context);
@@ -61,7 +60,7 @@ class UserProvider extends ChangeNotifier{
   void editProfile(data, token, context) async{
     editingProfile = true;
     try{
-      userDetails = await user.editProfile(data, token);
+      userDetails = await auth.editProfile(data, token);
       await saveJsonDetails("user", userDetails);
       showMessage("Profile edited successfully");
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const Wrapper()));

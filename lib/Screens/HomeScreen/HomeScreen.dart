@@ -1,9 +1,9 @@
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/NotificationServiceClass.dart';
-import 'package:campus_mart/Provider/MessageProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
-import 'package:campus_mart/Provider/WebSocketProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/message_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Homepage.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/DrawerMenu.dart';
@@ -13,7 +13,7 @@ import 'package:campus_mart/Screens/HomeScreen/Navs/WishList/WishList.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/BottomNav/BottomNav.dart';
 import 'package:campus_mart/Screens/MessageScreen/MessageScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -43,6 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     NotificationService.requestPermissions();
+
+    //Set Up for user Provider
+    Provider.of<UserProvider>(context, listen: false).setUserDetails(
+      Provider.of<AuthProvider>(context, listen: false).userModel
+    );
+
     //Subscribe User
     UserModel? user = context.read<UserProvider>().userDetails;
     OneSignal.shared.setExternalUserId(user!.id.toString());
@@ -68,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: DrawerMenu(),
       ),
       appBar: currentNav != 4 ? AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
@@ -97,8 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
               )):Container(),
         ],
       ):null,
-      body: Container(
-        color: Colors.white,
+      body: SizedBox(
         width: size.width,
         height: size.height,
         child: (currentNav == 1)
@@ -124,8 +128,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     badgeContent: Text("${provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id ).length}"),
                     showBadge: provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id).isNotEmpty,
                     child: FloatingActionButton(
-                    backgroundColor: primary,
-                    onPressed: (){
+                      shape: const CircleBorder(),
+                      backgroundColor: primary,
+                      onPressed: (){
                         // showMessageError("Feature not ready yet", context);
                       Navigator.push(context, MaterialPageRoute(builder: (_)=> const MessageScreen()));
                     },

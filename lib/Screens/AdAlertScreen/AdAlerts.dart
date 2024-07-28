@@ -1,6 +1,6 @@
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/AdAlertScreen/AdAlert.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +29,7 @@ class _AdAlertsState extends State<AdAlerts> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: const Text(
           "Buzz Me",
           style: TextStyle(fontSize: 15),

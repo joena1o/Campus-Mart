@@ -47,7 +47,7 @@ class NetworkHelper {
   /// A function to do any get request with the url and headers
   /// then sends back a json decoded result
   Future<dynamic> get(String url, {Map<String, String>? headers, body}) async {
-    print(url);
+    // print(url);
     try {
       return http.get(Uri.parse(url), headers: headers).then((http.Response response) {
         final String res = response.body;
@@ -216,7 +216,7 @@ class NetworkHelper {
         return res;
       });
     } catch (e) {
-      print(e);
+      // print(e);
       rethrow;
     }
   }

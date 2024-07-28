@@ -1,10 +1,10 @@
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/AdScreen/AdScreen.dart';
 import 'package:campus_mart/Screens/VerifyEmailScreen/VerifyEmailScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +35,6 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      color: Colors.white,
       width: size.width,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       height: size.height * .07,

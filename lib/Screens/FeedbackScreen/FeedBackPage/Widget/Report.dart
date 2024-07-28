@@ -1,8 +1,8 @@
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/FeedbackProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/feed_back_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute ;
 import 'package:nb_utils/nb_utils.dart';

@@ -1,4 +1,4 @@
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

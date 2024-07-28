@@ -1,6 +1,6 @@
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/ProductProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,6 @@ class _NavbarState extends State<Navbar> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(250, 250, 250, 1),
         borderRadius: BorderRadius.circular(10)
       ),
       child: Row(

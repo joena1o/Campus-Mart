@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:campus_mart/Model/AuthModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
-import 'package:campus_mart/Provider/AuthProvider.dart';
-import 'package:campus_mart/Provider/UserProvider.dart';
+import 'package:campus_mart/Provider/auth_provider.dart';
+import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/ForgotPasswordScreen/ForgotPasswordScreen.dart';
 import 'package:campus_mart/Screens/HomeScreen/HomeScreen.dart';
 import 'package:campus_mart/Screens/SignUpScreen/SignUpScreen.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:provider/provider.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -26,17 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-
-  Auth auth = Auth();
-  bool isLoading = false;
-
-  AuthProvider? authProvider;
-
-  @override
-  void initState(){
-    super.initState();
-    authProvider = Provider.of<AuthProvider>(context, listen: false);
-  }
 
 
   @override
@@ -60,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
             TextFormField(
               controller: email,
               decoration: const InputDecoration(
-                hintText: "Email Addresss"
+                hintText: "Email Address"
               ),
             ),
 
@@ -74,10 +63,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
 
-            !isLoading ? GestureDetector(
-              onTap: (){
-                loginUser();
-              },
+             Consumer<AuthProvider>(
+            builder: (context, provider, child) {
+
+            return !provider.isLoading  ? GestureDetector(
+                        onTap: () {
+                          provider.loginUser(email.text, password.text);
+                        },
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 30),
                 padding: const EdgeInsets.all(20),
@@ -95,12 +87,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(10)
                 ),
                 child: const Text("Login", textAlign: TextAlign.center, style: TextStyle(color:Colors.white, fontSize:17))
-              ),
-            ):   Container(
-                padding: const EdgeInsets.symmetric(vertical: 40),
-                child: const Center(
-              child: CircularProgressIndicator(),
-            )),
+                ),
+                ): const Center(
+                    child: CircularProgressIndicator(),
+                );
+              },
+            ),
 
             Wrap(
               children: [
@@ -137,22 +129,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void loginUser() async{
-    setState(() {
-      isLoading = true;
-    });
-    await auth.loginUser({"email": email.text.toString(), "password": password.text.toString()})
-        .then((AuthModel value){
-          setState(()=> isLoading = false);
-          context.read<UserProvider>().setUserDetails(UserModel.fromJson(value.data!.toJson()), password.text);
-          OneSignal.shared.setExternalUserId(value.data!.id!);
-          authProvider?.accessToken = value.auth!;
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomeScreen()));
-    }).catchError((onError){
-      setState(()=> isLoading = false);
-      ErrorModel error = ErrorModel.fromJson(jsonDecode(onError));
-      showMessageError(error.message);
-    });
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    email.dispose();
+    password.dispose();
+    super.dispose();
   }
+
+
+  // void loginUser() async{
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   await auth.loginUser({"email": email.text.toString(), "password": password.text.toString()})
+  //       .then((AuthModel value){
+  //         setState(()=> isLoading = false);
+  //         context.read<UserProvider>().setUserDetails(UserModel.fromJson(value.data!.toJson()), password.text);
+  //         Provider.of<AuthProvider>(context, listen: false).loginUser(value.data!.email!, password.text, context);
+  //         OneSignal.shared.setExternalUserId(value.data!.id!);
+  //         authProvider?.accessToken = value.auth!;
+  //         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const HomeScreen()));
+  //   }).catchError((onError){
+  //     setState(()=> isLoading = false);
+  //     ErrorModel error = ErrorModel.fromJson(jsonDecode(onError));
+  //     showMessageError(error.message);
+  //   });
+  // }
 
 }

@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Obtain shared preferences.
 
-  saveJsonDetails(String key, value) async {
+  Future<void> saveJsonDetails(String key, value) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(key, json.encode(value.toJson()));
   }
@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
     prefs.setString(key, value);
   }
 
-  read(String key) async {
+  Future<dynamic> read(String key) async {
     final prefs = await SharedPreferences.getInstance();
     var json = prefs.getString(key);
     if(json != null){
@@ -22,13 +22,13 @@ import 'package:shared_preferences/shared_preferences.dart';
     return null;
   }
 
-   readValue(key) async{
+  Future<dynamic> readValue(key) async{
     final prefs = await SharedPreferences.getInstance();
     var result = prefs.getString(key);
     return result;
   }
 
-  clearPrefs() async{
+  void clearPrefs() async{
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }

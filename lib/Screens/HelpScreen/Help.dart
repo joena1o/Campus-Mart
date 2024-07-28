@@ -13,7 +13,6 @@ class _HelpState extends State<Help> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: const Text(
           "Help",
           style: TextStyle(fontSize: 15),
