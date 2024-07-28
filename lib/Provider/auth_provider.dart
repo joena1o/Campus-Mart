@@ -20,19 +20,24 @@ import 'package:campus_mart/Wrapper.dart';
 
 // Utils
 import 'package:campus_mart/Utils/savePrefs.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class AuthProvider with ChangeNotifier {
+
   final Auth _auth = Auth();
   bool _isLoading = false;
   String _accessToken = '';
   String? _resetToken;
 
   AuthModel? _authModel;
+  UserModel? _userModel;
+
   SuccessMessageModel? _successMessageModel;
   VerifyTokenModel? _verifyTokenModel;
 
   AuthModel get authModel => _authModel!;
+  UserModel get userModel => _userModel!;
 
   bool get isLoading => _isLoading;
   String get accessToken => _accessToken;
@@ -43,16 +48,19 @@ class AuthProvider with ChangeNotifier {
   }
 
   // ----- Login -----
-  Future<void> loginUser(String email, String password, BuildContext context) async {
+  Future<void> loginUser(String email, String password) async {
     _isLoading = true;
-    notifyListeners();
-
     try {
+
       _authModel = await _auth.loginUser({"email": email, "password": password});
       accessToken = _authModel!.auth.toString();
 
-      final UserModel user = UserModel.fromJson(_authModel!.data!.toJson());
-      await saveJsonDetails("user", user);
+      _userModel = UserModel.fromJson(_authModel!.data!.toJson());
+      await saveJsonDetails("user", _userModel);
+      await saveDetails("passcode", password);
+
+      //Register id for push notification
+      OneSignal.shared.setExternalUserId(_authModel!.data!.id!);
 
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const HomeScreen()));
     } catch (e) {
@@ -82,8 +90,6 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> verifyEmailAddress(String otp, String email, BuildContext context, Timer timer) async {
     _isLoading = true;
-    notifyListeners();
-    final BuildContext storedContext = context;
     try {
       _verifyTokenModel = await _auth.verifyEmailAddressOtp(otp, email);
       timer.cancel();
@@ -100,8 +106,6 @@ class AuthProvider with ChangeNotifier {
   // ----- Forgot Password -----
   Future<void> requestForgotPassword(String email, BuildContext context, [VoidCallback? callback]) async {
     _isLoading = true;
-    notifyListeners();
-
     try {
       _successMessageModel = await _auth.requestForgottenPasswordOtp(email);
       showMessage(_successMessageModel?.message);
@@ -120,8 +124,6 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> verifyOtp(String otp, String email, BuildContext context) async {
     _isLoading = true;
-    notifyListeners();
-
     try {
       _verifyTokenModel =await _auth.verifyOtp(otp, email);
       _resetToken = _verifyTokenModel?.token;
@@ -137,8 +139,6 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> resetPassword(String password, BuildContext context) async {
     _isLoading = true;
-    notifyListeners();
-
     try {
       _successMessageModel = await _auth.resetPassword(_resetToken!, password);
       showMessage(_successMessageModel?.message);
@@ -150,4 +150,5 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
 }

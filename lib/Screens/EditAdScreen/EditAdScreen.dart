@@ -9,7 +9,7 @@ import 'package:campus_mart/Provider/AuthProvider.dart';
 import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/UserProvider.dart';
 import 'package:campus_mart/Screens/AdScreen/SuccessScreen.dart';
-import 'package:campus_mart/Utils/Categories.dart';
+import 'package:campus_mart/Utils/categories.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/conn.dart';
 import 'package:flutter/cupertino.dart';

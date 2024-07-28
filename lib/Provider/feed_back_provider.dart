@@ -1,6 +1,6 @@
 import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Network/FeedbackClass/FeedbackClass.dart';
-import 'package:campus_mart/Utils/snackBar.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:flutter/cupertino.dart';
 
 class FeedbackProvider extends ChangeNotifier{

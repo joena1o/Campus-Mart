@@ -1,7 +1,7 @@
 import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Screens/AllCategoryScreen/AllCategoryScreen.dart';
 import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
-import 'package:campus_mart/Utils/Categories.dart';
+import 'package:campus_mart/Utils/categories.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

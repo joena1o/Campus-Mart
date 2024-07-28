@@ -4,7 +4,7 @@ import 'package:campus_mart/Provider/ProductProvider.dart';
 import 'package:campus_mart/Provider/SignUpProvider.dart';
 import 'package:campus_mart/Screens/CategoryScreen/Widget/Navbar.dart';
 import 'package:campus_mart/Screens/HomeScreen/Navs/Homepage/Widget/AdGrid/CategoryAdGrid.dart';
-import 'package:campus_mart/Utils/Categories.dart';
+import 'package:campus_mart/Utils/categories.dart';
 import 'package:campus_mart/Utils/adsAdUnit.dart';
 import 'package:campus_mart/Utils/states.dart';
 import 'package:flutter/material.dart';

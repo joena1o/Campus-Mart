@@ -80,8 +80,6 @@ class ProductProvider extends ChangeNotifier {
   // ----- Wishlist -----
   Future<void> getWishList(String? username, String token) async {
     _loadingWishList = true;
-    notifyListeners();
-
     try {
       _wishProductModel = await _product.fetchWishList(username, token);
       _availableItems = _wishProductModel!.where((element) => element.product!.isNotEmpty).toList();

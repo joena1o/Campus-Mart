@@ -6,10 +6,10 @@ import 'package:campus_mart/Utils/conn.dart';
 
 class MessageClass {
 
-  NetworkHelper networkHelper = NetworkHelper();
-  ErrorHandler errorHandler = ErrorHandler();
+   final NetworkHelper _networkHelper = NetworkHelper();
+   final ErrorHandler _errorHandler = ErrorHandler();
 
-  Map<String, String>?  headers;
+  static Map<String, String>?  headers;
 
   String messageEndpoint ="$conn/message";
 
@@ -20,15 +20,13 @@ class MessageClass {
       "Content-Type": "application/json",
       "Authorization": token
     };
-    return networkHelper.post(messageEndpoint, headers: headers, body: data,
+    return _networkHelper.post(messageEndpoint, headers: headers, body: data,
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
       Map<String, dynamic> response = res;
       chat = Chat.fromJson(response);
       return chat;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> _errorHandler.handleError(err['body']));
   }
 
   Future getMessages(data, token){
@@ -38,7 +36,7 @@ class MessageClass {
       "Content-Type": "application/json",
       "Authorization": token
     };
-    return networkHelper.get("$messageEndpoint/$data", headers: headers)
+    return _networkHelper.get("$messageEndpoint/$data", headers: headers)
         .then((dynamic res) async{
           print(res);
           Map<String, dynamic> response = res;
@@ -46,9 +44,7 @@ class MessageClass {
                   (json) => MessageModel.fromJson(json))
               .toList();
       return messageModel;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> _errorHandler.handleError(err['body']));
   }
 
   Future setAsRead(data, token){
@@ -58,12 +54,10 @@ class MessageClass {
       "Content-Type": "application/json",
       "Authorization": token
     };
-    return networkHelper.get("$messageEndpoint/read/$data", headers: headers, body: data)
+    return _networkHelper.get("$messageEndpoint/read/$data", headers: headers, body: data)
         .then((dynamic res) async{
       return res;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> _errorHandler.handleError(err['body']));
   }
 
 

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:campus_mart/Model/MessageModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Network/MessageClass.dart';
+import 'package:campus_mart/Network/MessageClass/MessageClass.dart';
 import 'package:campus_mart/Network/NotificationServiceClass.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
