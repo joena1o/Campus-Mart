@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:campus_mart/main.dart';
 import 'package:flutter/material.dart';
 
@@ -12,20 +13,21 @@ import 'package:campus_mart/Model/VerifyOtpModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
 
 // Screens
-import 'package:campus_mart/Screens/ForgotPasswordScreen/ResetPasswordScreen.dart';
-import 'package:campus_mart/Screens/ForgotPasswordScreen/VerifyOtpScreen.dart';
-import 'package:campus_mart/Screens/HomeScreen/HomeScreen.dart';
-import 'package:campus_mart/Screens/LoginScreen/LoginScreen.dart';
+import 'package:campus_mart/Screens/ForgotPasswordScreen/reset_password_screen.dart';
+import 'package:campus_mart/Screens/ForgotPasswordScreen/verify_otp_screen.dart';
+import 'package:campus_mart/Screens/HomeScreen/home_screen.dart';
+import 'package:campus_mart/Screens/LoginScreen/login_screen.dart';
 import 'package:campus_mart/Wrapper.dart';
 
 // Utils
-import 'package:campus_mart/Utils/savePrefs.dart';
+import 'package:campus_mart/Utils/save_prefs.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class AuthProvider with ChangeNotifier {
 
   final Auth _auth = Auth();
+
   bool _isLoading = false;
   String _accessToken = '';
   String? _resetToken;
@@ -48,8 +50,9 @@ class AuthProvider with ChangeNotifier {
   }
 
   // ----- Login -----
-  Future<void> loginUser(String email, String password) async {
+  Future<void> loginUser(String email, String password, bool redirect) async {
     _isLoading = true;
+    notifyListeners();
     try {
 
       _authModel = await _auth.loginUser({"email": email, "password": password});
@@ -62,10 +65,10 @@ class AuthProvider with ChangeNotifier {
       //Register id for push notification
       OneSignal.shared.setExternalUserId(_authModel!.data!.id!);
 
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const HomeScreen()));
+      navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
     } catch (e) {
-      showMessageError(e.toString());
-      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      showMessageError(jsonDecode(e.toString())['message']);
+      redirect ?? navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -81,14 +84,14 @@ class AuthProvider with ChangeNotifier {
       _successMessageModel = await _auth.requestVerifyEmail(email);
       showMessage(_successMessageModel?.message);
     } catch (e) {
-      showMessageError(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> verifyEmailAddress(String otp, String email, BuildContext context, Timer timer) async {
+  Future<void> verifyEmailAddress(String otp, String email, Timer timer) async {
     _isLoading = true;
     try {
       _verifyTokenModel = await _auth.verifyEmailAddressOtp(otp, email);
@@ -96,7 +99,7 @@ class AuthProvider with ChangeNotifier {
       showMessage(_verifyTokenModel?.message);
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const Wrapper()));
     } catch (e) {
-      showMessageError(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -115,7 +118,7 @@ class AuthProvider with ChangeNotifier {
         callback();
       }
     } catch (e) {
-      showMessageError(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -130,7 +133,7 @@ class AuthProvider with ChangeNotifier {
       showMessage(_verifyTokenModel?.message);
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const ResetPasswordScreen()));
     } catch (e) {
-      showMessageError(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -144,7 +147,7 @@ class AuthProvider with ChangeNotifier {
       showMessage(_successMessageModel?.message);
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     } catch (e) {
-      showMessageError(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isLoading = false;
       notifyListeners();

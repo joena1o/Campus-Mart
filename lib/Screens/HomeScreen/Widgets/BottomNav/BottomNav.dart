@@ -1,10 +1,10 @@
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
-import 'package:campus_mart/Screens/AdScreen/AdScreen.dart';
-import 'package:campus_mart/Screens/VerifyEmailScreen/VerifyEmailScreen.dart';
-import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/Screens/AdScreen/ad_screen.dart';
+import 'package:campus_mart/Screens/VerifyEmailScreen/verify_email_screen.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
+import 'package:campus_mart/core/configs/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +36,9 @@ class _BottomNavState extends State<BottomNav> {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      height: size.height * .07,
+      color: Theme.of(context).scaffoldBackgroundColor,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -48,7 +49,7 @@ class _BottomNavState extends State<BottomNav> {
               },
               icon: widget.index == 1
                   ? const FaIcon(FontAwesomeIcons.house, color: Colors.orange, size: 20,)
-                  : const FaIcon(FontAwesomeIcons.house, color: Colors.black54, size: 20,)),
+                  : const FaIcon(FontAwesomeIcons.house, size: 20,)),
           IconButton(
               onPressed: () {
                 widget.callback(2);
@@ -61,7 +62,6 @@ class _BottomNavState extends State<BottomNav> {
               )
                   : const FaIcon(
                       FontAwesomeIcons.solidHeart,
-                      color: Colors.black54,
                         size: 20,
                     )),
           GestureDetector(
@@ -76,7 +76,6 @@ class _BottomNavState extends State<BottomNav> {
               },
               child: const FaIcon(
                 FontAwesomeIcons.plus,
-                color: Colors.grey,
                 size: 35,
               )),
 
@@ -90,7 +89,6 @@ class _BottomNavState extends State<BottomNav> {
                     )
                   : const FaIcon(
                       FontAwesomeIcons.solidBell,
-                      color: Colors.black54,
                       size: 20,
                     )),
           IconButton(
@@ -106,7 +104,6 @@ class _BottomNavState extends State<BottomNav> {
                   : const Icon(
                       Icons.person,
                       size: 27,
-                      color: Colors.black54,
                     ))
         ],
       ),

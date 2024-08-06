@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Network/FeedbackClass/FeedbackClass.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
@@ -16,7 +18,7 @@ class FeedbackProvider extends ChangeNotifier{
       SuccessMessageModel successMessageModel = await feedbackClass.uploadFeedback(token, data);
       showMessage(successMessageModel.message);
     }catch(e){
-      print(e);
+      showMessageError(jsonDecode(e.toString())['message']);
     }finally{
       uploadingFeedback = false;
     }

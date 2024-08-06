@@ -3,7 +3,7 @@ import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
-import 'package:campus_mart/Utils/timeAndDate.dart';
+import 'package:campus_mart/Utils/time_and_date.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';

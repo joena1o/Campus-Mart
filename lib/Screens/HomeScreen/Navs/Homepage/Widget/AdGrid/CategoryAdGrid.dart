@@ -2,7 +2,7 @@ import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
-import 'package:campus_mart/Screens/ProductScreen/ProductScreen.dart';
+import 'package:campus_mart/Screens/ProductScreen/product_screen.dart';
 import 'package:campus_mart/Utils/categories.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';

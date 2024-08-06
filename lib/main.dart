@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:campus_mart/Network/NotificationServiceClass.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/feed_back_provider.dart';
@@ -6,7 +7,9 @@ import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Provider/sign_up_provider.dart';
 import 'package:campus_mart/Provider/theme_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
+import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/conn.dart';
+import 'package:campus_mart/Utils/save_prefs.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,7 +33,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  const isLive = false;
+  const isLive = true;
   String onesignalAppId = isLive
       ? dotenv.env['ONE_SIGNAL_APP_ID_LIVE']!
       : dotenv.env['ONE_SIGNAL_APP_ID_TEST']!;
@@ -59,20 +62,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, provider, child) {
-        return MaterialApp(
-          title: 'Campus Mart',
-          debugShowCheckedModeBanner: false,
-          navigatorKey: navigatorKey,
-          scaffoldMessengerKey: rootScaffoldMessengerKey,
-          theme: provider.isDark ? ThemeData.dark() : ThemeData.light(),
-          home: const MySplashPage(),
-        );
-      },
-    );
+    return  const MySplashPage();
   }
 }
 
@@ -84,11 +77,40 @@ class MySplashPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MySplashPage> {
+
+  Color? statusBarColor;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer(const Duration(seconds: 1), ()
+    {
+      Provider.of<ThemeProvider>(context, listen: false).loadTheme();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    statusBarColor = Theme.of(context).scaffoldBackgroundColor;
+
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
+      statusBarColor: primary,
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark
     ));
-    return const Wrapper();
+
+    return Consumer<ThemeProvider>(
+      builder: (context, provider, child) {
+        return MaterialApp(
+          title: 'Campus Mart',
+          debugShowCheckedModeBanner: provider.isTest,
+          navigatorKey: navigatorKey,
+          scaffoldMessengerKey: rootScaffoldMessengerKey,
+          theme: provider.isDark ? ThemeData.dark() : ThemeData.light(),
+          home: const Wrapper()
+        );
+      },
+    );
   }
 }

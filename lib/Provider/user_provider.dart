@@ -1,24 +1,31 @@
 import 'dart:convert';
 import 'package:campus_mart/Model/ErrorModel.dart';
+import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
-import 'package:campus_mart/Utils/savePrefs.dart';
+import 'package:campus_mart/Network/SettingClass/setting_class.dart';
+import 'package:campus_mart/Utils/save_prefs.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Wrapper.dart';
+import 'package:campus_mart/main.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier{
 
   UserModel? userDetails;
+  SuccessMessageModel? successMessageModel;
+
   Auth auth = Auth();
+  SettingClass settingClass = SettingClass();
 
   String userDp = "";
 
   bool editingProfile = false;
   bool updatingDp = false;
 
-  void setUserDetails(UserModel _userDetails) async{
-    userDetails = _userDetails;
+
+  Future<void> setUserDetails(UserModel userDetailsParam) async{
+    userDetails = userDetailsParam;
     await saveJsonDetails("user", userDetails);
     if(userDetails?.image !=null){
       userDp = userDetails!.image!;
@@ -26,7 +33,7 @@ class UserProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void setAccessToken(token) async{
+  Future<void> setAccessToken(token) async{
     await saveDetails("accessToken", token);
     notifyListeners();
   }
@@ -50,22 +57,37 @@ class UserProvider extends ChangeNotifier{
       notifyListeners();
     }).catchError((onError){
       updatingDp = false;
-      Navigator.pop(context);
+      navigatorKey.currentState?.pop();
       ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError));
       showMessageError(errorModel.message);
       notifyListeners();
     });
   }
 
-  void editProfile(data, token, context) async{
+  Future<void> editProfile(data, token, context) async{
     editingProfile = true;
     try{
       userDetails = await auth.editProfile(data, token);
       await saveJsonDetails("user", userDetails);
-      showMessage("Profile edited successfully");
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> const Wrapper()));
+      showMessage("Profile updated successfully");
+      navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_)=> const Wrapper()));
     }catch(e){
-      showMessageError(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
+    }finally{
+      editingProfile = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> changePassword(data, token) async{
+    editingProfile = true;
+    notifyListeners();
+    try{
+      successMessageModel = await settingClass.changePassword(data, token);
+      navigatorKey.currentState?.pop();
+      showMessage(successMessageModel?.message);
+    }catch(e){
+      showMessageError(jsonDecode(e.toString())['message']);
     }finally{
       editingProfile = false;
     }

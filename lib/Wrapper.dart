@@ -3,10 +3,10 @@ import 'package:app_updater/app_updater.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
-import 'package:campus_mart/Screens/OnboardingScreen/OnboardingScreen.dart';
-import 'package:campus_mart/Screens/WelcomeScreen/WelcomeScreen.dart';
+import 'package:campus_mart/Screens/OnboardingScreen/onboarding_screen.dart';
+import 'package:campus_mart/Screens/WelcomeScreen/welcome_screen.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/savePrefs.dart';
+import 'package:campus_mart/Utils/save_prefs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +37,7 @@ class _WrapperState extends State<Wrapper> {
           final userAuth = UserModel.fromJson(user);
           context.read<UserProvider>().loadDetails();
           readValue('passcode').then((passcode){
-            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth.email!, passcode);
+            Provider.of<AuthProvider>(context, listen: false).loginUser(userAuth.email!, passcode, true);
           });
         }
       });

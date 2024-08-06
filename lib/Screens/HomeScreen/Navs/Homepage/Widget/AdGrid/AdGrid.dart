@@ -2,7 +2,7 @@ import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
-import 'package:campus_mart/Screens/ProductScreen/ProductScreen.dart';
+import 'package:campus_mart/Screens/ProductScreen/product_screen.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -133,7 +133,7 @@ class _AdGridState extends State<AdGrid> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 7),
                             child: Text("${bar.productList![index].title}",
-                              style: const TextStyle(color: Colors.black, fontSize: 13),
+                              style: const TextStyle(fontSize: 13),
                             ),
                           ),
                           Text("${bar.productList![index].adCategory}",
@@ -142,7 +142,7 @@ class _AdGridState extends State<AdGrid> {
                           Padding(
                           padding: const EdgeInsets.symmetric(vertical: 7),
                           child:Text("${user.campus}",
-                              style: const TextStyle(color: Colors.black, fontSize: 12)))
+                              style: const TextStyle(fontSize: 12)))
                         ],
                     ),
                   ),

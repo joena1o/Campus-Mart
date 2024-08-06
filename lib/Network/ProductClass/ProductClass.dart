@@ -135,7 +135,6 @@ class ProductClass{
     return networkHelper.post(productEndpoint, headers: headers, body: data,
       encoding: Encoding.getByName("utf-8"),)
         .then((dynamic res) async{
-          print(res);
       return res;
     }).catchError((err){
       errorHandler.handleError(err['body']);
@@ -153,9 +152,7 @@ class ProductClass{
         .then((dynamic res) async{
       productModel = ProductModel.fromJson(res);
       return productModel;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> errorHandler.handleError(err['body']));
   }
 
   Future updatePaymentStatus(data, token){
@@ -170,9 +167,7 @@ class ProductClass{
         .then((dynamic res) async{
       productModel = ProductModel.fromJson(res);
       return productModel;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err) => errorHandler.handleError(err['body']));
   }
 
   Future deleteProduct(id, token){
@@ -214,6 +209,7 @@ class ProductClass{
     List<WishProductModel>? productModel;
     return networkHelper.get("$wishListEndpoint/$username", headers: headers)
         .then((dynamic res) async{
+          print(res);
       Map<String, dynamic> response = res;
       productModel = response['data']
           .map<WishProductModel>((json) => WishProductModel.fromJson(json))

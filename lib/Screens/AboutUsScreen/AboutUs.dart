@@ -1,7 +1,8 @@
 import 'dart:io';
-import 'package:campus_mart/Utils/adsAdUnit.dart';
+import 'package:campus_mart/Utils/ads_ad_unit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart';
 
@@ -14,16 +15,7 @@ class AboutUs extends StatefulWidget {
 
 
 class _AboutUsState extends State<AboutUs> {
-
-  //  final AdRequest request =  const AdRequest(
-  //   keywords: <String>['foo', 'bar'],
-  //   contentUrl: 'http://foo.com/bar.html',
-  //   nonPersonalizedAds: true,
-  // );
-
   String fileContent = "";
-
-  //InterstitialAd? _interstitialAd;
 
   Future<void> loadFile() async {
     String content = await rootBundle.loadString('assets/about_us.txt');
@@ -31,19 +23,20 @@ class _AboutUsState extends State<AboutUs> {
       fileContent = content;
     });
   }
+  InterstitialAd? _interstitialAd;
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
 
   @override
   void initState(){
     super.initState();
     loadFile();
-    //_createInterstitialAd();
+    loadAd();
   }
-
-   @override
-   void dispose() {
-     super.dispose();
-     //_interstitialAd?.dispose();
-   }
 
 
   @override
@@ -54,9 +47,7 @@ class _AboutUsState extends State<AboutUs> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: const Text(
             "About Us",
             style: TextStyle(fontSize: 15),
@@ -73,47 +64,25 @@ class _AboutUsState extends State<AboutUs> {
     );
   }
 
-  // void _createInterstitialAd() {
-  //   InterstitialAd.load(
-  //       adUnitId: Platform.isAndroid
-  //           ? interstitialAdUnit
-  //           : 'ca-app-pub-3940256099942544/4411468910',
-  //       request: request,
-  //       adLoadCallback: InterstitialAdLoadCallback(
-  //         onAdLoaded: (InterstitialAd ad) {
-  //           print('$ad loaded');
-  //           _interstitialAd = ad;
-  //           _interstitialAd!.setImmersiveMode(true);
-  //         },
-  //         onAdFailedToLoad: (LoadAdError error) {
-  //           print('InterstitialAd failed to load: $error.');
-  //           _interstitialAd = null;
-  //         },
-  //       ));
-  // }
-  //
-  //
-  // void _showInterstitialAd() {
-  //   if (_interstitialAd == null) {
-  //     print('Warning: attempt to show interstitial before loaded.');
-  //     return;
-  //   }
-  //   _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-  //     onAdShowedFullScreenContent: (InterstitialAd ad) =>
-  //         print('ad onAdShowedFullScreenContent.'),
-  //     onAdDismissedFullScreenContent: (InterstitialAd ad) {
-  //       print('$ad onAdDismissedFullScreenContent.');
-  //       ad.dispose();
-  //       _createInterstitialAd();
-  //     },
-  //     onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-  //       print('$ad onAdFailedToShowFullScreenContent: $error');
-  //       ad.dispose();
-  //       _createInterstitialAd();
-  //     },
-  //   );
-  //   _interstitialAd!.show();
-  //   _interstitialAd = null;
-  // }
+  void loadAd() {
+    InterstitialAd.load(
+        adUnitId: interstitialAdUnit,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          // Called when an ad is successfully received.
+          onAdLoaded: (ad) {
+            debugPrint('$ad loaded.');
+            // Keep a reference to the ad so you can show it later.
+            setState((){
+              _interstitialAd = ad;
+            });
+            _interstitialAd?.show();
+          },
+          // Called when an ad request failed.
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
 
 }

@@ -19,8 +19,8 @@ class NetworkHelper {
   /// A function to do the login request with the url and headers
   /// then sends back a json decoded result
   Future<dynamic> postLogin(String url, {Map<String, String>? headers, body, encoding}) async {
-    print(url);
-    print(body);
+    // print(url);
+    // print(body);
 
     try {
       return http
@@ -38,7 +38,7 @@ class NetworkHelper {
         return result;
       });
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }
@@ -51,7 +51,6 @@ class NetworkHelper {
     try {
       return http.get(Uri.parse(url), headers: headers).then((http.Response response) {
         final String res = response.body;
-        print(response.statusCode);
         var myResponse={
           "code":response.statusCode,
           "body": response.body
@@ -63,7 +62,7 @@ class NetworkHelper {
         return _decoder.convert(res);
       });
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }
@@ -80,12 +79,10 @@ class NetworkHelper {
           body: json.encode(body), headers: headers, encoding: encoding)
           .then((http.Response response) {
         final String res = response.body;
-        print("This is the respoe");
         var myResponse={
           "code":response.statusCode,
           "body": response.body
         };
-        print(myResponse);
 
         final int statusCode = response.statusCode;
         var result = _decoder.convert(res);
@@ -95,8 +92,6 @@ class NetworkHelper {
         return result;
       });
     } catch (e) {
-      print("THis is the value ");
-      print(e);
       rethrow;
     }
   }
@@ -126,7 +121,7 @@ class NetworkHelper {
         return result;
       });
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }
@@ -151,7 +146,7 @@ class NetworkHelper {
       }
       return res;
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }
@@ -164,17 +159,21 @@ class NetworkHelper {
           .put(Uri.parse(url),
           body: json.encode(body), headers: headers, encoding: encoding)
           .then((http.Response response) {
-        print(response.body);
+       // print(response.body);
         final String res = response.body;
         final int statusCode = response.statusCode;
         var result = _decoder.convert(res);
+        var myResponse={
+          "code":response.statusCode,
+          "body": response.body
+        };
         if (statusCode < 200 || statusCode > 400) {
-          throw ("${result['msg']}");
+          throw (myResponse);
         }
         return result;
       });
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }
@@ -199,7 +198,7 @@ class NetworkHelper {
       }
       return res;
     } catch (e) {
-      print(e);
+      //print(e);
       rethrow;
     }
   }

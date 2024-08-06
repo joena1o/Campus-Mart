@@ -4,6 +4,7 @@ import 'package:campus_mart/Model/MessageModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Network/MessageClass/MessageClass.dart';
 import 'package:campus_mart/Network/NotificationServiceClass.dart';
+import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -39,7 +40,7 @@ class MessageProvider extends ChangeNotifier{
       Chat chatModel = await messageClass.addMessage(data, token);
       singleChat(chatModel);
     }catch(e){
-      // print(e);
+      showMessageError(jsonDecode(e.toString())['message']);
     }finally{
       messageText.text = "";
       sendingMessages = false;
@@ -63,9 +64,8 @@ class MessageProvider extends ChangeNotifier{
     loadingMessages = true;
     try{
       messageModel = await messageClass.getMessages(data, token);
-      print(messageModel);
     }catch(e){
-      print(e);
+      showMessageError(jsonDecode(e.toString())['message']);
     }finally{
       loadingMessages = false;
     }
@@ -76,7 +76,7 @@ class MessageProvider extends ChangeNotifier{
     try{
       messageModel = await messageClass.getMessages(data, token);
     }catch(e){
-      // print(e);
+      //showMessageError(jsonDecode(e.toString())['message']);
     }
     notifyListeners();
   }

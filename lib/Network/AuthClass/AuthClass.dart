@@ -21,7 +21,7 @@ class Auth{
   String campusEndpoint = "$conn/user/getcampus";
   String countryEndpoint = "$conn/user/getCountries";
   String stateEndpoint = "$conn/user/getStates/";
-  String validateEmail = "$conn/user/validate_email";
+  String validateEmail = "$conn/user/validate_email_user";
   String updateDpUrl = "$conn/user/updateDp";
   String validateUserEndpoint = "$conn/user/validate_user";
   String createUserEndpoint = "$conn/user/create";
@@ -112,19 +112,18 @@ class Auth{
     });
   }
 
-  Future validateMail(email){
+  Future validateMail(email, username){
     headers  = {
       "Accept": "application/json",
       "Content-Type": "application/json",
     };
     return networkHelper.post(validateEmail, body:{
-      "email": email
+      "email": email,
+      "username": username
     }, headers: headers)
         .then((dynamic value) async{
           return true;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+    }).catchError((err)=> errorHandler.handleError(err['body']));
     }
 
 
@@ -141,7 +140,6 @@ class Auth{
         errorHandler.handleError(err['body']);
       });
   }
-
 
   Future updateDp(email, dp, token){
     headers  = {

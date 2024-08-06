@@ -5,9 +5,20 @@ class AppTheme{
 
   static final lightTheme = ThemeData(
     primaryColor: AppColors.primary,
+    iconTheme: const IconThemeData(
+      color: Colors.black
+    ),
     scaffoldBackgroundColor: AppColors.lightBackground,
+      inputDecorationTheme: const InputDecorationTheme(
+          focusColor: Colors.black,
+          hintStyle: TextStyle(
+            fontStyle: FontStyle.normal
+          )
+      ),
     drawerTheme: const DrawerThemeData(
-      shape: BeveledRectangleBorder()
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero
+      )
     ),
     brightness: Brightness.light,
      bottomAppBarTheme: const BottomAppBarTheme(
@@ -30,10 +41,15 @@ class AppTheme{
     )
   );
 
+
+
   static final darkTheme = ThemeData(
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.darkBackground,
       brightness: Brightness.dark,
+      iconTheme: const IconThemeData(
+          color: Colors.white
+      ),
       fontFamily: "Poppins",
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
           shape: CircleBorder()
@@ -53,5 +69,6 @@ class AppTheme{
           )
       )
   );
+
 
 }

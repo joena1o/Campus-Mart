@@ -26,17 +26,19 @@ class _AlertFormState extends State<AlertForm> {
 
         const SizedBox(height: 40,),
 
-        SizedBox(child:DropdownButton(
-          value: category,
-          hint:
-          SizedBox(width: size.width*.8, child: const Text("Select Ad Category")),
+        Container(
+            //padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: DropdownButton(
+            value: category,
+            hint:
+            const Text("Select Ad Category"),
           icon: const Icon(Icons.keyboard_arrow_down),
           underline: Container(),
           items: categories.map((val) {
             return DropdownMenuItem(
                 value: val,
                 child: SizedBox(
-                    width: size.width*.8,
+                    width: size.width * .8,
                     child: Text(val))
             );
           }).toList(),
@@ -47,16 +49,17 @@ class _AlertFormState extends State<AlertForm> {
 
         Container(
         padding: const EdgeInsets.symmetric(horizontal: 30),
-        child:const Divider(color: Colors.black,)),
+        child:const Divider()),
 
         Container(
             padding: const EdgeInsets.symmetric(horizontal: 30),
-            child:TextFormField(
+            child: TextFormField(
             controller: title,
             validator: (String? text){
               if(text!.isEmpty) {
-                return "Title is requird";
+                return "Title is required";
               }
+              return null;
           },
           decoration: const InputDecoration(hintText: "Title"),
         )),

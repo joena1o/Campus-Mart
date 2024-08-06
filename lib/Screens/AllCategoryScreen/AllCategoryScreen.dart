@@ -1,4 +1,4 @@
-import 'package:campus_mart/Screens/CategoryScreen/CategoryScreen.dart';
+import 'package:campus_mart/Screens/CategoryScreen/category_screen.dart';
 import 'package:campus_mart/Utils/categories.dart';
 import 'package:flutter/material.dart';
 

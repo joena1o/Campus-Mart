@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:campus_mart/Utils/timeAndDate.dart';
+import 'package:campus_mart/Utils/time_and_date.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 // Models
@@ -20,6 +21,8 @@ import 'package:campus_mart/Utils/snackbars.dart';
 
 class ProductProvider extends ChangeNotifier {
   final ProductClass _product = ProductClass();
+
+  final plugin = PaystackPayment();
 
   List<WishProductModel>? _wishProductModel;
   List<ProductModel> _productList = [];
@@ -83,8 +86,8 @@ class ProductProvider extends ChangeNotifier {
     try {
       _wishProductModel = await _product.fetchWishList(username, token);
       _availableItems = _wishProductModel!.where((element) => element.product!.isNotEmpty).toList();
-    } catch (onError) {
-      print(onError);
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
       _wishProductModel = [];
     } finally {
       _loadingWishList = false;
@@ -115,8 +118,8 @@ class ProductProvider extends ChangeNotifier {
           _myAdsIndex++;
         }
       }
-    } catch (onError) {
-      // Handle error
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _refreshController.loadComplete();
     }
@@ -138,8 +141,8 @@ class ProductProvider extends ChangeNotifier {
       showMessage(successMessage.message);
       resetMyAdsItems();
       getMyAds(userId, token);
-    } catch (onError) {
-      // Handle error
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isGettingMyProduct = false;
       notifyListeners();
@@ -168,8 +171,8 @@ class ProductProvider extends ChangeNotifier {
     _fetchAdAlerts = true;
     try {
       _adAlertList = await _product.getAdAlerts(userId, token);
-    } catch (onError) {
-      print(onError);
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _fetchAdAlerts = false;
       notifyListeners();
@@ -222,7 +225,8 @@ class ProductProvider extends ChangeNotifier {
       _notificationList = await _product.getNotifications(userId, token);
       _notificationList.sort(compareTimestamps);
       _notificationList = _notificationList.reversed.toList();
-    } catch (onError) {// Handle error
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _loadingNotifications = false;
       notifyListeners();
@@ -248,7 +252,7 @@ class ProductProvider extends ChangeNotifier {
     try {
       _categoryProductList = await _product.searchProduct(query, _searchIndex, token);
     } catch (e) {
-      showMessage(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isGettingProduct = false;
       notifyListeners();
@@ -261,7 +265,7 @@ class ProductProvider extends ChangeNotifier {
     try {
       _categoryProductList = await _product.searchCategoryProduct(query, _searchIndex, _currentCategory!, token);
     } catch (e) {
-      showMessageError(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isGettingProduct = false;
       notifyListeners();
@@ -280,8 +284,8 @@ class ProductProvider extends ChangeNotifier {
           _indexCat++;
         }
       }
-    } catch (onError) {
-      // Handle error
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
     }
   }
 
@@ -306,7 +310,7 @@ class ProductProvider extends ChangeNotifier {
       await _product.editProduct(data, token);
       onSuccess();
     } catch (e) {
-      showMessage(e.toString());
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _isGettingProduct = false;
       notifyListeners();
@@ -318,7 +322,7 @@ class ProductProvider extends ChangeNotifier {
     try {
       await _product.saveSearch(data, token);
     } catch (e) {
-      print(e.toString());
+
     }
   }
 

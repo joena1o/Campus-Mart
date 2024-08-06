@@ -4,7 +4,7 @@ import 'package:campus_mart/Model/CountryModel.dart';
 import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:campus_mart/Model/StateModel.dart';
 import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
-import 'package:campus_mart/Screens/LoginScreen/LoginScreen.dart';
+import 'package:campus_mart/Screens/LoginScreen/login_screen.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:flutter/material.dart';
 

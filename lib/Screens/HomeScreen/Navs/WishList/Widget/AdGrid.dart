@@ -2,10 +2,12 @@ import 'package:campus_mart/Model/ProductModel.dart';
 import 'package:campus_mart/Model/WishProductModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
+import 'package:campus_mart/Provider/theme_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Screens/HomeScreen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/timeAndDate.dart';
+import 'package:campus_mart/Utils/time_and_date.dart';
+import 'package:campus_mart/core/configs/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,10 +31,7 @@ class _WishListAdGridState extends State<WishListAdGrid> {
   bool isLoading = true;
   List<ProductModel> products = [];
 
-  void _onRefresh() async{
-    //getProducts();
-    print("is working");
-  }
+  void _onRefresh() {}
 
   @override
   void initState(){
@@ -53,101 +52,104 @@ class _WishListAdGridState extends State<WishListAdGrid> {
             onLoading: _onRefresh,
             controller: _refreshController,
             child: SingleChildScrollView(
-                child:  StaggeredGrid.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  axisDirection: AxisDirection.down,
-                  crossAxisSpacing: 10,
-                  children: List.generate(data.availableItems.length, (index) {
-                    final products = data.availableItems;
-                    return products[index].product!.isNotEmpty ?
-                       GestureDetector(
-                          onTap: (){
-                            customBottomSheet(context, products[index]);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
+                child:  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: StaggeredGrid.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 4,
+                    axisDirection: AxisDirection.down,
+                    crossAxisSpacing: 4,
+                    children: List.generate(data.availableItems.length, (index) {
+                      final products = data.availableItems;
+                      return products[index].product!.isNotEmpty ?
+                         GestureDetector(
+                            onTap: (){
+                              customBottomSheet(context, products[index]);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
 
-                                Container(
-                                  width: size.width * .5,
-                                  height: index%2==0? size.width * .34 : size.width * .4,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey,
-                                  ),
-                                  child: Stack(
-                                    children: [
+                                  Container(
+                                    width: size.width * .5,
+                                    height: index%2==0? size.width * .34 : size.width * .4,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.grey,
+                                    ),
+                                    child: Stack(
+                                      children: [
 
-                                      Positioned(child: Opacity(
-                                          opacity: 0.78,
-                                          child: SizedBox(
-                                            width: size.width * .5,
-                                            height: index%2==0? size.width * .34 : size.width * .4,
-                                            child: products[index].product![0].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
-                                              fit: BoxFit.cover,
-                                            ):ImageWidget(url: products[index].product![0].images![0]['url'].toString()),
-                                          ))),
+                                        Positioned(child: Opacity(
+                                            opacity: 0.78,
+                                            child: SizedBox(
+                                              width: size.width * .65,
+                                              height: index%2==0? size.width * .45 : size.width * .45,
+                                              child: products[index].product![0].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
+                                                fit: BoxFit.cover,
+                                              ):ImageWidget(url: products[index].product![0].images![0]['url'].toString()),
+                                            ))),
 
-                                      Positioned(
-                                        top: 0,
-                                        child: Visibility(
-                                          visible: products[index].product![0].adType != "Free",
-                                          child: Container(
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: products[index].product![0].adType == "Standard" ? Colors.orangeAccent
-                                                      : Colors.green
-                                              ),
-                                              child: Text("${products[index].product![0].adType} Ad",
-                                                style: const TextStyle(color: Colors.white, fontSize: 10),
-                                              )
+                                        Positioned(
+                                          top: 0,
+                                          child: Visibility(
+                                            visible: products[index].product![0].adType != "Free",
+                                            child: Container(
+                                                padding: const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color: products[index].product![0].adType == "Standard" ? Colors.orangeAccent
+                                                        : Colors.green
+                                                ),
+                                                child: Text("${products[index].product![0].adType} Ad",
+                                                  style: const TextStyle(color: Colors.white, fontSize: 10),
+                                                )
+                                            ),
                                           ),
                                         ),
-                                      ),
 
-                                      Positioned(
-                                          right: 0,
-                                          child: IconButton(
-                                              onPressed: () {},
-                                              icon:  const Icon(
-                                                Icons.favorite,
-                                                color: Colors.white,
-                                              ))),
-                                    ],
+                                        Positioned(
+                                            right: 0,
+                                            child: IconButton(
+                                                onPressed: () {},
+                                                icon:  const Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.white,
+                                                ))),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  width: size.width,
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children:  [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 7),
-                                        child: Text("${products[index].product![0].title}",
-                                          style: const TextStyle(color: Colors.black, fontSize: 13),
-                                        ),
-                                      ),
-                                      Text("${products[index].product![0].adCategory}",
-                                          style: const TextStyle(color: primary, fontSize: 12)),
-
-                                      Padding(
+                                  Container(
+                                    width: size.width,
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children:  [
+                                        Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 7),
-                                          child:Text("${products[index].user![0].campus}",
-                                              style: const TextStyle(color: Colors.black, fontSize: 12))
+                                          child: Text("${products[index].product![0].title}",
+                                            style: const TextStyle(fontSize: 13),
+                                          ),
+                                        ),
+                                        Text("${products[index].product![0].adCategory}",
+                                            style: const TextStyle(color: primary, fontSize: 12)),
 
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )): Container();
-                  }),
-            ))): const Center(
+                                        Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 7),
+                                            child:Text("${products[index].user![0].campus}",
+                                                style: const TextStyle(fontSize: 12))
+
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )): Container();
+                    }),
+                              ),
+                ))): const Center(
           child: CircularProgressIndicator(),
         ); }));
   }
@@ -159,12 +161,14 @@ class _WishListAdGridState extends State<WishListAdGrid> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         Size size = MediaQuery.of(context).size;
+        return Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
         return Container(
           height: size.height*.80,
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(topLeft: radiusCircular(20), topRight: radiusCircular(20)),
-            color: Colors.white, // Customize the background color
+            color: provider.isDark ? AppColors.darkBackground : AppColors.lightBackground,
+            borderRadius: BorderRadius.only(topLeft: radiusCircular(20), topRight: radiusCircular(20)), // Customize the background color
           ),// Set the desired height of the bottom sheet
 
           child: Column(
@@ -183,16 +187,30 @@ class _WishListAdGridState extends State<WishListAdGrid> {
               ),
 
 
-              ListTile(
-                style: ListTileStyle.list,
-                leading: SizedBox(
-                  height: size.width * .65,
-                  child: product.product![0].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
-                    fit: BoxFit.cover,
-                  ):ImageWidget(url: product.product![0].images![0]['url'].toString()),
-                ),
-                title: Text(product.product![0].title!),
-                subtitle: Text(product.product![0].description!),
+               Row(
+                children: [
+
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: product.product![0].images!.isEmpty ? Image(image: AssetImage("assets/images/${images[0]}"),
+                      fit: BoxFit.cover,
+                    ): ImageWidget(url: product.product![0].images![0]['url'].toString()),
+                  ),
+
+                  const SizedBox(width: 20,),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(product.product![0].title!),
+                      const SizedBox(width: 10,),
+                      Text(product.product![0].description!),
+                    ],
+                  )
+
+
+                ],
               ),
 
               Container(height: 30,),
@@ -200,12 +218,13 @@ class _WishListAdGridState extends State<WishListAdGrid> {
               Visibility(
                 visible: product.product![0].adType != "Free",
                 child: Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration: const BoxDecoration(
-                        color: Colors.orangeAccent
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                    decoration:  BoxDecoration(
+                        color: Colors.orangeAccent,
+                        borderRadius: BorderRadius.circular(3)
                     ),
                     child: Text("${product.product![0].adType} Ad",
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
                     )
                 ),
               ),
@@ -283,18 +302,18 @@ class _WishListAdGridState extends State<WishListAdGrid> {
                       ),
                     ),
 
-                    GestureDetector(child:Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Icon(
-                        Icons.messenger_outline,
-                        size: 24,
-                        color: primary,
-                      ),
-                    ), onTap: (){
-                      launch("sms: ${product.user![0].phone}");
-                    },)
+                    // GestureDetector(child:Container(
+                    //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    //   decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(10)),
+                    //   child: const Icon(
+                    //     Icons.messenger_outline,
+                    //     size: 24,
+                    //     color: primary,
+                    //   ),
+                    // ), onTap: (){
+                    //   launch("sms: ${product.user![0].phone}");
+                    // },)
 
                   ],
                 )
@@ -306,6 +325,8 @@ class _WishListAdGridState extends State<WishListAdGrid> {
             ],
           ),
         );
+      },
+    );
       },
     );
   }
