@@ -20,9 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
+//import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 
 class AdScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _AdScreenState extends State<AdScreen> {
     super.dispose();
   }
 
-  final plugin = PaystackPayment();
+  //final plugin = PaystackPayment();
 
   bool contact = false;
   bool negotiable = false;
@@ -69,7 +70,7 @@ class _AdScreenState extends State<AdScreen> {
   @override
   void initState(){
 
-    plugin.initialize(publicKey: dotenv.env['PAY_STACK_PUBLIC_KEY_LIVE']!);
+   // plugin.initialize(publicKey: dotenv.env['PAY_STACK_PUBLIC_KEY_LIVE']!);
 
     productModel.userId = context.read<UserProvider>().userDetails!.id;
     productModel.campus = context.read<UserProvider>().userDetails!.campus;
@@ -290,7 +291,8 @@ class _AdScreenState extends State<AdScreen> {
           child: GridView.count(
             crossAxisCount: 3,
             children: _images.map((image) {
-              return Image.file(image, fit:BoxFit.contain);
+              return !kIsWeb ? Image.file(image, fit:BoxFit.contain)
+              : Image.network(image.path, fit:BoxFit.contain);
             }).toList(),
           )),
 
@@ -445,36 +447,35 @@ class _AdScreenState extends State<AdScreen> {
 
 
   payStackCheckOut() async{
-
-    final userDetails = context.read<UserProvider>().userDetails;
-
-    Charge charge = Charge()
-      ..amount = selectPayment!.amount!
-      ..reference = _getReference()
-    // or ..accessCode = _getAccessCodeFrmInitialization()
-      ..email = userDetails?.email;
-
-    CheckoutResponse response = await plugin.checkout(
-      context,
-      logo: const Image(image: AssetImage("assets/logo_orange.png"), width: 50,),
-      fullscreen: false,
-      method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
-      charge: charge,
-    );
-
-    if(response.message == "Success"){
-
-      setState(()=> productModel.paid = true);
-      setState(()=> processingPayment = true);
-      setState(()=> isSuccessful = true);
-
-      //updatePaymentStatus();
-      uploadProduct();
-
-    }else{
-      setState(()=> productModel.paid = false);
-      showMessageError("Error encountered while processing payment");
-    }
+    // final userDetails = context.read<UserProvider>().userDetails;
+    //
+    // Charge charge = Charge()
+    //   ..amount = selectPayment!.amount!
+    //   ..reference = _getReference()
+    // // or ..accessCode = _getAccessCodeFrmInitialization()
+    //   ..email = userDetails?.email;
+    //
+    // CheckoutResponse response = await plugin.checkout(
+    //   context,
+    //   logo: const Image(image: AssetImage("assets/logo_orange.png"), width: 50,),
+    //   fullscreen: false,
+    //   method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
+    //   charge: charge,
+    // );
+    //
+    // if(response.message == "Success"){
+    //
+    //   setState(()=> productModel.paid = true);
+    //   setState(()=> processingPayment = true);
+    //   setState(()=> isSuccessful = true);
+    //
+    //   //updatePaymentStatus();
+    //   uploadProduct();
+    //
+    // }else{
+    //   setState(()=> productModel.paid = false);
+    //   showMessageError("Error encountered while processing payment");
+    // }
   }
 
   String _getReference() {

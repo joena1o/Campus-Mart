@@ -42,7 +42,7 @@ dependencies:
   #flutter_paystack: ^1.0.7
   #pay_with_paystack:
   #flutter_paystack_max:
-  flutter_paystack_payment_plus:
+  #flutter_paystack_payment_plus:
   flutter_dotenv: ^5.1.0
   #flutter_paystack_payment:
   pull_to_refresh_flutter3: ^2.0.1

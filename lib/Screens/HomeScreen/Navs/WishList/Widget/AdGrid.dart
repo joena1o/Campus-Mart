@@ -180,7 +180,7 @@ class _WishListAdGridState extends State<WishListAdGrid> {
                 alignment: Alignment.centerRight,
                 child: IconButton(
                   onPressed: (){
-                    context.pop();
+                    Navigator.pop(context);
                   },
                   icon: const Icon(Icons.close),
                 ),

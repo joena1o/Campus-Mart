@@ -95,6 +95,7 @@ class MessageProvider extends ChangeNotifier{
 
   // Constructor to establish the WebSocket connection
   initProvider(UserModel user) {
+
     _channel = IOWebSocketChannel.connect('ws://campus-mart-server.onrender.com');
     _channel!.sink.add(jsonEncode({
       "type": "register",
