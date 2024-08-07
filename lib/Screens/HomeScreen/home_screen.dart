@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     OneSignal.shared.sendTag("state", user.state); // State Tag
 
     Provider.of<UserProvider>(context, listen: false).loadDetails();
-    Provider.of<MessageProvider>(context, listen: false).initProvider(user!);
+    Provider.of<MessageProvider>(context, listen: false).initProvider(user);
 
   }
 

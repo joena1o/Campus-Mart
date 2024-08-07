@@ -9,7 +9,6 @@ import 'package:campus_mart/Provider/theme_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/conn.dart';
-import 'package:campus_mart/Utils/save_prefs.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,7 +32,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  const isLive = true;
+  const isLive = false;
   String onesignalAppId = isLive
       ? dotenv.env['ONE_SIGNAL_APP_ID_LIVE']!
       : dotenv.env['ONE_SIGNAL_APP_ID_TEST']!;

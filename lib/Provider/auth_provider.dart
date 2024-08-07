@@ -67,9 +67,11 @@ class AuthProvider with ChangeNotifier {
 
       navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
     } catch (e) {
+      if(redirect){
+        navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      }
       showMessageError(jsonDecode(e.toString())['message']);
-      redirect ?? navigatorKey.currentState?.pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
-    } finally {
+    }finally {
       _isLoading = false;
       notifyListeners();
     }

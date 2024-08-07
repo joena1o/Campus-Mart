@@ -22,7 +22,6 @@ class MyAdScreen extends StatefulWidget {
 
 class _MyAdScreenState extends State<MyAdScreen> {
 
-
   BannerAd? _bannerAd;
 
   @override
@@ -139,7 +138,6 @@ class _MyAdScreenState extends State<MyAdScreen> {
                                               onPressed: () {
                                                 setState(()=> selectedId = bar.myProductList[index].id);
                                                 setState(()=> selectedAd = bar.myProductList[index]);
-                                                print(selectedId);
                                                 customBottomSheet(context);
                                               },
                                               icon:  const Icon(
@@ -158,7 +156,7 @@ class _MyAdScreenState extends State<MyAdScreen> {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 7),
                                         child: Text("${bar.myProductList[index].title}",
-                                          style: const TextStyle(color: Colors.black, fontSize: 13),
+                                          style: const TextStyle(fontSize: 13),
                                         ),
                                       ),
                                       Text("${bar.myProductList[index].adCategory}",
@@ -167,7 +165,7 @@ class _MyAdScreenState extends State<MyAdScreen> {
                                       Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 7),
                                           child:Text("${user.campus}",
-                                              style: const TextStyle(color: Colors.black, fontSize: 12)))
+                                              style: const TextStyle(fontSize: 12)))
                                     ],
                                   ),
                                 )
