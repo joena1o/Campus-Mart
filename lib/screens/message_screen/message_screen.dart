@@ -1,8 +1,8 @@
-import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/message_provider.dart';
 import 'package:campus_mart/Provider/theme_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
+import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/screens/chat_screen/chat_screen.dart';
 import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/basic.dart';

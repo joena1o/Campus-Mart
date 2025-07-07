@@ -3,7 +3,7 @@ import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/screens/category_screen/Widget/Navbar.dart';
 import 'package:campus_mart/Utils/categories.dart';
 import 'package:campus_mart/Utils/ads_ad_unit.dart';
-import 'package:campus_mart/screens/home_screen/navs/home_page/Widget/ad_grid/category_ad_grid.dart';
+import 'package:campus_mart/screens/home_screen/navs/home_page/widget/ad_grid/category_ad_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';

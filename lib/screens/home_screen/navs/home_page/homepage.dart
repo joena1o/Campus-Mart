@@ -1,6 +1,6 @@
 import 'package:campus_mart/screens/home_screen/navs/home_page/Widget/Category/category.dart';
-import 'package:campus_mart/screens/home_screen/navs/home_page/Widget/SearchBar/search_bar.dart';
-import 'package:campus_mart/screens/home_screen/navs/home_page/Widget/ad_grid/ad_grid.dart';
+import 'package:campus_mart/screens/home_screen/navs/home_page/widget/SearchBar/search_bar.dart';
+import 'package:campus_mart/screens/home_screen/navs/home_page/widget/ad_grid/ad_grid.dart';
 import 'package:flutter/material.dart';
 
 class HomepageNav extends StatefulWidget {

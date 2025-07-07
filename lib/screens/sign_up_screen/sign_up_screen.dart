@@ -331,7 +331,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 icon: const Icon(Icons.keyboard_arrow_down),
                                 underline: Container(),
                                 items: data.campuses.map((Campus item) {
-                                  return DropdownMenuItem(
+                                  return DropdownMenuItem<String>(
                                     value: item.campus,
                                     child: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -340,7 +340,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         child: Text(item.campus.toString())),
                                   );
                                 }).toList(),
-                                onChanged: (dynamic newValue) {
+                                onChanged: (String? newValue) {
                                   setState(() => campus = newValue);
                                 },
                               ),

@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/main.dart';
+import 'package:campus_mart/model/auth_model.dart';
+import 'package:campus_mart/model/success_message_model.dart';
+import 'package:campus_mart/model/user_model.dart';
+import 'package:campus_mart/model/verify_otp_model.dart';
 import 'package:campus_mart/network/auth_class/auth_class.dart';
 import 'package:campus_mart/screens/forgot_password_screen/reset_password_screen.dart';
 import 'package:campus_mart/screens/forgot_password_screen/verify_otp_screen.dart';
 import 'package:campus_mart/screens/home_screen/home_screen.dart';
 import 'package:campus_mart/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
-
-import 'package:campus_mart/Model/AuthModel.dart';
-import 'package:campus_mart/Model/SuccessMessageModel.dart';
-import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Model/VerifyOtpModel.dart';
 
 import 'package:campus_mart/Utils/save_prefs.dart';
 import 'package:campus_mart/Utils/snackbars.dart';

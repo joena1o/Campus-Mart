@@ -1,9 +1,9 @@
-import 'package:campus_mart/Model/ProductModel.dart';
-import 'package:campus_mart/Model/WishProductModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Provider/theme_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
+import 'package:campus_mart/model/product_model.dart';
+import 'package:campus_mart/model/wish_product_model.dart';
 import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/time_and_date.dart';

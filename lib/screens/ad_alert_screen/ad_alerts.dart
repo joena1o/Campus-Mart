@@ -65,63 +65,56 @@ class _AdAlertsState extends State<AdAlerts> {
         width: size.width,
         height: size.height,
         child: Consumer<ProductProvider>(builder: (_, bar, __) {
-
           return Column(
             children: [
-
-              !bar.isFetchingAdAlerts ?
-
-              bar.adAlertList.isNotEmpty ?
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: bar.adAlertList.length,
-                        itemBuilder: (BuildContext ctx, i) {
-                          return ListTile(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            title: Text(
-                              bar.adAlertList[i].item.toString(),
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                            subtitle: Text(bar.adAlertList[i].category.toString()),
-                            trailing: IconButton(
-                                onPressed: () {
-                                  setState(() => selectedId = bar.adAlertList[i].id);
-                                  customBottomSheet(context);
-                                },
-                                icon: const Icon(Icons.more_horiz)),
-                          );
-                        }),
-                  ) :
-
-               const Expanded(
-                 child: Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                     Text("No Buzz", style: TextStyle(fontSize: 17),),
-                  ],
-                               ),
-               )
-
-                    : const Expanded(
-                      child:  Center(
-                                        child:  CircularProgressIndicator(),
-                      
-                                    ),
+              !bar.isFetchingAdAlerts
+                  ? bar.adAlertList!.isNotEmpty
+                      ? Expanded(
+                          child: ListView.builder(
+                              itemCount: bar.adAlertList?.length ?? 0,
+                              itemBuilder: (BuildContext ctx, i) {
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  title: Text(
+                                    bar.adAlertList![i].item.toString(),
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                  subtitle: Text(
+                                      bar.adAlertList![i].category.toString()),
+                                  trailing: IconButton(
+                                      onPressed: () {
+                                        setState(() => selectedId =
+                                            bar.adAlertList![i].id);
+                                        customBottomSheet(context);
+                                      },
+                                      icon: const Icon(Icons.more_horiz)),
+                                );
+                              }),
+                        )
+                      : const Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "No Buzz",
+                                style: TextStyle(fontSize: 17),
+                              ),
+                            ],
+                          ),
+                        )
+                  : const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
-
-
               _bannerAd == null
-              // Nothing to render yet.
-                  ? const SizedBox() : SizedBox(
-                  height: 50,
-                  child: AdWidget(
-                      ad: _bannerAd!)),
-
+                  // Nothing to render yet.
+                  ? const SizedBox()
+                  : SizedBox(height: 50, child: AdWidget(ad: _bannerAd!)),
             ],
           );
         }),
-
       ),
     );
   }
@@ -146,9 +139,8 @@ class _AdAlertsState extends State<AdAlerts> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               const Row(
-                children:  [
+                children: [
                   Icon(
                     Icons.edit,
                     color: Colors.grey,
@@ -163,11 +155,9 @@ class _AdAlertsState extends State<AdAlerts> {
                   )
                 ],
               ),
-
               const SizedBox(
                 height: 30,
               ),
-
               GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -178,7 +168,7 @@ class _AdAlertsState extends State<AdAlerts> {
                         context.read<AuthProvider>().accessToken);
                   },
                   child: const Row(
-                    children:  [
+                    children: [
                       Icon(
                         Icons.delete,
                         color: Colors.red,
@@ -209,7 +199,8 @@ class _AdAlertsState extends State<AdAlerts> {
           padding: const EdgeInsets.all(30),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                topLeft: radiusCircular(20), topRight: radiusCircular(10)), // Customize the background color
+                topLeft: radiusCircular(20),
+                topRight: radiusCircular(10)), // Customize the background color
           ), // Set the desired height of the bottom sheet
 
           child: Column(
@@ -259,5 +250,4 @@ class _AdAlertsState extends State<AdAlerts> {
     // Start loading.
     bannerAd.load();
   }
-
 }

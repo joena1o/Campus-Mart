@@ -85,7 +85,7 @@ class ProductClass {
     }
   }
 
-  Future<List<ProductModel>?> searchProduct(query, index, token) async {
+  Future<List<ProductModel>> searchProduct(query, index, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -103,7 +103,7 @@ class ProductClass {
     }
   }
 
-  Future<List<ProductModel>?> searchCategoryProduct(
+  Future<List<ProductModel>> searchCategoryProduct(
       query, index, cat, token) async {
     headers = {
       "Accept": "application/json",
@@ -142,7 +142,7 @@ class ProductClass {
     });
   }
 
-  Future<ProductModel?> editProduct(data, token) async {
+  Future<ProductModel> editProduct(data, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -157,7 +157,7 @@ class ProductClass {
     }
   }
 
-  Future<ProductModel?> updatePaymentStatus(data, token) async {
+  Future<ProductModel> updatePaymentStatus(data, token) async {
     ProductModel? productModel;
     headers = {
       "Accept": "application/json",
@@ -193,7 +193,22 @@ class ProductClass {
     }
   }
 
-  Future<List<WishProductModel>?> fetchWishList(username, token) async {
+  Future addToWishlist(data, token){
+    headers  = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    return networkHelper.post(wishListEndpoint, headers: headers, body: data,
+      encoding: Encoding.getByName("utf-8"),)
+        .then((dynamic res) async{
+      return res;
+    }).catchError((err){
+      errorHandler.handleError(err['body']);
+    });
+  }
+
+  Future<List<WishProductModel>> fetchWishList(username, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -227,7 +242,7 @@ class ProductClass {
     }
   }
 
-  Future<ReviewModel?> getReviews(id, token) async {
+  Future<ReviewModel> getReviews(id, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -242,7 +257,7 @@ class ProductClass {
     }
   }
 
-  Future<List<NotificationModel>?> getNotifications(userId, token) async {
+  Future<List<NotificationModel>> getNotifications(userId, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -258,14 +273,14 @@ class ProductClass {
     }
   }
 
-  Future<void> adAlert(data, token) async {
+  Future<dynamic> adAlert(data, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": token
     };
     try {
-      await networkHelper.post(
+      return await networkHelper.post(
         addAlertEndpoint,
         headers: headers,
         body: data,
@@ -294,7 +309,7 @@ class ProductClass {
     }
   }
 
-  Future<List<AdAlertModel>?> getAdAlerts(userId, token) async {
+  Future<List<AdAlertModel>> getAdAlerts(userId, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -310,7 +325,7 @@ class ProductClass {
     }
   }
 
-  Future<SuccessMessageModel?> deleteAdAlert(id, token) async {
+  Future<SuccessMessageModel> deleteAdAlert(id, token) async {
     SuccessMessageModel? successMessageModel;
     headers = {
       "Accept": "application/json",

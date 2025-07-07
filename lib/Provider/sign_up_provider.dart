@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:campus_mart/Model/CampusModel.dart';
-import 'package:campus_mart/Model/CountryModel.dart';
-import 'package:campus_mart/Model/ErrorModel.dart';
-import 'package:campus_mart/Model/StateModel.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
+import 'package:campus_mart/model/campus_model.dart';
+import 'package:campus_mart/model/country_model.dart';
+import 'package:campus_mart/model/error_model.dart';
+import 'package:campus_mart/model/state_model.dart';
 import 'package:campus_mart/network/auth_class/auth_class.dart';
 import 'package:campus_mart/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';

@@ -1,8 +1,4 @@
 import 'dart:convert';
-import 'package:campus_mart/Model/ErrorModel.dart';
-import 'package:campus_mart/Model/ProductModel.dart';
-import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
@@ -306,7 +302,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     if(review.text.isNotEmpty){
                       setState(()=> isLoading = true);
                       productClass.addReview({
-                        "user": userDetails.username, "userId": product.userId,
+                        "user": userDetails?.username, "userId": product.userId,
                         "ProductId": product.id, "Review": review.text.toString(),
                         "reviewerId": userDetails?.id,
                         "Rating": ratingValue ?? 0

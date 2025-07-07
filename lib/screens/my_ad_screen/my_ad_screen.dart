@@ -1,8 +1,8 @@
-import 'package:campus_mart/Model/ProductModel.dart';
-import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
+import 'package:campus_mart/model/product_model.dart';
+import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/screens/edit_ad_screen/edit_ad_screen.dart';
 import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/ads_ad_unit.dart';

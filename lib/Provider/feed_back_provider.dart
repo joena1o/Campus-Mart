@@ -15,7 +15,7 @@ class FeedbackProvider extends ChangeNotifier {
     try {
       SuccessMessageModel? successMessageModel =
           await feedbackClass.uploadFeedback(token, data);
-      showMessage(successMessageModel.message);
+      showMessage(successMessageModel?.message);
     } catch (e) {
       showMessageError(jsonDecode(e.toString())['message']);
     } finally {

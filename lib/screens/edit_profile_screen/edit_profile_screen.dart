@@ -1,11 +1,11 @@
-import 'package:campus_mart/Model/CampusModel.dart';
-import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/sign_up_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Utils/states.dart';
+import 'package:campus_mart/model/campus_model.dart';
+import 'package:campus_mart/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field2/intl_phone_field.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -154,7 +154,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                DropdownButton(
+                                DropdownButton<String>(
                                   value: campus,
                                   hint: SizedBox(
                                       //width: size.width * .75,
@@ -164,7 +164,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   icon: const Icon(Icons.keyboard_arrow_down),
                                   underline: Container(),
                                   items: data.campuses.map((Campus item) {
-                                    return DropdownMenuItem(
+                                    return DropdownMenuItem<String>(
                                       value: item.campus,
                                       child: Container(
                                           padding: const EdgeInsets.symmetric(

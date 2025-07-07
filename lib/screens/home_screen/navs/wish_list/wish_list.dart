@@ -1,4 +1,4 @@
-import 'package:campus_mart/screens/home_screen/navs/WishList/Widget/ad_grid.dart';
+import 'package:campus_mart/screens/home_screen/navs/wish_list/widget/ad_grid.dart';
 import 'package:flutter/material.dart';
 
 class WishList extends StatefulWidget {

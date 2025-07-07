@@ -1,4 +1,4 @@
-import "package:campus_mart/Model/NotificationModel.dart";
+import "package:campus_mart/model/notification_model.dart";
 import "package:intl/intl.dart";
 
 String timeAgo(DateTime pastTime) {

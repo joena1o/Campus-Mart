@@ -9,8 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
-class MessageProvider extends ChangeNotifier{
-
+class MessageProvider extends ChangeNotifier {
   IOWebSocketChannel? _channel;
   StreamSubscription? _streamSubscription;
 
@@ -33,15 +32,17 @@ class MessageProvider extends ChangeNotifier{
     }
   }
 
-  Future addMessage(data, token) async{
+  Future addMessage(data, token) async {
     sendingMessages = true;
     notifyListeners();
-    try{
-      Chat chatModel = await messageClass.addMessage(data, token);
-      singleChat(chatModel);
-    }catch(e){
+    try {
+      Chat? chatModel = await messageClass.addMessage(data, token);
+      if (chatModel != null) {
+        singleChat(chatModel);
+      }
+    } catch (e) {
       showMessageError(jsonDecode(e.toString())['message']);
-    }finally{
+    } finally {
       messageText.text = "";
       sendingMessages = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,43 +52,43 @@ class MessageProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void loadChats(List<Chat> userChats){
+  void loadChats(List<Chat> userChats) {
     chats = userChats;
   }
 
-  void singleChat(Chat value){
+  void singleChat(Chat value) {
     chats.add(value);
     notifyListeners();
   }
 
-  Future getMessages(data, token) async{
+  Future getMessages(data, token) async {
     loadingMessages = true;
-    try{
+    try {
       messageModel = await messageClass.getMessages(data, token);
-    }catch(e){
+    } catch (e) {
       showMessageError(jsonDecode(e.toString())['message']);
-    }finally{
+    } finally {
       loadingMessages = false;
     }
     notifyListeners();
   }
 
-  Future getMessagesBackground(data, token) async{
-    try{
+  Future getMessagesBackground(data, token) async {
+    try {
       messageModel = await messageClass.getMessages(data, token);
-    }catch(e){
+    } catch (e) {
       //showMessageError(jsonDecode(e.toString())['message']);
     }
     notifyListeners();
   }
 
-  Future setAsRead(data, token) async{
+  Future setAsRead(data, token) async {
     loadingMessages = true;
-    try{
-       await messageClass.setAsRead(data, token);
-    }catch(e){
+    try {
+      await messageClass.setAsRead(data, token);
+    } catch (e) {
       // print(e);
-    }finally{
+    } finally {
       loadingMessages = false;
     }
     notifyListeners();
@@ -95,17 +96,15 @@ class MessageProvider extends ChangeNotifier{
 
   // Constructor to establish the WebSocket connection
   initProvider(UserModel user) {
-    _channel = IOWebSocketChannel.connect('ws://campus-mart-server.onrender.com');
-    _channel!.sink.add(jsonEncode({
-      "type": "register",
-      "userId": user.id
-    }));
+    _channel =
+        IOWebSocketChannel.connect('ws://campus-mart-server.onrender.com');
+    _channel!.sink.add(jsonEncode({"type": "register", "userId": user.id}));
 
     _streamSubscription = _channel!.stream.listen((message) {
       final newResponse = json.decode(message.toString());
-      if (newResponse['type'] == 'status_response'){
+      if (newResponse['type'] == 'status_response') {
         userIsOnline = newResponse['isOnline'];
-      }else {
+      } else {
         Chat newChatMessage = Chat.fromJson(newResponse);
         chats.add(newChatMessage);
         showLocalNotification(
@@ -115,11 +114,9 @@ class MessageProvider extends ChangeNotifier{
     });
   }
 
-  void checkUserStatus(userId){
+  void checkUserStatus(userId) {
     // Check the status of another user
-    _channel!.sink.add(
-        jsonEncode({"type": "check_status", "userId": userId})
-    );
+    _channel!.sink.add(jsonEncode({"type": "check_status", "userId": userId}));
   }
 
   void sendMessage(Map<String, dynamic> chats) {
@@ -136,10 +133,10 @@ class MessageProvider extends ChangeNotifier{
     );
   }
 
-  void makeAsReadLocally(){
-   for(var chat in chats){
-     chat.seen = true;
-   }
+  void makeAsReadLocally() {
+    for (var chat in chats) {
+      chat.seen = true;
+    }
   }
 
   void disconnectWebSocket() {
@@ -155,6 +152,4 @@ class MessageProvider extends ChangeNotifier{
     disconnectWebSocket();
     super.dispose();
   }
-
-
 }

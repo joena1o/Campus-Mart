@@ -1,23 +1,16 @@
 import 'dart:convert';
 import 'package:campus_mart/Utils/time_and_date.dart';
-import 'package:flutter/foundation.dart';
+import 'package:campus_mart/model/ad_alert_model.dart';
+import 'package:campus_mart/model/error_model.dart';
+import 'package:campus_mart/model/notification_model.dart';
+import 'package:campus_mart/model/product_model.dart';
+import 'package:campus_mart/model/review_model.dart';
+import 'package:campus_mart/model/success_message_model.dart';
+import 'package:campus_mart/model/wish_product_model.dart';
+import 'package:campus_mart/network/product_class/product_class.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-
-// Models
-import 'package:campus_mart/Model/AdAlertModel.dart';
-import 'package:campus_mart/Model/ErrorModel.dart';
-import 'package:campus_mart/Model/NotificationModel.dart';
-import 'package:campus_mart/Model/ProductModel.dart';
-import 'package:campus_mart/Model/ReviewModel.dart';
-import 'package:campus_mart/Model/SuccessMessageModel.dart';
-import 'package:campus_mart/Model/WishProductModel.dart';
-
-// Network
-import 'package:campus_mart/Network/ProductClass/ProductClass.dart';
-
-// Utils
 import 'package:campus_mart/Utils/snackbars.dart';
 
 class ProductProvider extends ChangeNotifier {
@@ -30,7 +23,7 @@ class ProductProvider extends ChangeNotifier {
   List<ProductModel> _pendingAdsList = [];
   List<ProductModel> _categoryProductList = [];
   List<NotificationModel> _notificationList = [];
-  List<AdAlertModel> _adAlertList = [];
+  List<AdAlertModel>? _adAlertList = [];
   List<ProductModel> _myProductList = [];
   List<WishProductModel> _availableItems = [];
 
@@ -62,7 +55,7 @@ class ProductProvider extends ChangeNotifier {
   List<ProductModel> get pendingAdsList => _pendingAdsList;
   List<ProductModel> get categoryProductList => _categoryProductList;
   List<NotificationModel> get notificationList => _notificationList;
-  List<AdAlertModel> get adAlertList => _adAlertList;
+  List<AdAlertModel>? get adAlertList => _adAlertList;
   List<ProductModel> get myProductList => _myProductList;
   List<WishProductModel> get availableItems => _availableItems;
   ReviewModel? get reviews => _reviews;
@@ -155,8 +148,8 @@ class ProductProvider extends ChangeNotifier {
     _uploadingAdAlert = true;
     try {
       final dynamic response = await _product.adAlert(data, token);
-        final ErrorModel errorModel = ErrorModel.fromJson(response);
-        showMessage(errorModel.message);
+        final SuccessMessageModel result = SuccessMessageModel.fromJson(response);
+        showMessage(result.message);
         getAdAlerts(userId, token);
     } catch (onError) {
       final ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError as String));
@@ -276,8 +269,8 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> _getMoreProducts(String category, String token, bool isAll) async {
     try {
-      final List<ProductModel> newProducts = await _product.fetchProduct(category, isAll ? _indexAll : _indexCat, token);
-      if (newProducts.isNotEmpty) {
+      final List<ProductModel>? newProducts = await _product.fetchProducts(category, isAll ? _indexAll : _indexCat, token);
+      if (newProducts!.isNotEmpty) {
         if (isAll) {
           _productList.addAll(newProducts);
           _indexAll++;
@@ -317,6 +310,11 @@ class ProductProvider extends ChangeNotifier {
       _isGettingProduct = false;
       notifyListeners();
     }
+  }
+
+  // ----- Save Search -----
+  Future<void> saveSearch(Map<String, dynamic> data, String token) async {
+    await _product.saveSearch(data, token);
   }
 
   void disposeControllers(){

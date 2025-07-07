@@ -3,7 +3,12 @@ import 'package:campus_mart/Network/error_handler.dart';
 import 'package:campus_mart/Network/network_util.dart';
 import 'package:campus_mart/Utils/conn.dart';
 import 'package:campus_mart/model/auth_model.dart';
+import 'package:campus_mart/model/campus_model.dart';
+import 'package:campus_mart/model/country_model.dart';
+import 'package:campus_mart/model/state_model.dart';
+import 'package:campus_mart/model/success_message_model.dart';
 import 'package:campus_mart/model/user_model.dart';
+import 'package:campus_mart/model/verify_otp_model.dart';
 
 class Auth {
   NetworkHelper networkHelper = NetworkHelper();
@@ -156,52 +161,46 @@ class Auth {
     });
   }
 
-  Future validateUser(user) {
+  Future<dynamic> validateUser(user) async{
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
     };
-    return networkHelper
-        .post(validateUserEndpoint, body: {"username": user}, headers: headers)
-        .then((dynamic value) async {
-      return true;
-    }).catchError((err) {
-      print(err);
-      errorHandler.handleError(err['body']);
-    });
+    try{
+      final result = await networkHelper
+        .post(validateUserEndpoint, body: {"username": user}, headers: headers);
+        return result;
+    }catch(e){
+      rethrow;
+    }
   }
 
-  Future requestVerifyEmail(email) {
-    SuccessMessageModel? successMessageModel;
+  Future requestVerifyEmail(email) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
     };
-    return networkHelper
-        .post(requestVerifyEmailUrl, body: {"email": email}, headers: headers)
-        .then((dynamic value) async {
-      successMessageModel = SuccessMessageModel.fromJson(value);
-      return successMessageModel;
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
+    try {
+      final result = await networkHelper.post(requestVerifyEmailUrl,
+          body: {"email": email}, headers: headers);
+      return SuccessMessageModel.fromJson(result);
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future verifyEmailAddressOtp(otp, email) {
-    VerifyTokenModel? verifyTokenModel;
+  Future<VerifyTokenModel?> verifyEmailAddressOtp(otp, email) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
     };
-    return networkHelper
-        .post(verifyEmailAddressUrl,
-            body: {"email": email, "otp": otp}, headers: headers)
-        .then((dynamic value) async {
-      verifyTokenModel = VerifyTokenModel.fromJson(value);
-      return verifyTokenModel;
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
+    try {
+      final result = await networkHelper.post(verifyEmailAddressUrl,
+          body: {"email": email, "otp": otp}, headers: headers);
+      return VerifyTokenModel.fromJson(result);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<SuccessMessageModel?> requestForgottenPasswordOtp(email) async {
@@ -209,11 +208,11 @@ class Auth {
       "Accept": "application/json",
       "Content-Type": "application/json",
     };
-    try{
-      final result = await networkHelper
-        .post(forgottenPasswordUrl, body: {"email": email}, headers: headers);
-        return SuccessMessageModel.fromJson(result);
-    }catch(e){
+    try {
+      final result = await networkHelper.post(forgottenPasswordUrl,
+          body: {"email": email}, headers: headers);
+      return SuccessMessageModel.fromJson(result);
+    } catch (e) {
       rethrow;
     }
   }

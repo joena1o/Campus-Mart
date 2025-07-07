@@ -1,6 +1,6 @@
-import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
+import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/screens/ad_screen/ad_screen.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/screens/verify_email_screen/verify_email_screen.dart';

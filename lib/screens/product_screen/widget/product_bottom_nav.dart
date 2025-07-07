@@ -1,7 +1,7 @@
-import 'package:campus_mart/Model/ProductModel.dart';
-import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/time_and_date.dart';
+import 'package:campus_mart/model/product_model.dart';
+import 'package:campus_mart/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -69,22 +69,6 @@ class _ProductBottomNavState extends State<ProductBottomNav> {
                   color: primary,
                 ),
               ),
-
-              // GestureDetector(child:Container(
-              //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              //   decoration: BoxDecoration(
-              //     // border: Border.all(color: primary),
-              //       borderRadius: BorderRadius.circular(10)),
-              //   child: const Icon(
-              //     Icons.messenger_outline,
-              //     size: 24,
-              //     color: primary,
-              //   ),
-              // ), onTap: (){
-              //   Navigator.of(context).push(
-              //     MaterialPageRoute(builder: (_)=> ChatScreen(user: user, chats: [],))
-              //   );
-              // },)
 
             ],
           )

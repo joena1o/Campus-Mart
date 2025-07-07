@@ -1,10 +1,10 @@
-import 'package:campus_mart/Model/MessageModel.dart';
-import 'package:campus_mart/Model/UserModel.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/message_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/basic.dart';
 import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/model/message_model.dart';
+import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
