@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 // import 'package:http_parser/http_parser.dart' show MediaType;
@@ -112,7 +111,6 @@ class NetworkHelper {
           body: json.encode(body), headers: headers, encoding: encoding)
           .then((http.Response response) {
         final String res = response.body;
-        print(res);
         final int statusCode = response.statusCode;
         var result = _decoder.convert(res);
         if (statusCode < 200 || statusCode > 400) {
@@ -210,7 +208,6 @@ class NetworkHelper {
       // print(url);
       return http.delete(Uri.parse(url), headers: headers).then((http.Response response) {
         final String res = response.body;
-        final int statusCode = response.statusCode;
         // print(statusCode);
         return res;
       });

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:campus_mart/Utils/time_and_date.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -48,7 +49,7 @@ class ProductProvider extends ChangeNotifier {
 
   int _indexAll = 1;
   int _indexCat = 1;
-  int _searchIndex = 1;
+  final int _searchIndex = 1;
   int _myAdsIndex = 1;
   int _pendingAdsIndex =1;
 
@@ -185,7 +186,7 @@ class ProductProvider extends ChangeNotifier {
       final dynamic successMessage = await _product.deleteAdAlert(id, token);
       showMessage(successMessage);
     } catch (e) {
-      print(e);
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _deleteAdAlertStatus = false;
       notifyListeners();
@@ -197,9 +198,8 @@ class ProductProvider extends ChangeNotifier {
     _loadingReviews = true;
     try {
       _reviews = await _product.getReviews(id, token);
-      print(_reviews!.data?.length);
-    } catch (onError) {
-      print(onError);
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _loadingReviews = false;
       notifyListeners();
@@ -210,7 +210,9 @@ class ProductProvider extends ChangeNotifier {
     _uploadingReview= true;
     try {
       await _product.addReview(data, token);
-    } catch (onError) {// Handle error
+    } catch (e) {
+      // Handle error
+        showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _uploadingReview = false;
       notifyListeners();
@@ -314,15 +316,6 @@ class ProductProvider extends ChangeNotifier {
     } finally {
       _isGettingProduct = false;
       notifyListeners();
-    }
-  }
-
-  // ----- Save Search -----
-  Future<void> saveSearch(Map<String, dynamic> data, String token) async {
-    try {
-      await _product.saveSearch(data, token);
-    } catch (e) {
-
     }
   }
 

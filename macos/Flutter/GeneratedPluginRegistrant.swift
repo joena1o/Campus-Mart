@@ -5,7 +5,7 @@
 import FlutterMacOS
 import Foundation
 
-import connectivity_plus
+import connectivity_plus_macos
 import device_info_plus_macos
 import file_selector_macos
 import firebase_core
@@ -16,7 +16,7 @@ import package_info_plus_macos
 import path_provider_foundation
 import shared_preferences_foundation
 import smart_auth
-import sqflite
+import sqflite_darwin
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {

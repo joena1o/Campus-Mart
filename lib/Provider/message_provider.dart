@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:campus_mart/Model/MessageModel.dart';
-import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Network/MessageClass/MessageClass.dart';
-import 'package:campus_mart/Network/NotificationServiceClass.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
+import 'package:campus_mart/model/message_model.dart';
+import 'package:campus_mart/model/user_model.dart';
+import 'package:campus_mart/network/message_class/messaging_class.dart';
+import 'package:campus_mart/network/notification_service_class.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;

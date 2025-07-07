@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:campus_mart/Network/NotificationServiceClass.dart';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/feed_back_provider.dart';
 import 'package:campus_mart/Provider/message_provider.dart';
@@ -8,12 +7,13 @@ import 'package:campus_mart/Provider/sign_up_provider.dart';
 import 'package:campus_mart/Provider/theme_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
-import 'package:campus_mart/Utils/conn.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nb_utils/nb_utils.dart' as NotificationService;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,15 +32,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  const isLive = false;
-  String onesignalAppId = isLive
-      ? dotenv.env['ONE_SIGNAL_APP_ID_LIVE']!
-      : dotenv.env['ONE_SIGNAL_APP_ID_TEST']!;
+  String onesignalAppId = dotenv.env['ONE_SIGNAL_APP_ID_LIVE']!;
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
   OneSignal.shared.setAppId(onesignalAppId);
 
   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-    print("Accepted permission: $accepted");
+    if (kDebugMode) {
+      print("Accepted permission: $accepted");
+    }
   });
 
   runApp(
@@ -81,7 +80,6 @@ class _MyHomePageState extends State<MySplashPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Timer(const Duration(seconds: 1), ()
     {

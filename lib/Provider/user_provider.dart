@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:campus_mart/Model/SuccessMessageModel.dart';
 import 'package:campus_mart/Model/UserModel.dart';
-import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
 import 'package:campus_mart/Network/SettingClass/setting_class.dart';
 import 'package:campus_mart/Utils/save_prefs.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/main.dart';
+import 'package:campus_mart/network/auth_class/auth_class.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier{

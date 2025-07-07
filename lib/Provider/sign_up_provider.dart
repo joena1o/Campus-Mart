@@ -3,9 +3,9 @@ import 'package:campus_mart/Model/CampusModel.dart';
 import 'package:campus_mart/Model/CountryModel.dart';
 import 'package:campus_mart/Model/ErrorModel.dart';
 import 'package:campus_mart/Model/StateModel.dart';
-import 'package:campus_mart/Network/AuthClass/AuthClass.dart';
-import 'package:campus_mart/Screens/LoginScreen/login_screen.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
+import 'package:campus_mart/network/auth_class/auth_class.dart';
+import 'package:campus_mart/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SignUpProvider extends ChangeNotifier{
