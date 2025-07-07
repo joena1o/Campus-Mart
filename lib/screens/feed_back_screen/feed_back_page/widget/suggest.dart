@@ -16,10 +16,9 @@ class Suggest extends StatefulWidget {
 }
 
 class _SuggestState extends State<Suggest> {
-  String? user_id;
+ 
   String? token;
   String? refreshToken;
-
   String feedback = "";
 
   @override

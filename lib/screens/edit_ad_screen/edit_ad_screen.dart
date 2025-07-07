@@ -477,8 +477,8 @@ class _AdScreenState extends State<EditAdScreen> {
     }
     final result = await request.send();
     if (result.statusCode == 200) {
-      final resp_string = await result.stream.bytesToString();
-      final connValue = jsonDecode(resp_string);
+      final responseString = await result.stream.bytesToString();
+      final connValue = jsonDecode(responseString);
       productModel.images = connValue['data'];
       withPayment
           ? (){}

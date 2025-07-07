@@ -4,11 +4,11 @@ import 'package:campus_mart/Provider/theme_provider.dart';
 import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/screens/chat_screen/chat_screen.dart';
-import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/basic.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/time_and_date.dart';
 import 'package:campus_mart/core/configs/theme/app_colors.dart';
+import 'package:campus_mart/screens/home_screen/widgets/ImageWidget/image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

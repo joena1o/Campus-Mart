@@ -9,7 +9,7 @@ import 'package:campus_mart/model/error_model.dart';
 import 'package:campus_mart/model/product_model.dart';
 import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/network/product_class/product_class.dart';
-import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
+import 'package:campus_mart/screens/home_screen/widgets/ImageWidget/image_widget.dart';
 import 'package:campus_mart/screens/product_screen/widget/product_bottom_nav.dart';
 import 'package:campus_mart/screens/product_screen/widget/review_card.dart';
 import 'package:flutter/material.dart';

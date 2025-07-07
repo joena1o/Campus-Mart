@@ -13,7 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nb_utils/nb_utils.dart' as NotificationService;
+import 'package:nb_utils/nb_utils.dart' as notification_service;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -24,7 +24,7 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationService.initialize();
+  notification_service.initialize();
 
   await dotenv.load(fileName: ".env");
 

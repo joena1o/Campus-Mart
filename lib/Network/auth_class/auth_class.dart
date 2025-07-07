@@ -33,149 +33,136 @@ class Auth {
   String requestVerifyEmailUrl = "$conn/user/requestVerifyEmail";
   String verifyEmailAddressUrl = "$conn/user/verifyEmailAddress";
 
-  Future<AuthModel> loginUser(data) {
+  Future<AuthModel> loginUser(data) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
     };
-    AuthModel authModel = AuthModel();
-    return networkHelper
-        .post(loginEndpoint,
-            headers: headers, encoding: Encoding.getByName("utf-8"), body: data)
-        .then((dynamic res) async {
-      authModel = AuthModel.fromJson(res);
-      return authModel;
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
-  }
-
-  Future<UserModel> createUser(data) {
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
-    UserModel userModel = UserModel();
-    return networkHelper
-        .post(createUserEndpoint,
-            headers: headers, encoding: Encoding.getByName("utf-8"), body: data)
-        .then((dynamic res) async {
-      final response = res;
-      userModel = UserModel.fromJson(response);
-      return userModel;
-    }).catchError((err) => throw err);
-  }
-
-  Future fetchCampuses(state) {
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
-    List<Campus> campus = [];
-    return networkHelper
-        .get("$campusEndpoint/$state", headers: headers)
-        .then((dynamic value) async {
-      final res = value as List;
-      campus = res.map<Campus>((val) => Campus.fromJson(val)).toList();
-      return campus;
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
-  }
-
-  Future fetchCountries() {
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
-    List<CountryModel> countries = [];
-    return networkHelper
-        .get(countryEndpoint, headers: headers)
-        .then((dynamic value) async {
-      final res = value as List;
-      countries = res.map((val) => CountryModel.fromJson(val)).toList();
-      return countries;
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
-  }
-
-  Future fetchStates(id) {
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
-    List<StateModel> states = [];
-    return networkHelper
-        .get(stateEndpoint + id, headers: headers)
-        .then((dynamic value) async {
-      final res = value as List;
-      states = res.map((val) => StateModel.fromJson(val)).toList();
-      return states;
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
-  }
-
-  Future validateMail(email, username) {
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
-    return networkHelper
-        .post(validateEmail,
-            body: {"email": email, "username": username}, headers: headers)
-        .then((dynamic value) async {
-      return true;
-    }).catchError((err) => throw err);
-  }
-
-  Future editProfile(data, token) {
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": token
-    };
-    return networkHelper
-        .put(editProfileEndpoint, body: data, headers: headers)
-        .then((dynamic value) async {
-      return UserModel.fromJson(value['data']);
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
-  }
-
-  Future updateDp(email, dp, token) {
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": token
-    };
-    return networkHelper
-        .post(updateDpUrl,
-            body: {"emailField": email, "dp": dp}, headers: headers)
-        .then((dynamic value) async {
-      return true;
-    }).catchError((err) {
-      errorHandler.handleError(err['body']);
-    });
-  }
-
-  Future<dynamic> validateUser(user) async{
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    };
-    try{
-      final result = await networkHelper
-        .post(validateUserEndpoint, body: {"username": user}, headers: headers);
-        return result;
-    }catch(e){
+    try {
+      final response = await networkHelper.post(loginEndpoint,
+          headers: headers, encoding: Encoding.getByName("utf-8"), body: data);
+      return AuthModel.fromJson(response);
+    } catch (e) {
       rethrow;
     }
   }
 
-  Future requestVerifyEmail(email) async {
+  Future<UserModel> createUser(data) async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    try {
+      final result = await networkHelper.post(createUserEndpoint,
+          headers: headers, encoding: Encoding.getByName("utf-8"), body: data);
+      final response = result;
+      return UserModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Campus>> fetchCampuses(state) async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    try {
+      final result = await networkHelper.get(campusEndpoint, headers: headers);
+      final res = result as List;
+      return res.map((val) => Campus.fromJson(val)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<CountryModel>> fetchCountries() async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    try {
+      final result = await networkHelper.get(countryEndpoint, headers: headers);
+      final res = result as List;
+      return res.map((val) => CountryModel.fromJson(val)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<StateModel>> fetchStates(id) async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    try {
+      final result =
+          await networkHelper.get(stateEndpoint + id, headers: headers);
+      final res = result as List;
+      return res.map((val) => StateModel.fromJson(val)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> validateMail(email, username) async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    try {
+      final result = await networkHelper.post(editProfileEndpoint,
+          body: {"email": email, "username": username}, headers: headers);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> editProfile(data, token) async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    try {
+      final result = await networkHelper.post(editProfileEndpoint,
+          body: data, headers: headers);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updateDp(email, dp, token) async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": token
+    };
+    try {
+      final result = await networkHelper.get(updateDpUrl, headers: headers);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> validateUser(user) async {
+    headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    };
+    try {
+      final result = await networkHelper.post(validateUserEndpoint,
+          body: {"username": user}, headers: headers);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<SuccessMessageModel> requestVerifyEmail(email) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",

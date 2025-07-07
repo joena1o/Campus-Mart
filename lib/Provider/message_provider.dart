@@ -5,6 +5,7 @@ import 'package:campus_mart/model/message_model.dart';
 import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/network/message_class/messaging_class.dart';
 import 'package:campus_mart/network/notification_service_class.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
@@ -77,7 +78,9 @@ class MessageProvider extends ChangeNotifier {
     try {
       messageModel = await messageClass.getMessages(data, token);
     } catch (e) {
-      //showMessageError(jsonDecode(e.toString())['message']);
+      if(kDebugMode){
+      showMessageError(jsonDecode(e.toString())['message']);
+      }
     }
     notifyListeners();
   }

@@ -51,7 +51,7 @@ class _NavbarState extends State<Navbar> {
                    : Provider.of<ProductProvider>(context, listen: false).searchProductByCategory(text,
                    context.read<AuthProvider>().accessToken, context);
 
-               Provider.of<ProductProvider>(context, listen: false).saveSearch({
+              context.read<ProductProvider>().saveSearch({
                  "user_id": context.read<UserProvider>().userDetails?.id,
                  "keyword": text
                },  context.read<AuthProvider>().accessToken);

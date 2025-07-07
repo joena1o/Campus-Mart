@@ -1,5 +1,5 @@
 import 'package:campus_mart/model/review_model.dart';
-import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
+import 'package:campus_mart/screens/home_screen/widgets/ImageWidget/image_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReviewCard extends StatelessWidget {

@@ -44,10 +44,12 @@ class ProductProvider extends ChangeNotifier {
   int _indexCat = 1;
   final int _searchIndex = 1;
   int _myAdsIndex = 1;
-  int _pendingAdsIndex =1;
+  int _pendingAdsIndex = 1;
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
-  final RefreshController _refreshController2 = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController2 =
+      RefreshController(initialRefresh: false);
 
   // Getters
   List<WishProductModel>? get wishProductModel => _wishProductModel;
@@ -79,7 +81,9 @@ class ProductProvider extends ChangeNotifier {
     _loadingWishList = true;
     try {
       _wishProductModel = await _product.fetchWishList(username, token);
-      _availableItems = _wishProductModel!.where((element) => element.product!.isNotEmpty).toList();
+      _availableItems = _wishProductModel!
+          .where((element) => element.product!.isNotEmpty)
+          .toList();
     } catch (e) {
       showMessageError(jsonDecode(e.toString())['message']);
       _wishProductModel = [];
@@ -126,12 +130,12 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   Future<void> deleteAd(String? id, String? userId, String token) async {
     _isGettingMyProduct = true;
     try {
       final String response = await _product.deleteProduct(id, token);
-      final SuccessMessageModel successMessage = SuccessMessageModel.fromJson(jsonDecode(response));
+      final SuccessMessageModel successMessage =
+          SuccessMessageModel.fromJson(jsonDecode(response));
       showMessage(successMessage.message);
       resetMyAdsItems();
       getMyAds(userId, token);
@@ -144,15 +148,17 @@ class ProductProvider extends ChangeNotifier {
   }
 
   // ----- Ad Alerts -----
-  Future<void> addAdAlert(BuildContext context, Map<String, dynamic> data, String userId, String token) async {
+  Future<void> addAdAlert(BuildContext context, Map<String, dynamic> data,
+      String userId, String token) async {
     _uploadingAdAlert = true;
     try {
       final dynamic response = await _product.adAlert(data, token);
-        final SuccessMessageModel result = SuccessMessageModel.fromJson(response);
-        showMessage(result.message);
-        getAdAlerts(userId, token);
+      final SuccessMessageModel result = SuccessMessageModel.fromJson(response);
+      showMessage(result.message);
+      getAdAlerts(userId, token);
     } catch (onError) {
-      final ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError as String));
+      final ErrorModel errorModel =
+          ErrorModel.fromJson(jsonDecode(onError as String));
       showMessage(errorModel.message);
     } finally {
       _uploadingAdAlert = false;
@@ -173,7 +179,8 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteAdAlert(String? id, BuildContext context, String? userId, String token) async {
+  Future<void> deleteAdAlert(
+      String? id, BuildContext context, String? userId, String token) async {
     _deleteAdAlertStatus = true;
     try {
       final dynamic successMessage = await _product.deleteAdAlert(id, token);
@@ -200,18 +207,17 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<void> addReview(Map<String, dynamic> data, String token) async {
-    _uploadingReview= true;
+    _uploadingReview = true;
     try {
       await _product.addReview(data, token);
     } catch (e) {
       // Handle error
-        showMessageError(jsonDecode(e.toString())['message']);
+      showMessageError(jsonDecode(e.toString())['message']);
     } finally {
       _uploadingReview = false;
       notifyListeners();
     }
   }
-
 
   // ----- Notifications -----
   Future<void> getNotifications(String? userId, String token) async {
@@ -241,24 +247,13 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> searchProduct(String? query, String token, BuildContext context) async {
-    _categoryProductList = [];
-    _isGettingProduct =true;
-    try {
-      _categoryProductList = await _product.searchProduct(query, _searchIndex, token);
-    } catch (e) {
-      showMessageError(jsonDecode(e.toString())['message']);
-    } finally {
-      _isGettingProduct = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> searchProductByCategory(String? query, String token, BuildContext context) async {
+  Future<void> searchProduct(
+      String? query, String token, BuildContext context) async {
     _categoryProductList = [];
     _isGettingProduct = true;
     try {
-      _categoryProductList = await _product.searchCategoryProduct(query, _searchIndex, _currentCategory!, token);
+      _categoryProductList =
+          await _product.searchProduct(query, _searchIndex, token);
     } catch (e) {
       showMessageError(jsonDecode(e.toString())['message']);
     } finally {
@@ -267,9 +262,26 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _getMoreProducts(String category, String token, bool isAll) async {
+  Future<void> searchProductByCategory(
+      String? query, String token, BuildContext context) async {
+    _categoryProductList = [];
+    _isGettingProduct = true;
     try {
-      final List<ProductModel>? newProducts = await _product.fetchProducts(category, isAll ? _indexAll : _indexCat, token);
+      _categoryProductList = await _product.searchCategoryProduct(
+          query, _searchIndex, _currentCategory!, token);
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
+    } finally {
+      _isGettingProduct = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _getMoreProducts(
+      String category, String token, bool isAll) async {
+    try {
+      final List<ProductModel>? newProducts = await _product.fetchProducts(
+          category, isAll ? _indexAll : _indexCat, token);
       if (newProducts!.isNotEmpty) {
         if (isAll) {
           _productList.addAll(newProducts);
@@ -284,12 +296,14 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getProduct(String? category, int val, String token, Function callback) async {
+  Future<void> getProduct(
+      String? category, int val, String token, Function callback) async {
     _isGettingProduct = true;
     try {
       await _getMoreProducts(category!, token, category.isEmpty);
     } catch (onError) {
-      final ErrorModel errorModel = ErrorModel.fromJson(jsonDecode(onError as String));
+      final ErrorModel errorModel =
+          ErrorModel.fromJson(jsonDecode(onError as String));
       showMessageError(errorModel.message);
     } finally {
       _isGettingProduct = false;
@@ -299,7 +313,8 @@ class ProductProvider extends ChangeNotifier {
   }
 
   // ----- Edit Ad -----
-  Future<void> editProduct(Map<String, dynamic> data, String token, VoidCallback onSuccess) async {
+  Future<void> editProduct(
+      Map<String, dynamic> data, String token, VoidCallback onSuccess) async {
     _isGettingProduct = true;
     try {
       await _product.editProduct(data, token);
@@ -317,10 +332,8 @@ class ProductProvider extends ChangeNotifier {
     await _product.saveSearch(data, token);
   }
 
-  void disposeControllers(){
+  void disposeControllers() {
     _refreshController.dispose();
     _refreshController2.dispose();
   }
-
 }
-

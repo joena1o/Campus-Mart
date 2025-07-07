@@ -9,7 +9,7 @@ import 'package:campus_mart/screens/category_screen/category_screen.dart';
 import 'package:campus_mart/screens/home_screen/navs/home_page/homepage.dart';
 import 'package:campus_mart/screens/home_screen/navs/home_page/widget/drawer_menu.dart';
 import 'package:campus_mart/screens/home_screen/navs/notification_page/notification_page.dart';
-import 'package:campus_mart/screens/home_screen/navs/ProfilePage/profile_page.dart';
+import 'package:campus_mart/screens/home_screen/navs/profile_page/profile_page.dart';
 import 'package:campus_mart/screens/home_screen/navs/wish_list/wish_list.dart';
 import 'package:campus_mart/screens/home_screen/widgets/bottom_nav/bottom_nav.dart';
 import 'package:campus_mart/screens/settings_page/settings_page.dart';

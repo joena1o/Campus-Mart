@@ -1,9 +1,9 @@
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Provider/product_provider.dart';
 import 'package:campus_mart/model/user_model.dart';
-import 'package:campus_mart/screens/home_screen/Widgets/ImageWidget/ImageWidget.dart';
 import 'package:campus_mart/Utils/categories.dart';
 import 'package:campus_mart/Utils/colors.dart';
+import 'package:campus_mart/screens/home_screen/widgets/ImageWidget/image_widget.dart';
 import 'package:campus_mart/screens/product_screen/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
