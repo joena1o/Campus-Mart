@@ -41,7 +41,11 @@ class Auth {
     try {
       final response = await networkHelper.post(loginEndpoint,
           headers: headers, encoding: Encoding.getByName("utf-8"), body: data);
-      return AuthModel.fromJson(response);
+      if (response.statusCode >= 400 && response.statusCode <= 500) {
+        throw response.body;
+      }
+      final result = json.decode(response.body);
+      return AuthModel.fromJson(result);
     } catch (e) {
       rethrow;
     }
@@ -53,10 +57,13 @@ class Auth {
       "Content-Type": "application/json",
     };
     try {
-      final result = await networkHelper.post(createUserEndpoint,
+      final response = await networkHelper.post(createUserEndpoint,
           headers: headers, encoding: Encoding.getByName("utf-8"), body: data);
-      final response = result;
-      return UserModel.fromJson(response);
+      if (response.statusCode >= 400 && response.statusCode <= 500) {
+        throw (response.body);
+      }
+      final result = json.decode(response.body);
+      return UserModel.fromJson(result);
     } catch (e) {
       rethrow;
     }
@@ -69,7 +76,10 @@ class Auth {
     };
     try {
       final result = await networkHelper.get(campusEndpoint, headers: headers);
-      final res = result as List;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      final res = json.decode(result.body) as List;
       return res.map((val) => Campus.fromJson(val)).toList();
     } catch (e) {
       rethrow;
@@ -83,7 +93,10 @@ class Auth {
     };
     try {
       final result = await networkHelper.get(countryEndpoint, headers: headers);
-      final res = result as List;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      final res = json.decode(result.body) as List;
       return res.map((val) => CountryModel.fromJson(val)).toList();
     } catch (e) {
       rethrow;
@@ -98,14 +111,17 @@ class Auth {
     try {
       final result =
           await networkHelper.get(stateEndpoint + id, headers: headers);
-      final res = result as List;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      final res = json.decode(result.body) as List;
       return res.map((val) => StateModel.fromJson(val)).toList();
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<dynamic> validateMail(email, username) async {
+  Future<Map<String, dynamic>> validateMail(email, username) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -113,13 +129,16 @@ class Auth {
     try {
       final result = await networkHelper.post(editProfileEndpoint,
           body: {"email": email, "username": username}, headers: headers);
-      return result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return json.decode(result.body);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<dynamic> editProfile(data, token) async {
+  Future<UserModel> editProfile(data, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -128,13 +147,16 @@ class Auth {
     try {
       final result = await networkHelper.post(editProfileEndpoint,
           body: data, headers: headers);
-      return result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return UserModel.fromJson(json.decode(result.body)['data']);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<dynamic> updateDp(email, dp, token) async {
+  Future<Map<String, dynamic>> updateDp(email, dp, token) async {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -142,7 +164,10 @@ class Auth {
     };
     try {
       final result = await networkHelper.get(updateDpUrl, headers: headers);
-      return result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return json.decode(result.body);
     } catch (e) {
       rethrow;
     }
@@ -156,7 +181,10 @@ class Auth {
     try {
       final result = await networkHelper.post(validateUserEndpoint,
           body: {"username": user}, headers: headers);
-      return result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return json.decode(result.body);
     } catch (e) {
       rethrow;
     }
@@ -170,7 +198,10 @@ class Auth {
     try {
       final result = await networkHelper.post(requestVerifyEmailUrl,
           body: {"email": email}, headers: headers);
-      return SuccessMessageModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return SuccessMessageModel.fromJson(json.decode(result.body));
     } catch (e) {
       rethrow;
     }
@@ -184,7 +215,10 @@ class Auth {
     try {
       final result = await networkHelper.post(verifyEmailAddressUrl,
           body: {"email": email, "otp": otp}, headers: headers);
-      return VerifyTokenModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return VerifyTokenModel.fromJson(json.decode(result.body));
     } catch (e) {
       rethrow;
     }
@@ -198,7 +232,10 @@ class Auth {
     try {
       final result = await networkHelper.post(forgottenPasswordUrl,
           body: {"email": email}, headers: headers);
-      return SuccessMessageModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return SuccessMessageModel.fromJson(json.decode(result.body));
     } catch (e) {
       rethrow;
     }
@@ -212,7 +249,10 @@ class Auth {
     try {
       final result = await networkHelper.post(verifyOtpUrl,
           body: {"email": email, "otp": otp}, headers: headers);
-      return VerifyTokenModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return VerifyTokenModel.fromJson(json.decode(result.body));
     } catch (e) {
       rethrow;
     }
@@ -231,7 +271,11 @@ class Auth {
             "password": newPassword,
           },
           headers: headers);
-      successMessageModel = SuccessMessageModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      successMessageModel =
+          SuccessMessageModel.fromJson(json.decode(result.body));
       return successMessageModel;
     } catch (e) {
       rethrow;

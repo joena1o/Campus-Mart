@@ -42,36 +42,36 @@ dependencies:
   #flutter_paystack: ^1.0.7
   #pay_with_paystack:
   #flutter_paystack_max:
-  flutter_paystack_payment_plus:
+  #flutter_paystack_payment_plus:
   flutter_dotenv: ^5.1.0
   #flutter_paystack_payment:
   pull_to_refresh_flutter3: ^2.0.1
   fast_cached_network_image: ^1.2.9
-  google_mobile_ads:
+  google_mobile_ads: ^6.0.0
   lottie: ^2.2.0
   image_picker: ^0.8.6+1
   cached_network_image: ^3.3.1
-  firebase_core:
+  firebase_core: ^3.15.1
   flutter_rating_bar: ^4.0.1
   dotted_border: ^2.0.0+3
-  onesignal_flutter: ^3.5.0
+  onesignal_flutter: ^5.3.2 
   custom_bottom_sheet:
-  firebase_messaging:
-  http: ^0.13.5
-  nb_utils: ^4.5.0
+  # http: ^1.3.0
+  #nb_utils: ^7.1.6
   shared_preferences: 
   flutter_launcher_icons: ^0.12.0
   provider: ^6.0.3
   chat_bubbles:
   badges:
   web_socket_channel: ^2.2.1
+  #device_info_plus: ^8.1.0
   intl_phone_field2: ^3.3.4
+  permission_handler:
   url_launcher: ^6.1.10
   gallery_image_viewer: ^1.2.0
   galleryimage:
   flutter_local_notifications:
   popup_banner: ^1.0.0
-  app_updater: ^1.0.6
   intl: ^0.17.0
   pinput: ^4.0.0
 

@@ -9,18 +9,15 @@ import 'package:campus_mart/model/product_model.dart';
 import 'package:campus_mart/model/user_model.dart';
 import 'package:campus_mart/network/product_class/product_class.dart';
 import 'package:campus_mart/screens/ad_screen/success_screen.dart';
-import 'package:campus_mart/Utils/ads_ad_unit.dart';
 import 'package:campus_mart/Utils/categories.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/conn.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
+// import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,7 +36,7 @@ class _AdScreenState extends State<AdScreen> {
     super.dispose();
   }
 
-  final plugin = PaystackPayment();
+  //final plugin = PaystackPayment();
 
   bool contact = false;
   bool negotiable = false;
@@ -66,7 +63,7 @@ class _AdScreenState extends State<AdScreen> {
 
   @override
   void initState() {
-    plugin.initialize(publicKey: dotenv.env['PAY_STACK_PUBLIC_KEY_LIVE']!);
+    // plugin.initialize(publicKey: dotenv.env['PAY_STACK_PUBLIC_KEY_LIVE']!);
 
     productModel.userId = context.read<UserProvider>().userDetails!.id;
     productModel.campus = context.read<UserProvider>().userDetails!.campus;
@@ -459,74 +456,33 @@ class _AdScreenState extends State<AdScreen> {
     }
   }
 
-  Future<void> payStackCheckOut() async {
-    final userDetails = context.read<UserProvider>().userDetails;
-    Charge charge = Charge()
-      ..amount = selectPayment!.amount!
-      ..reference = _getReference()
-      // or ..accessCode = _getAccessCodeFrmInitialization()
-      ..email = userDetails?.email;
-    CheckoutResponse response = await plugin.checkout(
-      context,
-      logo: const Image(
-        image: AssetImage("assets/logo_orange.png"),
-        width: 50,
-      ),
-      fullscreen: false,
-      method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
-      charge: charge,
-    );
-    if (response.message == "Success") {
-      setState(() => productModel.paid = true);
-      setState(() => processingPayment = true);
-      setState(() => isSuccessful = true);
-      //updatePaymentStatus();
-      uploadProduct();
-    } else {
-      setState(() => productModel.paid = false);
-      showMessageError("Error encountered while processing payment");
-    }
-  }
-
-  String _getReference() {
-    String platform;
-    if (!kIsWeb) {
-      if (Platform.isIOS) {
-        platform = 'iOS';
-      } else {
-        platform = 'Android';
-      }
-    } else {
-      platform = "WEB";
-    }
-    return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
-  }
+   Future<void> payStackCheckOut() async {}
 
   void _loadAd() {
-    final bannerAd = BannerAd(
-      size: AdSize.fullBanner,
-      adUnitId: bannerAdUnit,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        // Called when an ad is successfully received.
-        onAdLoaded: (ad) {
-          if (!mounted) {
-            ad.dispose();
-            return;
-          }
-          setState(() {
-            _bannerAd = ad as BannerAd;
-          });
-        },
-        // Called when an ad request failed.
-        onAdFailedToLoad: (ad, error) {
-          debugPrint('BannerAd failed to load: $error');
-          ad.dispose();
-        },
-      ),
-    );
+  //   final bannerAd = BannerAd(
+  //     size: AdSize.fullBanner,
+  //     adUnitId: bannerAdUnit,
+  //     request: const AdRequest(),
+  //     listener: BannerAdListener(
+  //       // Called when an ad is successfully received.
+  //       onAdLoaded: (ad) {
+  //         if (!mounted) {
+  //           ad.dispose();
+  //           return;
+  //         }
+  //         setState(() {
+  //           _bannerAd = ad as BannerAd;
+  //         });
+  //       },
+  //       // Called when an ad request failed.
+  //       onAdFailedToLoad: (ad, error) {
+  //         debugPrint('BannerAd failed to load: $error');
+  //         ad.dispose();
+  //       },
+  //     ),
+  //   );
 
-    // Start loading.
-    bannerAd.load();
+  //   // Start loading.
+  //   bannerAd.load();
   }
 }

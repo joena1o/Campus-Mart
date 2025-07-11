@@ -4,7 +4,6 @@ import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class Suggest extends StatefulWidget {
@@ -39,12 +38,12 @@ class _SuggestState extends State<Suggest> {
                 "Suggest a new feature for the app",
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
-              10.height,
+                const SizedBox(height: 7,),
               const Text(
                 "Recommend a feature you would love to be included in the app",
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
-              20.height,
+                const SizedBox(height: 17,),
               Container(
                   height: size.height * .25,
                   decoration: BoxDecoration(
@@ -62,7 +61,7 @@ class _SuggestState extends State<Suggest> {
                         hintStyle: TextStyle(fontSize: 12),
                         border: InputBorder.none),
                   )),
-              30.height,
+                const SizedBox(height: 27,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

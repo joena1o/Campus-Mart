@@ -23,10 +23,17 @@ class _SettingsPageState extends State<SettingsPage> {
     status();
   }
 
-  Future<void> status() async{
-    final onesignal = await OneSignal.shared.getDeviceState();
-    setState(()=> isEnabled = onesignal!.pushDisabled);
+  Future<void> status() async {
+  try {
+    // Get permission status
+    final permission =  OneSignal.Notifications.permission;
+    setState(() {
+      isEnabled = permission;
+    });
+  } catch (e) {
+    setState(() => isEnabled = false);
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +169,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         onChanged: (value) {
                           setState(() {
                             isEnabled = value;
-                            OneSignal.shared.disablePush(value);
+                            setPushEnabled(value);
                           });
                         },
                         activeColor: primary,
@@ -178,5 +185,14 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+  Future<void> setPushEnabled(bool enabled) async {
+    try {
+      // For OneSignal 5.0+
+      await OneSignal.Notifications.requestPermission(enabled);
+      print("Push notifications ${enabled ? 'enabled' : 'disabled'}");
+    } catch (e) {
+      print("Error setting push notifications: $e");
+    }
   }
 }

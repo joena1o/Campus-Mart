@@ -9,51 +9,41 @@ import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Wrapper.dart';
 import 'package:campus_mart/firebase_options.dart';
+import 'package:campus_mart/network/notification_service_class.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nb_utils/nb_utils.dart' as notification_service;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<
-    ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  notification_service.initialize();
-
   await dotenv.load(fileName: ".env");
-
+  await requestNotificationPermission();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  NotificationService.initialize();
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.initialize(dotenv.env['ONE_SIGNAL_APP_ID_LIVE']!);
+  OneSignal.Notifications.requestPermission(true);
 
-  String onesignalAppId = dotenv.env['ONE_SIGNAL_APP_ID_LIVE']!;
-  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-  OneSignal.shared.setAppId(onesignalAppId);
-
-  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-    if (kDebugMode) {
-      print("Accepted permission: $accepted");
-    }
-  });
-
-  runApp(
-      MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => UserProvider()),
-            ChangeNotifierProvider(create: (_) => AuthProvider()),
-            ChangeNotifierProvider(create: (_) => ProductProvider()),
-            ChangeNotifierProvider(create: (_) => SignUpProvider()),
-            ChangeNotifierProvider(create: (_) => FeedbackProvider()),
-            ChangeNotifierProvider(create: (_) => MessageProvider()),
-            ChangeNotifierProvider(create: (_) => ThemeProvider()),
-          ],
-          child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => UserProvider()),
+    ChangeNotifierProvider(create: (_) => AuthProvider()),
+    ChangeNotifierProvider(create: (_) => ProductProvider()),
+    ChangeNotifierProvider(create: (_) => SignUpProvider()),
+    ChangeNotifierProvider(create: (_) => FeedbackProvider()),
+    ChangeNotifierProvider(create: (_) => MessageProvider()),
+    ChangeNotifierProvider(create: (_) => ThemeProvider()),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -63,7 +53,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const MySplashPage();
+    return const MySplashPage();
   }
 }
 
@@ -74,15 +64,17 @@ class MySplashPage extends StatefulWidget {
   State<MySplashPage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MySplashPage> {
+ Future<void> requestNotificationPermission() async {
+    await Permission.notification.request();
+  }
 
+class _MyHomePageState extends State<MySplashPage> {
   Color? statusBarColor;
 
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 1), ()
-    {
+    Timer(const Duration(seconds: 1), () {
       Provider.of<ThemeProvider>(context, listen: false).loadTheme();
     });
   }
@@ -92,22 +84,28 @@ class _MyHomePageState extends State<MySplashPage> {
     statusBarColor = Theme.of(context).scaffoldBackgroundColor;
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: primary,
-      statusBarBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark
-    ));
+        statusBarColor: primary,
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark));
 
     return Consumer<ThemeProvider>(
       builder: (context, provider, child) {
         return MaterialApp(
-          title: 'Campus Mart',
-          debugShowCheckedModeBanner: provider.isTest,
-          navigatorKey: navigatorKey,
-          scaffoldMessengerKey: rootScaffoldMessengerKey,
-          theme: provider.isDark ? ThemeData.dark() : ThemeData.light(),
-          home: const Wrapper()
-        );
+            title: 'Campus Mart',
+            scrollBehavior: NoGlowScrollBehavior(),
+            debugShowCheckedModeBanner: provider.isTest,
+            navigatorKey: navigatorKey,
+            scaffoldMessengerKey: rootScaffoldMessengerKey,
+            theme: provider.isDark ? ThemeData.dark() : ThemeData.light(),
+            home: const Wrapper());
       },
     );
+  }
+}
+
+class NoGlowScrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }

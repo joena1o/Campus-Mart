@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "24001240351",
     "project_id": "campusmart-5aac2",
-    "storage_bucket": "campusmart-5aac2.appspot.com"
+    "storage_bucket": "campusmart-5aac2.firebasestorage.app"
   },
   "client": [
     {
@@ -12,12 +12,7 @@
           "package_name": "com.pollex.campus_mart"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "24001240351-knko5r8huj8e4vc3eh5lds2ommd2mqd5.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyC_ankTrYn-9V7Ck2hx8FCfK6_vii7rEKw"
@@ -25,19 +20,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "24001240351-knko5r8huj8e4vc3eh5lds2ommd2mqd5.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "24001240351-7tt3l65cgua68aqtl1md4kjmajj37vt8.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.campusMart"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

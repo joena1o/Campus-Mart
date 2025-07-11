@@ -4,7 +4,6 @@ import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute ;
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 
@@ -39,10 +38,10 @@ class _ReportState extends State<Report> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Report an issue with the App", style: TextStyle(fontWeight: FontWeight.w500),),
-              10.height,
+                const SizedBox(height: 7,),
               const Text(
                   "Please include the Transaction Reference Number in your description.", style: TextStyle(fontSize: 12, color:Colors.grey),),
-              20.height,
+                const SizedBox(height: 17,),
               Container(
                   height: size.height*.25,
                   decoration:
@@ -61,7 +60,7 @@ class _ReportState extends State<Report> {
                         hintStyle: TextStyle(fontSize: 12),
                         border: InputBorder.none),
                   )),
-              30.height,
+                const SizedBox(height: 25,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

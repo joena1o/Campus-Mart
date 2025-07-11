@@ -44,13 +44,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBcL6Iz2YyuXjC0fgVuzyZJ58IbfMgIcos',
-    appId: '1:24001240351:web:a52dd221f5c2135b54e42a',
+    apiKey: 'AIzaSyDUGmy2pxizm3kVG5dgi68cHWNrRWO1nhE',
+    appId: '1:24001240351:web:adf983a8d9bd6ea254e42a',
     messagingSenderId: '24001240351',
     projectId: 'campusmart-5aac2',
     authDomain: 'campusmart-5aac2.firebaseapp.com',
-    storageBucket: 'campusmart-5aac2.appspot.com',
-    measurementId: 'G-T0T3JBZSXG',
+    storageBucket: 'campusmart-5aac2.firebasestorage.app',
+    measurementId: 'G-C54L144CPN',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -58,16 +58,16 @@ class DefaultFirebaseOptions {
     appId: '1:24001240351:android:7023ac9a8f4d957054e42a',
     messagingSenderId: '24001240351',
     projectId: 'campusmart-5aac2',
-    storageBucket: 'campusmart-5aac2.appspot.com',
+    storageBucket: 'campusmart-5aac2.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCrFFsv9zoRh6QwRx0XZZrMZ_yng6QzAj8',
-    appId: '1:24001240351:ios:cbfabf5a23d16d3054e42a',
+    appId: '1:24001240351:ios:9fecabf1981c061254e42a',
     messagingSenderId: '24001240351',
     projectId: 'campusmart-5aac2',
-    storageBucket: 'campusmart-5aac2.appspot.com',
-    iosBundleId: 'com.pollex.campus-mart',
+    storageBucket: 'campusmart-5aac2.firebasestorage.app',
+    iosBundleId: 'com.pollex.campusMart',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

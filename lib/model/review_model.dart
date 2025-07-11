@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:nb_utils/nb_utils.dart';
 
 class ReviewModel {
   List<Datum>? data;
@@ -62,7 +61,7 @@ class Datum {
     reviewerId: json["reviewerId"],
     productId: json["ProductId"],
     review: json["Review"],
-    rating: json["Rating"].toString().toDouble(),
+    rating: json["Rating"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],

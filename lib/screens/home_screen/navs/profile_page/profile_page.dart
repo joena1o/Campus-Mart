@@ -12,7 +12,6 @@ import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -93,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
           height: 20,
         ),
 
-        10.height,
+        const SizedBox(height: 7,),
 
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,

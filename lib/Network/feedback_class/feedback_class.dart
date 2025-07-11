@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:campus_mart/Network/error_handler.dart';
 import 'package:campus_mart/Network/network_util.dart';
 import 'package:campus_mart/Utils/conn.dart';
@@ -19,8 +21,11 @@ class FeedbackClass{
       "Authorization": token
     };
     try{
-      final request = await networkHelper.post(feedback, body: data, headers: headers);
-      successMessageModel = SuccessMessageModel.fromJson(request);
+      final result = await networkHelper.post(feedback, body: data, headers: headers);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      successMessageModel = SuccessMessageModel.fromJson(json.decode(result.body));
       return successMessageModel;
     }catch(e){
       rethrow;

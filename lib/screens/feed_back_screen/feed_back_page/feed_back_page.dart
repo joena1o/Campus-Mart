@@ -5,7 +5,6 @@ import 'package:campus_mart/screens/feed_back_screen/feed_back_page/widget/repor
 import 'package:campus_mart/screens/feed_back_screen/feed_back_page/widget/suggest.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute ;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 
 class FeedbackView extends StatefulWidget {
@@ -76,7 +75,7 @@ class _FeedbackViewState extends State<FeedbackView>
                             },
                             child: const FeedbackCard(
                                 title: "Report an issue with the transaction")),
-                    20.height,
+                const SizedBox(height: 17,),
                     step == 2
                         ? Suggest(feedBackType: widget.type)
                         : GestureDetector(
@@ -85,7 +84,7 @@ class _FeedbackViewState extends State<FeedbackView>
                             },
                             child:
                                 const FeedbackCard(title: "Suggest a new feature")),
-                    20.height,
+                const SizedBox(height: 27,),
                     step == 3
                         ? Bug(feedBackType: widget.type)
                         : GestureDetector(

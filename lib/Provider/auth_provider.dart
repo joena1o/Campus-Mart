@@ -41,7 +41,6 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // ----- Login -----
   Future<void> loginUser(String email, String password, bool redirect) async {
     _isLoading = true;
     notifyListeners();
@@ -55,7 +54,7 @@ class AuthProvider with ChangeNotifier {
       await saveDetails("passcode", password);
 
       //Register id for push notification
-      OneSignal.shared.setExternalUserId(_authModel!.data!.id!);
+      OneSignal.login(_authModel!.data!.id!);
 
       navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(builder: (_) => const HomeScreen()));
@@ -71,7 +70,6 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // ----- Email Verification -----
   Future<void> requestVerifyEmailAddress(
       String email, BuildContext context) async {
     _isLoading = true;
@@ -104,7 +102,6 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // ----- Forgot Password -----
   Future<void> requestForgotPassword(String email, BuildContext context,
       [VoidCallback? callback]) async {
     _isLoading = true;

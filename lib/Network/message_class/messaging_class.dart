@@ -24,7 +24,10 @@ class MessageClass {
         body: data,
         encoding: Encoding.getByName("utf-8"),
       );
-      Map<String, dynamic> response = result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      Map<String, dynamic> response = json.decode(result.body);
       chat = Chat.fromJson(response);
       return chat;
     } catch (e) {
@@ -41,7 +44,10 @@ class MessageClass {
     try {
       final result =
           await _networkHelper.get("$messageEndpoint/$data", headers: headers);
-      Map<String, dynamic> response = result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      Map<String, dynamic> response = json.decode(result.body);
       return response['data']
           .map<MessageModel>((json) => MessageModel.fromJson(json))
           .toList();

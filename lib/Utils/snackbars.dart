@@ -5,9 +5,9 @@ void showMessage(message) {
   final snackBar = SnackBar(
     content: Text(
       message,
-      style: const TextStyle(color: Colors.green),
+      style: const TextStyle(color: Colors.white),
     ),
-    backgroundColor: Colors.greenAccent,
+    backgroundColor: Colors.green,
     duration: const Duration(seconds: 4),
   );
   rootScaffoldMessengerKey.currentState?.showSnackBar(snackBar);

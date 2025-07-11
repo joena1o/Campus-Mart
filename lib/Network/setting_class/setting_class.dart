@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:campus_mart/Network/error_handler.dart';
 import 'package:campus_mart/Network/network_util.dart';
 import 'package:campus_mart/Utils/conn.dart';
@@ -20,7 +22,10 @@ class SettingClass{
     };
     try{
       final result = await networkHelper.put(changePasswordUrl, body:data, headers: headers);
-      return SuccessMessageModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return SuccessMessageModel.fromJson(json.decode(result.body));
     }catch(e){
       rethrow;
     }

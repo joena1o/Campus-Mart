@@ -71,7 +71,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
             builder: (context, provider, child) {
               return GestureDetector(
                   onTap: () {
-                    OneSignal.shared.removeExternalUserId();
+                    OneSignal.logout();
                     provider.disconnectWebSocket();
                     clearPrefs();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(

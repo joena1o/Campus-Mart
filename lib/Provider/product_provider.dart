@@ -9,14 +9,14 @@ import 'package:campus_mart/model/success_message_model.dart';
 import 'package:campus_mart/model/wish_product_model.dart';
 import 'package:campus_mart/network/product_class/product_class.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
+// import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 
 class ProductProvider extends ChangeNotifier {
   final ProductClass _product = ProductClass();
 
-  final plugin = PaystackPayment();
+  //final plugin = PaystackPayment();
 
   List<WishProductModel>? _wishProductModel;
   List<ProductModel> _productList = [];
@@ -309,6 +309,16 @@ class ProductProvider extends ChangeNotifier {
       _isGettingProduct = false;
       callback();
       notifyListeners();
+    }
+  }
+
+  Future<void> addOrRemoveFromWishlist(
+       Map<String, dynamic> data, String token) async {
+    try {
+      final wishlist = await _product.addToWishlist(data, token);
+       showMessage(wishlist.message);
+    } catch (e) {
+      showMessageError(jsonDecode(e.toString())['message']);
     }
   }
 

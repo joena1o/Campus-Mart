@@ -10,7 +10,6 @@ import 'package:campus_mart/screens/home_screen/widgets/ImageWidget/image_widget
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -207,8 +206,8 @@ class _MyAdScreenState extends State<MyAdScreen> {
         return Container(
           height: size.height*.26 ,
           padding: const EdgeInsets.all(30),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(topLeft: radiusCircular(20), topRight: radiusCircular(20)),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             color: Colors.white, // Customize the background color
           ),// Set the desired height of the bottom sheet
 

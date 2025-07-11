@@ -35,26 +35,26 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     NotificationService.requestPermissions();
 
     //Set Up for user Provider
     Provider.of<UserProvider>(context, listen: false).setUserDetails(
-      Provider.of<AuthProvider>(context, listen: false).userModel
-    );
+        Provider.of<AuthProvider>(context, listen: false).userModel);
 
     //Subscribe User
     UserModel? user = context.read<UserProvider>().userDetails;
-    OneSignal.shared.setExternalUserId(user!.id.toString());
+    OneSignal.login(user!.id.toString());
 
-    OneSignal.shared.sendTag("campus", user.campus); // Campus Tag
-    OneSignal.shared.sendTag("state", user.state); // State Tag
+    OneSignal.User.addTags({
+      "campus": user.campus,
+      "state": user.state,
+    });
 
     Provider.of<UserProvider>(context, listen: false).loadDetails();
     Provider.of<MessageProvider>(context, listen: false).initProvider(user);
-
   }
 
   @override
@@ -62,47 +62,18 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: const Drawer(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         child: DrawerMenu(),
       ),
-      appBar: currentNav != 4 ? AppBar(
-        toolbarHeight: 60,
-        elevation: 0,
-        leading: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-          return Container(
-              margin: const EdgeInsets.only(left: 12),
-              child:IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Icon(
-                Icons.menu,
-                size: 25,
-              )));
-        }),
-        actions: [
-          currentNav != 3 ?  IconButton(
-              onPressed: () {
-                context.read<ProductProvider>().resetItems();
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const CategoryScreen(index: -1,)));
-              },
-              icon: const Icon(
-                Icons.search_sharp,
-                size: 28,
-                color: primary,
-              )):Container(),
-        ],
-      ): AppBar(
-          toolbarHeight: 60,
-          leading: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
+      appBar: currentNav != 4
+          ? AppBar(
+              toolbarHeight: 60,
+              elevation: 0,
+              leading: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
                 return Container(
                     margin: const EdgeInsets.only(left: 12),
-                    child:IconButton(
+                    child: IconButton(
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
@@ -111,16 +82,54 @@ class _HomeScreenState extends State<HomeScreen> {
                           size: 25,
                         )));
               }),
-          actions: [
-            IconButton(onPressed: (){
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_)=> const SettingsPage())
-              );
-            }, icon: const Icon(Icons.settings, size: 30,)),
-
-            const SizedBox(width: 7,)
-          ],
-      ),
+              actions: [
+                currentNav != 3
+                    ? IconButton(
+                        onPressed: () {
+                          context.read<ProductProvider>().resetItems();
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => const CategoryScreen(
+                                    index: -1,
+                                  )));
+                        },
+                        icon: const Icon(
+                          Icons.search_sharp,
+                          size: 28,
+                          color: primary,
+                        ))
+                    : Container(),
+              ],
+            )
+          : AppBar(
+              toolbarHeight: 60,
+              leading: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                    margin: const EdgeInsets.only(left: 12),
+                    child: IconButton(
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        icon: const Icon(
+                          Icons.menu,
+                          size: 25,
+                        )));
+              }),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const SettingsPage()));
+                    },
+                    icon: const Icon(
+                      Icons.settings,
+                      size: 30,
+                    )),
+                const SizedBox(
+                  width: 7,
+                )
+              ],
+            ),
       body: SizedBox(
         width: size.width,
         height: size.height,
@@ -133,7 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     : const ProfilePage())),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-
       bottomNavigationBar: BottomAppBar(
         height: 60,
         elevation: 10,
@@ -143,28 +151,34 @@ class _HomeScreenState extends State<HomeScreen> {
           callback: updateNav,
         ),
       ),
-
       floatingActionButton: Consumer<MessageProvider>(
         builder: (context, provider, child) {
-            return badges.Badge(
-                    position: badges.BadgePosition.topStart(start: 43),
-                    badgeContent: Text("${provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id ).length}"),
-                    showBadge: provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id).isNotEmpty,
-                    child: FloatingActionButton(
-                      shape: const CircleBorder(),
-                      backgroundColor: primary,
-                      onPressed: (){
-                        // showMessageError("Feature not ready yet", context);
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=> const MessageScreen()));
-                    },
-                    child: const FaIcon(FontAwesomeIcons.message, color: Colors.white,),
-                  ),
-                );
-            },
+          return badges.Badge(
+            position: badges.BadgePosition.topStart(start: 43),
+            badgeContent: Text(
+                "${provider.chats.where((element) => element.seen == false && element.receiverId == context.read<UserProvider>().userDetails?.id).length}"),
+            showBadge: provider.chats
+                .where((element) =>
+                    element.seen == false &&
+                    element.receiverId ==
+                        context.read<UserProvider>().userDetails?.id)
+                .isNotEmpty,
+            child: FloatingActionButton(
+              shape: const CircleBorder(),
+              backgroundColor: primary,
+              onPressed: () {
+                // showMessageError("Feature not ready yet", context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const MessageScreen()));
+              },
+              child: const FaIcon(
+                FontAwesomeIcons.message,
+                color: Colors.white,
+              ),
+            ),
+          );
+        },
       ),
-
     );
   }
-
-
 }

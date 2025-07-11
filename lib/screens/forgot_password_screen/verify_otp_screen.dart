@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:campus_mart/Provider/auth_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -92,14 +91,14 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               ),
             ),
 
-            20.height,
+                const SizedBox(height: 17,),
 
             !bar.isLoading ?
 
             Wrap(
               children: [
                 const Text("Didn't receive code?", style: TextStyle(fontSize:15,fontWeight:FontWeight.normal)),
-                6.width,
+                const SizedBox(height: 6,),
                 GestureDetector(
                     onTap: (){
                       isLoading ? null :

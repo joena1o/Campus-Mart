@@ -35,7 +35,10 @@ class ProductClass {
     try {
       final result = await networkHelper
           .get("$getMyProductEndpoint/$id/$pageNumber", headers: headers);
-      Map<String, dynamic> response = result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      Map<String, dynamic> response = json.decode(result.body);
       return response['data']
           .map<ProductModel>((json) => ProductModel.fromJson(json))
           .toList();
@@ -54,7 +57,10 @@ class ProductClass {
       final result = await networkHelper.get(
           "$getMyPendingProductEndpoint/$id/$pageNumber",
           headers: headers);
-      Map<String, dynamic> response = result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      Map<String, dynamic> response = json.decode(result.body);
       return response['data']
           .map<ProductModel>((json) => ProductModel.fromJson(json))
           .toList();
@@ -76,7 +82,10 @@ class ProductClass {
               ? "$productEndpoint/$index"
               : "$url/$index",
           headers: headers);
-      Map<String, dynamic> response = result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      Map<String, dynamic> response = json.decode(result.body);
       return response['data']
           .map<ProductModel>((json) => ProductModel.fromJson(json))
           .toList();
@@ -94,7 +103,10 @@ class ProductClass {
     try {
       final result = await networkHelper.get("$searchAdEndPoint$index/$query",
           headers: headers);
-      Map<String, dynamic> response = result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+       throw (result.body);
+      }
+      Map<String, dynamic> response = json.decode(result.body);
       return response['data']
           .map<ProductModel>((json) => ProductModel.fromJson(json))
           .toList();
@@ -113,7 +125,10 @@ class ProductClass {
     try {
       final result = await networkHelper
           .get("$searchAdEndPoint$cat/$index/$query", headers: headers);
-      Map<String, dynamic> response = result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      Map<String, dynamic> response = json.decode(result.body);
       return response['data']
           .map<ProductModel>((json) => ProductModel.fromJson(json))
           .toList();
@@ -151,7 +166,10 @@ class ProductClass {
     try {
       final result = await networkHelper.put("$productEndpoint/editAd",
           body: data, headers: headers);
-      return ProductModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return ProductModel.fromJson(json.decode(result.body));
     } catch (e) {
       rethrow;
     }
@@ -171,7 +189,10 @@ class ProductClass {
         body: data,
         encoding: Encoding.getByName("utf-8"),
       );
-      productModel = ProductModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      productModel = ProductModel.fromJson(json.decode(result.body));
       return productModel;
     } catch (e) {
       rethrow;
@@ -187,25 +208,31 @@ class ProductClass {
     try {
       final result =
           await networkHelper.delete("$productEndpoint/$id", headers: headers);
-      return result;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+       throw (result.body);
+      }
+      return result.body;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future addToWishlist(data, token){
-    headers  = {
+  Future<SuccessMessageModel> addToWishlist(data, token) async {
+    headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": token
     };
-    return networkHelper.post(wishListEndpoint, headers: headers, body: data,
-      encoding: Encoding.getByName("utf-8"),)
-        .then((dynamic res) async{
-      return res;
-    }).catchError((err){
-      errorHandler.handleError(err['body']);
-    });
+     try {
+      final result =
+          await networkHelper.post(wishListEndpoint, body: data, headers: headers);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+       throw (result.body);
+      }
+      return SuccessMessageModel.fromJson(json.decode(result.body));
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<List<WishProductModel>> fetchWishList(username, token) async {
@@ -217,7 +244,10 @@ class ProductClass {
     try {
       final result = await networkHelper.get("$wishListEndpoint/$username",
           headers: headers);
-      final response = result['data'] as List;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      final response = json.decode(result.body)['data'] as List;
       return response.map((json) => WishProductModel.fromJson(json)).toList();
     } catch (e) {
       rethrow;
@@ -251,7 +281,10 @@ class ProductClass {
     try {
       final result =
           await networkHelper.get("$reviewEndpoint/$id", headers: headers);
-      return ReviewModel.fromJson(result);
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      return ReviewModel.fromJson(json.decode(result.body));
     } catch (e) {
       rethrow;
     }
@@ -266,7 +299,10 @@ class ProductClass {
     try {
       final result = await networkHelper.get("$getNotificationEndpoint/$userId",
           headers: headers);
-      List response = result as List;
+      if (result.statusCode >= 400 && result.statusCode <= 500) {
+        throw (result.body);
+      }
+      List response = json.decode(result.body) as List;
       return response.map((json) => NotificationModel.fromJson(json)).toList();
     } catch (e) {
       rethrow;
@@ -318,7 +354,10 @@ class ProductClass {
     try {
       final response = await networkHelper.get("$addAlertEndpoint/$userId",
           headers: headers);
-      final result = response['data'] as List;
+      if (response.statusCode >= 400 && response.statusCode <= 500) {
+       throw (response.body);
+      }
+      final result = json.decode(response.body)['data'] as List;
       return result.map((json) => AdAlertModel.fromJson(json)).toList();
     } catch (e) {
       rethrow;
@@ -333,9 +372,13 @@ class ProductClass {
       "Authorization": token
     };
     try {
-      final reponse =
+      final response =
           await networkHelper.delete("$addAlertEndpoint/$id", headers: headers);
-      successMessageModel = SuccessMessageModel.fromJson(reponse);
+      if (response.statusCode >= 400 && response.statusCode <= 500) {
+        throw (response.body);
+      }
+      successMessageModel =
+          SuccessMessageModel.fromJson(json.decode(response.body));
       return successMessageModel;
     } catch (e) {
       rethrow;

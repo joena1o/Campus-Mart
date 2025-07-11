@@ -6,7 +6,6 @@ import 'package:campus_mart/Utils/ads_ad_unit.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class AdAlerts extends StatefulWidget {
@@ -19,7 +18,7 @@ class AdAlerts extends StatefulWidget {
 class _AdAlertsState extends State<AdAlerts> {
   String? selectedId;
 
-  BannerAd? _bannerAd;
+ BannerAd? _bannerAd;
 
   @override
   void dispose() {
@@ -108,10 +107,10 @@ class _AdAlertsState extends State<AdAlerts> {
                         child: CircularProgressIndicator(),
                       ),
                     ),
-              _bannerAd == null
-                  // Nothing to render yet.
-                  ? const SizedBox()
-                  : SizedBox(height: 50, child: AdWidget(ad: _bannerAd!)),
+              // _bannerAd == null
+              //     // Nothing to render yet.
+              //     ? const SizedBox()
+              //     : SizedBox(height: 50, child: AdWidget(ad: _bannerAd!)),
             ],
           );
         }),
@@ -129,9 +128,9 @@ class _AdAlertsState extends State<AdAlerts> {
         return Container(
           height: size.height * .20,
           padding: const EdgeInsets.all(30),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
-                topLeft: radiusCircular(20), topRight: radiusCircular(20)),
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             color: Colors.white, // Customize the background color
           ), // Set the desired height of the bottom sheet
 
@@ -197,22 +196,24 @@ class _AdAlertsState extends State<AdAlerts> {
         return Container(
           height: size.height * .3,
           padding: const EdgeInsets.all(30),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
-                topLeft: radiusCircular(20),
-                topRight: radiusCircular(10)), // Customize the background color
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(10)), // Customize the background color
           ), // Set the desired height of the bottom sheet
 
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text(
+               Text(
                 "Buzz Me",
                 style: TextStyle(fontSize: 23, color: primary),
               ),
-              15.height,
-              const Text(
+               SizedBox(
+                height: 7,
+              ),
+               Text(
                 'Stay informed about the products you care about. "Buzz Me" sends you quick, attention-grabbing alerts when a product is back in stock, on sale, or its status changes, so you never miss an update.',
                 style: TextStyle(height: 1.5),
               )

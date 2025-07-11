@@ -8,7 +8,6 @@ import 'package:campus_mart/model/campus_model.dart';
 import 'package:campus_mart/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field2/intl_phone_field.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -242,8 +241,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             primary,
                                             secondary,
                                           ] : [
-                                              grey,
-                                              grey,
+                                              Colors.grey,
+                                              Colors.grey,
                                             ]
           
                                   ),

@@ -3,10 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  connectivity_plus_windows
   file_selector_windows
   firebase_core
-  nb_utils
+  permission_handler_windows
   smart_auth
   url_launcher_windows
 )

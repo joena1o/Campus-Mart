@@ -3,7 +3,6 @@ import 'package:campus_mart/Provider/user_provider.dart';
 import 'package:campus_mart/Utils/colors.dart';
 import 'package:campus_mart/Utils/snackbars.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -49,7 +48,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
           
-              40.height,
+              const SizedBox(height: 36,),
           
               const Text("Change Password", style: TextStyle(fontSize:23,fontWeight:FontWeight.bold)),
               Container(height: 10,),

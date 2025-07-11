@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:galleryimage/galleryimage.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -168,7 +167,7 @@ class _WishListAdGridState extends State<WishListAdGrid> {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: provider.isDark ? AppColors.darkBackground : AppColors.lightBackground,
-            borderRadius: BorderRadius.only(topLeft: radiusCircular(20), topRight: radiusCircular(20)), // Customize the background color
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)), // Customize the background color
           ),// Set the desired height of the bottom sheet
 
           child: Column(
@@ -189,7 +188,6 @@ class _WishListAdGridState extends State<WishListAdGrid> {
 
                Row(
                 children: [
-
                   SizedBox(
                     width: 100,
                     height: 100,
@@ -197,9 +195,7 @@ class _WishListAdGridState extends State<WishListAdGrid> {
                       fit: BoxFit.cover,
                     ): ImageWidget(url: product.product![0].images![0]['url'].toString()),
                   ),
-
                   const SizedBox(width: 20,),
-
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -208,8 +204,6 @@ class _WishListAdGridState extends State<WishListAdGrid> {
                       Text(product.product![0].description!),
                     ],
                   )
-
-
                 ],
               ),
 
